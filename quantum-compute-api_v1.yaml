@@ -1,0 +1,333 @@
+openapi: 3.0.3
+info:
+  title: "Quantum Computing API - University of Vienna"
+  version: "1.0"
+servers:
+  - url: "https://quantum.univie.ac.at/api/v1"
+security:
+  - bearerAuth: []
+paths:
+  /experiments/{experimentId}:
+    parameters:
+      - schema:
+          type: string
+        name: experimentId
+        example: "615c5752d99d8706d46409f9"
+        in: path
+        required: true
+    get:
+      summary: Get an experiment (and corresponding computation result if available) by experimentId
+      responses:
+        "200":
+          description: OK - Returns the given Experiment. If the status of the experiment is DONE, an "#/components/schemas/ExperimentResult" object will also be returned'. 
+            Only experiments belonging to the current user will be listed.
+          content:
+            application/json:
+              schema:
+                properties:
+                  experimentConfiguration:
+                    type: object
+                    $ref: "#/components/schemas/Experiment"
+                  experimentResult:
+                    type: object
+                    $ref: "#/components/schemas/ExperimentResult"
+        "401":
+          description: Authorization information is missing or invalid.
+        "404":
+          description: An Experiment with the specified ID was not found (or does not belong to the current user).
+        "500":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+      operationId: get-experiments-experimentId
+      description: Retrieve a specific experiment by ID
+    delete:
+      summary: Delete an experiment by experimentId. Is scoped to the current user given in the JWT token
+      responses:
+        "204":
+          description: OK - Experiment deleted successfully
+        "401":
+          description: Authorization information is missing or invalid.
+        "404":
+          description: An Experiment with the specified ID was not found (or does not belong to the current user).
+        "500":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /experiments:
+    get:
+      description: Returns all experiments from the system that the user has access to
+      responses:
+        "202":
+          description: Returns a list of all experiments corresponding to the current user given in the JWT token.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Experiment"
+        "204":
+          description: The request was processed successfully but no experiments bound to the current user have beend found.
+        "401":
+          description: Authorization information is missing or invalid.
+        "500":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    post:
+      summary: Add new experiment
+      operationId: post-experiments
+      responses:
+        "201":
+          description: Experiment created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/Experiment"
+        "401":
+          description: Authorization information is missing or invalid.
+        "403":
+          description: Current quota limit exceeded. Cannot create additional experiments
+        "404":
+          description: An Experiment with the specified ID was not found.
+        "500":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+      description: Add a new experiment in initial status "CREATED"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: "#/components/schemas/ExperimentBase"
+
+  /users/quota:
+    get:
+      description: Returns the number of experiments the user is still allowed to run this month.
+        The backend can compute this quite easily 
+      responses:
+        "200":
+          description: Returns the remaining number of experiments the current user is still allowed to perform within the current period.
+          content:
+            application/json:
+              schema:
+                properties:
+                  remainingExperiments:
+                    type: integer
+                    example: 20
+                    minimum: 0
+                  endOfCurrentQuotaCycle:
+                    type: string
+                    format: date-time
+                    description: "Creation date and time"
+                    example: "2021-01-30T08:30:00Z"
+
+        "401":
+          description: Authorization information is missing or invalid.
+        "500":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    ExperimentBase:
+      properties:
+        circuitId:
+          type: integer
+          description: ID of a valid configuration circuit provided within the circuitLib package
+          example: 3
+          minimum: 1
+        experimentName:
+          type: string
+          description: The name of this experiment
+          example: "P=NP?"
+        projectId:
+          type: string
+          description: The id of the project this experiment is associated with
+          example: "21ac5193d88d8706d267c9f9"
+        maxRuntime:
+          type: integer
+          description: Maximum runtime of an experiment in seconds.
+          minimum: 1
+          maximum: 120
+          example: 120
+      allOf:
+        - $ref: "#/components/schemas/ComputeSettings"
+        - type: object
+      type: object
+      required:
+        - experiment_name
+        - circuitId
+
+    Experiment:
+      allOf:
+        - $ref: "#/components/schemas/ExperimentBase"
+        - type: object
+          properties:
+            id:
+              type: string
+              description: The id of this experiment. Will be set by the server.
+              example: "615c5752d99d8706d46409f9"
+            status:
+              type: string
+              description: The status of the experiment. Will be set by the server.
+              enum: [RUNNING, FAILED, DONE]
+
+    ComputeSettings:
+      type: object
+      properties:
+        clusterState:
+          type: object
+          properties:
+            amountQubits:
+              type: integer
+              description: Amount of selected Qubits.
+              example: 4 # range: 1-4
+              minimum: 1
+            presetSettings:
+              type: string
+              description: Defines the cluster state preset and can either be "linear" or "ghz"
+              example: "linear"
+              enum: [linear, ghz]
+          required:
+            - amountQubits
+            - presetSettings
+        qubitComputing:
+          type: object
+          properties:
+            circuitConfiguration:
+              type: string
+              description: The circuit configuration the user chose
+              example: "horseshoe" # <--- Get list of configuration names from Omar
+              enum: [horseshoe, NameConfig2, NameConfig3]
+            circuitAngles:
+              type: array
+              items:
+                $ref: "#/components/schemas/CircuitConfigurationItem"
+              example:
+                - circuitAngleName: alpha
+                  circuitAngleValue: 45
+                - circuitAngleName: beta
+                  circuitAngleValue: 34
+          required:
+            - circuitConfiguration
+        encodedQubitMeasurements:
+          type: array
+          items: 
+            $ref: "#/components/schemas/QubitMeasurementItem"
+          example:
+            - encodedQubitIndex: 1
+              theta: 45.2
+              phi: 22
+            - encodedQubitIndex: 2
+              theta: 90
+              phi: 20.9
+
+    CircuitConfigurationItem:
+      type: object
+      properties:
+        circuitAngleName:
+          type: string
+          example: "alpha"
+        circuitAngleValue:
+          type: number
+          minimum: 0
+          maximum: 360
+          example: 45.9
+      required:
+        - circuitAngleName
+        - circuitAngleValue
+
+    QubitMeasurementItem:
+      type: object
+      properties:
+        encodedQubitIndex:
+          type: integer
+          minimum: 1
+          example: 1
+        theta:
+          type: number
+          minimum: 0
+          maximum: 360
+          example: 45.9
+        phi:
+          type: number
+          minimum: 0
+          maximum: 360
+          example: 99.9
+    
+    ExperimentResult:
+      type: object
+      properties:
+        startTime: 
+          type: string
+          format: date-time
+          description: "Creation date and time"
+          example: "2021-01-30T08:30:00Z"
+        totalCounts:
+          type: integer
+          description: "Total counts"
+          example: 3400000
+        numberOfDetectors:
+          type: integer
+          description: "Number of detectors used"
+          example: 8
+        singlePhotonRate:
+          type: number
+          description: "Single photon rate"
+          example: 1890000.32
+        totalTime:
+          type: integer
+          description: "Total runtime of experiment in milliseconds"
+          example: 3123
+      required:
+        - startTime
+        - totalCounts
+        - numberOfDetectors
+        - singlePhotonRate
+        - totalTime
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "An error occured"
+      required:
+        - message
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: "Example value for the JWT: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImFkbWluIjpmYWxzZX0.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwidXNlcm5hbWUiOiJqb2huLmRvZUBleGFtcGxlLWVtYWlsLmd2LmF0IiwiaWF0IjoxNTE2MjM5MDIyfQ.1lON67sWX-F-deyB2qaCQ3wn2j7lGGCgfz_fRoDol1c'
+        The JWT token would look like this
+        {
+          'alg': 'HS256',
+          'typ': 'JWT',
+          'admin': false
+        }
+        PAYLOAD:DATA
+        {
+          'sub': 1234567890,
+          'name': 'John Doe',
+          'username': 'john.doe@example-email.gv.at',
+          'iat': 1516239022
+        }"
