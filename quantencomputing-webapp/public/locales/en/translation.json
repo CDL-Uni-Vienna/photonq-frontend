@@ -1,0 +1,9 @@
+{
+  "firstName": "First name",
+  "lastName": "Second name",
+  "email": "Email",
+  "occupation": "Occupation",
+  "country": "Country",
+  "credits": "Credits",
+  "image": "Image"
+}
