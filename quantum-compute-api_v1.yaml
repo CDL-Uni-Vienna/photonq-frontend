@@ -214,8 +214,7 @@ components:
             circuitConfiguration:
               type: string
               description: The circuit configuration the user chose
-              example: "horseshoe" # <--- Get list of configuration names from Omar
-              enum: [horseshoe, NameConfig2, NameConfig3]
+              example: "horseshoe or ConfigID-12"
             circuitAngles:
               type: array
               items:
