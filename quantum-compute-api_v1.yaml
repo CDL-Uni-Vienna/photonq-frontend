@@ -213,7 +213,7 @@ components:
           properties:
             circuitConfiguration:
               type: string
-              description: The circuit configuration the user chose
+              description: The circuit configuration the user chose. Can be any string, also the ConfigID from the library can be used.
               example: "horseshoe or ConfigID-12"
             circuitAngles:
               type: array
