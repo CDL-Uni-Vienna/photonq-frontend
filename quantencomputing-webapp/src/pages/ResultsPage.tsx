@@ -17,10 +17,7 @@ export default withRouter(function ResultsPage(
 
   return (
     <div className={"bg-primaryDark"}>
-      <ExperimentNavbar
-        experimentName={"Experiment"}
-        experimentCreatedAt={new Date()}
-      />
+      <ExperimentNavbar />
       <PageLayout>
         <NavbarPadding />
         {experiment.status === ExperimentState.Running ? (
