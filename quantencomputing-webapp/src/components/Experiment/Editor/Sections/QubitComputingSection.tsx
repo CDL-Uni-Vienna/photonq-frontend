@@ -46,15 +46,18 @@ export default function QubitComputingSection({
           </p>
         </div>
         <div className={"absolute top-0 right-0 p-4"}>
-          <Switch
-            defaultChecked
-            onChange={() => {
-              setExperiment((prev) => ({
-                ...prev,
-                withQubitConfig: !prev.withQubitConfig,
-              }));
-            }}
-          />
+          <div className={"flex items-center space-x-4"}>
+            <p>{experiment.withQubitConfig ? "On" : "Off"}</p>
+            <Switch
+              defaultChecked
+              onChange={() => {
+                setExperiment((prev) => ({
+                  ...prev,
+                  withQubitConfig: !prev.withQubitConfig,
+                }));
+              }}
+            />
+          </div>
         </div>
       </div>
       {configs.length && experiment.withQubitConfig && (
