@@ -96,7 +96,6 @@ export default function ClusterStateSection({
         <div className="space-y-2">
           <h3 className={"text-white font-bold"}>{t("Preset Settings")}</h3>
           <div className={"flex space-x-1 items-center"}>
-            <img className={"max-h-8"} src={getSvgSource(true)} />
             <Select
               size={"small"}
               className={"bg-primaryDark"}
@@ -110,10 +109,15 @@ export default function ClusterStateSection({
             >
               {Object.values(PresetSetting).map((val, index) => (
                 <MenuItem key={index} value={val}>
-                  {t(`${val} cluster`)}
+                  {t(
+                    `${
+                      val.substring(0, 1).toUpperCase() + val.substring(1)
+                    } Cluster`
+                  )}
                 </MenuItem>
               ))}
             </Select>
+            <img className={"max-h-8"} src={getSvgSource(true)} />
           </div>
         </div>
       </div>
