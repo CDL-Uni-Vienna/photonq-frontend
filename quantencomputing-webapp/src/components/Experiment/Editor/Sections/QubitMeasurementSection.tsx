@@ -140,6 +140,11 @@ function EncodedQubitInput({
       >
         <embed src="/images/theta.svg" />
         <TextField
+          inputProps={{
+            style: {
+              color: "white",
+            },
+          }}
           value={
             experiment.encodedQubitMeasurements.find(
               (measurement) => measurement.encodedQubitIndex === nr
@@ -158,6 +163,11 @@ function EncodedQubitInput({
       <div className={"flex items-center space-x-2"}>
         <embed src="/images/phi.svg" />
         <TextField
+          inputProps={{
+            style: {
+              color: "white",
+            },
+          }}
           value={
             experiment.encodedQubitMeasurements.find(
               (measurement) => measurement.encodedQubitIndex === nr
