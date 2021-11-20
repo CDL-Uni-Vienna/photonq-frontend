@@ -58,8 +58,8 @@ export default function QubitComputingSection({
         </div>
       </div>
       {configs.length && experiment.withQubitConfig && (
-        <div className={"flex justify-between text-white"}>
-          <div className={"space-y-3"}>
+        <div className={"flex space-x-10 text-white"}>
+          <div className={"space-y-3 w-1/2"}>
             <h3 className={"font-bold"}>{t("Circuit Configuration")}</h3>
             <div className={"flex space-x-6"}>
               <div>

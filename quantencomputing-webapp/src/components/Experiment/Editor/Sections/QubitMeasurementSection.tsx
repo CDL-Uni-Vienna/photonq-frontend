@@ -40,8 +40,8 @@ export default function QubitMeasurementSection({
           )}
         </p>
       </div>
-      <div className={"flex justify-between text-white"}>
-        <div className={"flex space-x-5"}>
+      <div className={"flex space-x-10 text-white"}>
+        <div className={"flex space-x-5 w-1/2"}>
           <div className={"space-y-7"}>
             <EncodedQubitInput
               nr={1}

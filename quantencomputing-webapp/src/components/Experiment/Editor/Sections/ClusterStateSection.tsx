@@ -62,11 +62,11 @@ export default function ClusterStateSection({
 
   return (
     <ContentContainer
-      className={"flex justify-between"}
+      className={"flex space-x-10"}
       withPadding
       color={secondaryDark}
     >
-      <div className={"space-y-6"}>
+      <div className={"space-y-6 w-1/2"}>
         <div>
           <EditorSectionHeader header={"Cluster State Preparation"} />
           <p className={"text-white"}>
