@@ -146,25 +146,30 @@ function CircuitConfigSelector({
 
   return (
     <React.Fragment>
-      <Button onClick={handleOnClick} className={"p-1 bg-primaryDark"}>
+      <Button
+        style={{ backgroundColor: primaryDark }}
+        onClick={handleOnClick}
+        className={"p-1"}
+      >
         <img src={getSrc(currentConfig)} />
       </Button>
       <Popper open={!!anchorEl} anchorEl={anchorEl} placement={"right"}>
         <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
           <Paper
             className={"overflow-auto space-y-8 p-4"}
-            style={{ backgroundColor: primaryDark }}
+            style={{ backgroundColor: secondaryDark }}
           >
             {Object.keys(groupedConfigs)
               .filter((key) => groupedConfigs[key as any].length)
               .map((key) => (
-                <div key={key}>
+                <div className={"space-y-2"} key={key}>
                   <h3 className={"font-bold text-white"}>{`Encoded Qubits ${
                     groupedConfigs[key as any][0]?.qc_encoded_qubits
                   }`}</h3>
-                  <div className={"flex"}>
+                  <div className={"flex space-x-2"}>
                     {groupedConfigs[key as any].map((config) => (
                       <Button
+                        style={{ backgroundColor: primaryDark }}
                         onClick={() => {
                           setCurrentConfig(config);
                           setAnchorEl(null);
