@@ -58,7 +58,7 @@ export default withRouter(function MainTable({
     <TableContainer component={Paper}>
       <Table {...getTableProps()}>
         <TableHead className={"p-8"}>
-          <TableRow className={"bg-gray-200"}>
+          <TableRow className={"bg-gray-100"}>
             {columns.map((column, index) => (
               <TableCell
                 // @ts-ignore

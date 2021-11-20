@@ -53,7 +53,7 @@ export function getPrivateRoutes() {
     },
     {
       path: Path.MyProjects,
-      label: "My Projects",
+      label: "My Experiments",
       page: MyProjectPage,
     },
     {
@@ -87,7 +87,7 @@ export function getNavbarRoutes() {
     },
     {
       path: Path.MyProjects,
-      label: "My Projects",
+      label: "My Experiments",
     },
     {
       href: `${LANDING_PAGE_PATH}/en/how-to-guides`,
