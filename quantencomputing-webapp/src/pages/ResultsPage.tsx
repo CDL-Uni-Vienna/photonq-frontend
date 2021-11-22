@@ -19,13 +19,13 @@ export default withRouter(function ResultsPage(
   return (
     <div
       className={clsx("bg-primaryDark h-screen", {
-        ["overflow-hidden"]: experiment.status !== ExperimentState.Running,
+        ["overflow-hidden"]: experiment.status === ExperimentState.Running,
       })}
     >
       <ExperimentNavbar />
       <PageLayout>
         <NavbarPadding />
-        {experiment.status !== ExperimentState.Running ? (
+        {experiment.status === ExperimentState.Running ? (
           <div className={"h-screen flex justify-center items-center"}>
             <AnimatedLoadingIcon />
           </div>
