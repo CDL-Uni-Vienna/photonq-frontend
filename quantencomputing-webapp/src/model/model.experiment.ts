@@ -6,8 +6,10 @@ import {
   ExperimentState,
   ExperimentWithConfigs,
   PresetSetting,
+  ExperimentResult,
 } from "./types/type.experiment";
 import { CircuitConfig, circuitConfigs } from "../circuitConfig/circuits4Dv004";
+import { format } from "date-fns";
 
 /**
  * Returns an Experiment with default configuration
@@ -128,6 +130,45 @@ export function getEmptyEncodedQubitMeasurement(
 
 /**
  *
+ * @param experimentId
+ * @param experimentResult
+ */
+export function getExecutionIndicators(
+  experimentId: string,
+  experimentResult: ExperimentResult
+): ResultParameters[] {
+  return [
+    {
+      label: "Execution Start Time",
+      value: format(new Date(experimentResult.startTime), "Ppp"),
+    },
+    {
+      label: "Total Counts",
+      value: experimentResult.totalCounts,
+    },
+    {
+      label: "Number of Detectors Used",
+      value: experimentResult.numberOfDetectors,
+    },
+    {
+      label: "Single Photon Rate",
+      value: experimentResult.singlePhotonRate,
+    },
+    {
+      label: "Expected Execution ID",
+      value: experimentId,
+    },
+    {
+      label: "Total Time",
+      value: experimentResult.totalTime,
+    },
+  ];
+}
+
+/**
+ *
+ * @param experiment
+ * @param config
  */
 export function getComputationParameters(
   experiment: Experiment,
@@ -171,7 +212,7 @@ function convertToAngleString(angles: number[] | EncodedQubitMeasurement[]) {
       if (typeof angle === "number") {
         return `${angle}°`;
       }
-      return `${angle.phi}°, ${angle.theta}°`;
+      return `[${angle.phi}°, ${angle.theta}°]`;
     })
     .join(", ")}]`;
 }

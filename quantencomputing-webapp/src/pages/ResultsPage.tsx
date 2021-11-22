@@ -31,7 +31,7 @@ export default withRouter(function ResultsPage(
           </div>
         ) : (
           <ExperimentResult
-            experimentResult={experimentResult!}
+            experimentResult={experimentResult}
             experiment={experiment}
           />
         )}
