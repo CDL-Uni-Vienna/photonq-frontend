@@ -9,6 +9,7 @@ import { TextField } from "@mui/material";
 import clsx from "clsx";
 import { getEmptyEncodedQubitMeasurement } from "../../../../model/model.experiment";
 import { EncodedQubitMeasurement } from "../../../../model/types/type.experiment";
+import TextFieldWithIcon from "../../../TextFieldWithIcon";
 
 export default function QubitMeasurementSection({
   setExperiment,
@@ -107,7 +108,7 @@ function EncodedQubitInput({
   const isDisabled = () => !!encodedQubits && nr > encodedQubits;
 
   const handleOnChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
+    value: string,
     variant: keyof Omit<EncodedQubitMeasurement, "nr">
   ) => {
     setExperiment((prev) => ({
@@ -117,13 +118,22 @@ function EncodedQubitInput({
           if (measurement.encodedQubitIndex === nr) {
             return {
               ...measurement,
-              [variant]: Math.min(Math.abs(Number(e.target.value)), 360),
+              [variant]: Math.min(Math.abs(Number(value)), 360),
             };
           }
           return measurement;
         }
       ),
     }));
+  };
+
+  const getValue = (
+    nr: number,
+    angle: keyof Omit<EncodedQubitMeasurement, "nr">
+  ) => {
+    return experiment.encodedQubitMeasurements.find(
+      (measurement) => measurement.encodedQubitIndex === nr
+    )?.[angle];
   };
 
   return (
@@ -134,53 +144,23 @@ function EncodedQubitInput({
         })}
       >{`${t("Encoded Qubit")} ${nr}`}</h3>
       <div
-        className={clsx("flex items-center space-x-2", {
+        className={clsx("space-y-3", {
           ["text-gray-500"]: isDisabled(),
         })}
       >
-        <embed src="/images/theta.svg" />
-        <TextField
-          inputProps={{
-            style: {
-              color: "white",
-            },
+        <TextFieldWithIcon
+          isDisabled={isDisabled()}
+          iconsSrc={"/images/theta.svg"}
+          value={"" + getValue(nr, "theta") || "0"}
+          setValue={(value) => {
+            handleOnChange(value, "theta");
           }}
-          value={
-            experiment.encodedQubitMeasurements.find(
-              (measurement) => measurement.encodedQubitIndex === nr
-            )?.theta || ""
-          }
-          type={"number"}
-          disabled={isDisabled()}
-          size={"small"}
-          onChange={(e) => handleOnChange(e, "theta")}
-          color={"primary"}
-          className={clsx({
-            ["bg-primaryDark rounded-sm"]: !isDisabled(),
-          })}
         />
-      </div>
-      <div className={"flex items-center space-x-2"}>
-        <embed src="/images/phi.svg" />
-        <TextField
-          inputProps={{
-            style: {
-              color: "white",
-            },
-          }}
-          value={
-            experiment.encodedQubitMeasurements.find(
-              (measurement) => measurement.encodedQubitIndex === nr
-            )?.phi || ""
-          }
-          type={"number"}
-          onChange={(e) => handleOnChange(e, "phi")}
-          disabled={isDisabled()}
-          size={"small"}
-          color={"primary"}
-          className={clsx({
-            ["bg-primaryDark rounded-sm"]: !isDisabled(),
-          })}
+        <TextFieldWithIcon
+          isDisabled={isDisabled()}
+          iconsSrc={"/images/phi.svg"}
+          value={"" + getValue(nr, "phi") || "0"}
+          setValue={(value) => handleOnChange(value, "phi")}
         />
       </div>
     </div>
