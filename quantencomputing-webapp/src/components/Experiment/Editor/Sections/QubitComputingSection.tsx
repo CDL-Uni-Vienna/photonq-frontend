@@ -49,7 +49,7 @@ export default function QubitComputingSection({
           <div className={"flex items-center space-x-4"}>
             <p>{experiment.withQubitConfig ? "On" : "Off"}</p>
             <Switch
-              defaultChecked
+              checked={experiment.withQubitConfig}
               onChange={() => {
                 setExperiment((prev) => ({
                   ...prev,

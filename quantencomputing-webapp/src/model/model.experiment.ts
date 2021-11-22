@@ -17,7 +17,7 @@ export function getDefaultExperimentConfig(experimentName: string): Experiment {
   return {
     createdAt: Date.now(),
     clusterState: {
-      amountQubits: 3,
+      amountQubits: 2,
       presetSettings: PresetSetting.Linear,
     },
     qubitComputing: {
@@ -34,7 +34,7 @@ export function getDefaultExperimentConfig(experimentName: string): Experiment {
       ],
     },
     encodedQubitMeasurements: [],
-    circuitId: 3,
+    circuitId: 5,
     experimentName,
     projectId: "",
     maxRuntime: 120,
