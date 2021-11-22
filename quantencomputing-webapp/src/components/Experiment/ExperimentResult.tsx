@@ -8,7 +8,10 @@ import { secondaryDark } from "../../theme/theme.config";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import SettingsImage from "./Editor/Sections/SettingsImage";
-import { getConfig } from "../../model/model.experiment";
+import {
+  getComputationParameters,
+  getConfig,
+} from "../../model/model.experiment";
 
 interface ExperimentResultProps {
   experiment: Experiment;
@@ -63,13 +66,16 @@ export default function ExperimentResultContainer({
           />
         </div>
       </div>
-      <div>{config?.qc_circuit_model && <img src={getQubitConfigSrc()} />}</div>
+      <div style={{ width: "fit-content" }} className={"bg-primaryDark p-1"}>
+        {config?.qc_circuit_model && <img src={getQubitConfigSrc()} />}
+      </div>
       <div className={"flex justify-between text-white"}>
-        <div>
+        <div className={"space-y-3"}>
           <h3 className={"font-bold"}>{t("Computation parameters")}</h3>
-          {Object.keys(experiment).map((key) => (
-            <div key={key} className={"flex justify-between"}>
-              <p>{key}</p>
+          {getComputationParameters(experiment, config!).map((param, index) => (
+            <div key={index} className={"flex justify-between"}>
+              <p>{param.label}</p>
+              <p>{param.value}</p>
             </div>
           ))}
         </div>

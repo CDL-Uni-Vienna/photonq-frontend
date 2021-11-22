@@ -7,6 +7,7 @@ import { useSelectedExperiment } from "../hook/hook.experiment";
 import { ExperimentState } from "../model/types/type.experiment";
 import AnimatedLoadingIcon from "../components/AnimatedLoadingIcon";
 import ExperimentResult from "../components/Experiment/ExperimentResult";
+import clsx from "clsx";
 
 export default withRouter(function ResultsPage(
   props: RouteComponentProps<{ id: string }>
@@ -16,11 +17,15 @@ export default withRouter(function ResultsPage(
   );
 
   return (
-    <div className={"bg-primaryDark"}>
+    <div
+      className={clsx("bg-primaryDark h-screen", {
+        ["overflow-hidden"]: experiment.status !== ExperimentState.Running,
+      })}
+    >
       <ExperimentNavbar />
       <PageLayout>
         <NavbarPadding />
-        {experiment.status === ExperimentState.Running ? (
+        {experiment.status !== ExperimentState.Running ? (
           <div className={"h-screen flex justify-center items-center"}>
             <AnimatedLoadingIcon />
           </div>

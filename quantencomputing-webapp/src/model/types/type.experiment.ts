@@ -16,6 +16,11 @@ export enum ExperimentState {
   Done = "DONE",
 }
 
+export interface ResultParameters {
+  label: string;
+  value: string | number;
+}
+
 export type CircuitAngleName = "alpha" | "beta" | "gamma";
 
 export interface EncodedQubitMeasurement {

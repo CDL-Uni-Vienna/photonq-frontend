@@ -1,4 +1,5 @@
 import {
+  ResultParameters,
   CreateExperimentPayload,
   EncodedQubitMeasurement,
   Experiment,
@@ -123,4 +124,54 @@ export function getEmptyEncodedQubitMeasurement(
     phi: 0,
     theta: 0,
   };
+}
+
+/**
+ *
+ */
+export function getComputationParameters(
+  experiment: Experiment,
+  config: CircuitConfig
+): ResultParameters[] {
+  return [
+    {
+      label: "Physical qubits",
+      value: experiment.clusterState.amountQubits,
+    },
+    {
+      label: "Encoded qubits",
+      value: config.qc_encoded_qubits || 0,
+    },
+    {
+      label: "Computation configruation",
+      value: experiment.qubitComputing.circuitConfiguration,
+    },
+    {
+      label: "CPhase gates",
+      value: config.qc_cphase_gates || 0,
+    },
+    {
+      label: "Computing parameters",
+      value: convertToAngleString(
+        experiment.qubitComputing.circuitAngles.map(
+          (val) => val.circuitAngleValue
+        )
+      ),
+    },
+    {
+      label: "Projection Parameters",
+      value: convertToAngleString(experiment.encodedQubitMeasurements),
+    },
+  ];
+}
+
+function convertToAngleString(angles: number[] | EncodedQubitMeasurement[]) {
+  return `[${angles
+    .map((angle, index) => {
+      if (typeof angle === "number") {
+        return `${angle}°`;
+      }
+      return `${angle.phi}°, ${angle.theta}°`;
+    })
+    .join(", ")}]`;
 }
