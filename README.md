@@ -33,3 +33,21 @@ To run the application within a docker container, perform the following tasks
 export CR_PAT={{PersonalAccessToken}}
 echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
 docker push ghcr.io/{{container-registry-username}}/quantencomputing-webapp:latest
+
+---
+
+## Content Management
+
+TODO
+Sanity will be used as a headless CMS: https://www.sanity.io/studio
+The following environmental variables have to be set
+SANITY_USERNAME
+SANITY_PA
+
+---
+
+## Backend API
+
+The following environmental variable has to be set correctly to set the backend API:
+
+REACT_APP_BASE_URL=https://quco.exp.univie.ac.at/api/v1
