@@ -2,7 +2,7 @@ import {
   BaseApiFetchPayload,
   GetExperimentResponse,
   Method,
-  MockEndpoint,
+  Endpoint,
 } from "./types/type.api";
 import { CreateExperimentPayload, Experiment } from "./types/type.experiment";
 
@@ -38,7 +38,7 @@ export async function getExperiment(
   const response = await baseApiFetch({
     method: Method.GET,
     params: id,
-    endpoint: MockEndpoint.Experiment,
+    endpoint: Endpoint.Experiment,
   });
   if (!response.ok) throw new Error("Could not get Experiment " + id);
   return response.json();
@@ -50,7 +50,7 @@ export async function getExperiment(
 export async function getExperiments(): Promise<Experiment[]> {
   const response = await baseApiFetch({
     method: Method.GET,
-    endpoint: MockEndpoint.Experiments,
+    endpoint: Endpoint.Experiments,
   });
   if (!response.ok) throw new Error("Could not get Experiments");
   return response.json();
@@ -77,7 +77,7 @@ export async function deleteExperiment(id: string) {
   const response = await baseApiFetch({
     method: Method.DELETE,
     params: id,
-    endpoint: MockEndpoint.Experiment,
+    endpoint: Endpoint.Experiment,
   });
   if (!response.ok) throw new Error("Could not delete Experiment: " + id);
   return response;
@@ -92,7 +92,7 @@ export async function createExperiment(
 ): Promise<Experiment> {
   const response = await baseApiFetch<CreateExperimentPayload>({
     method: Method.POST,
-    endpoint: MockEndpoint.Experiment,
+    endpoint: Endpoint.Experiment,
     body: experimentPayload,
   });
   if (!response.ok) {

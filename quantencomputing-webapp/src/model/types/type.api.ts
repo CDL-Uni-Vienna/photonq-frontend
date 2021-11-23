@@ -1,6 +1,6 @@
 import { Experiment, ExperimentResult } from "./type.experiment";
 
-export enum MockEndpoint {
+export enum Endpoint {
   Experiment = "/experiment",
   Experiments = "/experiments",
 }
@@ -14,7 +14,7 @@ export enum Method {
 
 export interface BaseApiFetchPayload<T> {
   body?: T;
-  endpoint: MockEndpoint;
+  endpoint: Endpoint;
   method: Method;
   params?: string;
 }
