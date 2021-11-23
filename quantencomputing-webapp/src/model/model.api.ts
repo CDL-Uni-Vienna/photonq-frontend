@@ -3,6 +3,7 @@ import {
   GetExperimentResponse,
   Method,
   Endpoint,
+  BASE_ENDPOINT_URL,
 } from "./types/type.api";
 import { CreateExperimentPayload, Experiment } from "./types/type.experiment";
 
@@ -19,7 +20,7 @@ async function baseApiFetch<T>({
   endpoint,
   body,
 }: BaseApiFetchPayload<T>) {
-  return fetch(`${endpoint}${params ? "/" + params : ""}`, {
+  return fetch(`${BASE_ENDPOINT_URL}${endpoint}${params ? "/" + params : ""}`, {
     headers: {
       "Content-Type": "application/json",
     },

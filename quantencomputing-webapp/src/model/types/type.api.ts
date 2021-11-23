@@ -1,5 +1,7 @@
 import { Experiment, ExperimentResult } from "./type.experiment";
 
+export const BASE_ENDPOINT_URL = "https://quantum.univie.ac.at/api/v1";
+
 export enum Endpoint {
   Experiment = "/experiment",
   Experiments = "/experiments",
