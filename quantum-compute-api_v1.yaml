@@ -3,10 +3,94 @@ info:
   title: "Quantum Computing API - University of Vienna"
   version: "1.0"
 servers:
-  - url: "https://quantum.univie.ac.at/api/v1"
+  - url: "https://quco.exp.univie.ac.at/api/v1"
 security:
   - bearerAuth: []
 paths:
+  /login:
+    post:
+      summary: Login with username and password
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                username:
+                  type: string
+                  example: test@test.at
+                password:
+                  type: string
+                  example: 12345
+      responses:
+        "200":
+          description: OK - Returns an authorization token to use in subsequent calls within the HTTP Authorization header. Also returns email, name and id of the currently logged in user.
+          content:
+            application/json:
+              schema:
+                properties:
+                  expires:
+                    type: string
+                    format: date-time
+                    description: "Date and time of token expiration"
+                    example: "2022-01-30T08:30:00Z"
+                  token:
+                    type: string
+                    description: "Value of the authentication token"
+                    example: "9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
+                  id:
+                    type: integer
+                    description: "The ID of the current user"
+                    example: 3
+                  name:
+                    type: string 
+                    description: "Name of the current user"
+                    example: "John Doe"
+                  email:
+                    type: string
+                    description: "The email of the current user"
+                    example: "test@test.at"
+        "401":
+          description: Authorization information is missing or invalid.
+
+  /register:
+    post:
+      summary: Register new user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  type: string
+                  example: "John Doe"
+                username:
+                  type: string
+                  example: "test@test.at"
+                password:
+                  type: "string"
+                  example: 12345
+      responses:
+        "200":
+          description: OK - Returns an authorization token to use in subsequent calls within the HTTP Authorization header. Also returns email, name and id of the currently logged in user.
+          content:
+            application/json:
+              schema:
+                properties:
+                  id:
+                    type: integer
+                    description: "The ID of the current user"
+                    example: 3
+                  name:
+                    type: string 
+                    description: "Name of the current user"
+                    example: "John Doe"
+                  email:
+                    type: string
+                    description: "The email of the current user"
+                    example: "test@test.at"
+        "401":
+          description: Authorization information is missing or invalid.
+
   /experiments/{experimentId}:
     parameters:
       - schema:
@@ -315,18 +399,4 @@ components:
     bearerAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT
-      description: "Example value for the JWT: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImFkbWluIjpmYWxzZX0.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwidXNlcm5hbWUiOiJqb2huLmRvZUBleGFtcGxlLWVtYWlsLmd2LmF0IiwiaWF0IjoxNTE2MjM5MDIyfQ.1lON67sWX-F-deyB2qaCQ3wn2j7lGGCgfz_fRoDol1c'
-        The JWT token would look like this
-        {
-          'alg': 'HS256',
-          'typ': 'JWT',
-          'admin': false
-        }
-        PAYLOAD:DATA
-        {
-          'sub': 1234567890,
-          'name': 'John Doe',
-          'username': 'john.doe@example-email.gv.at',
-          'iat': 1516239022
-        }"
+      description: "example HTTP Header: Authorization: 'Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b'"
