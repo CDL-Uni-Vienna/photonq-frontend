@@ -42,7 +42,7 @@ export default function Navbar() {
         <Container maxWidth={"xl"}>
           <div className={"w-full flex justify-between items-center py-4 px-8"}>
             <Link to={Path.MyProjects} className={"w-32 cursor-pointer z-40"}>
-              <img src="/images/uni-wien-logo.png" alt="Logo Uni Wien" />
+              <img src="/images/uni-wien-logo.svg" alt="Logo Uni Wien" />
             </Link>
             <div className={"flex space-x-8"}>
               {routes.map((route, index) => (

@@ -6,19 +6,17 @@ import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 import { format } from "date-fns";
 import DropDownButton from "./DropDownButton";
+import { useSelectedExperiment } from "../../hook/hook.experiment";
 
-interface ExperimentTopBarProps extends RouteComponentProps<{ id: string }> {
-  experimentName: string;
-  experimentCreatedAt: Date;
-}
+interface ExperimentTopBarProps extends RouteComponentProps<{ id: string }> {}
 
 export default withRouter(function ExperimentNavbar({
-  experimentCreatedAt,
-  experimentName,
   location,
   match,
+  history,
 }: ExperimentTopBarProps) {
   const { t } = useTranslation();
+  const { experiment } = useSelectedExperiment(match.params.id);
 
   return (
     <div className={"relative w-full text-white"}>
@@ -26,13 +24,14 @@ export default withRouter(function ExperimentNavbar({
         <div className={"grid grid-cols-3 w-full"}>
           <div className={"flex items-center space-x-4 justify-self-start"}>
             <img
+              className={"cursor-pointer"}
+              onClick={() => history.push(Path.MyProjects)}
               src="/images/logo-white.png"
               alt="Logo of the university of vienna"
             />
-            <h2 className={"text-xl font-bold"}>{`${experimentName} - ${format(
-              experimentCreatedAt,
-              "P"
-            )}`}</h2>
+            <h2 className={"text-xl font-bold"}>{`${
+              experiment.experimentName
+            } - ${format(experiment.createdAt, "P")}`}</h2>
           </div>
           <div className={"flex space-x-4 items-center justify-center"}>
             <ExperimentLinkElement

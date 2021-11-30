@@ -10,6 +10,10 @@ import { updateExperiment } from "../../../model/model.api";
 import { useState } from "react";
 import LoadingButton from "../../LoadingButton";
 import StatusSnackbar from "../../../StatusSnackbar";
+import {
+  getConfig,
+  getDefaultExperimentConfig,
+} from "../../../model/model.experiment";
 
 export default withRouter(({ match }: RouteComponentProps<{ id: string }>) => {
   const { t } = useTranslation();
@@ -36,6 +40,20 @@ export default withRouter(({ match }: RouteComponentProps<{ id: string }>) => {
     setIsUpdating(() => false);
   };
 
+  const reset = () => {
+    const defaultExperiment = getDefaultExperimentConfig(
+      experiment.experimentName
+    );
+    const config = getConfig(defaultExperiment);
+    setExperiment((prev) => ({
+      ...defaultExperiment,
+      config: config,
+      withQubitConfig: !!config?.qc_encoded_onoff,
+      id: experiment.id,
+      projectId: experiment.projectId,
+    }));
+  };
+
   if (isLoading) {
     return (
       <div className={"h-screen flex justify-center items-center"}>
@@ -60,7 +78,7 @@ export default withRouter(({ match }: RouteComponentProps<{ id: string }>) => {
         setExperiment={setExperiment}
       />
       <div className={"flex justify-end space-x-4"}>
-        <Button>{t("Reset")}</Button>
+        <Button onClick={reset}>{t("Reset")}</Button>
         <LoadingButton
           isLoading={isUpdating}
           text={t("Save")}

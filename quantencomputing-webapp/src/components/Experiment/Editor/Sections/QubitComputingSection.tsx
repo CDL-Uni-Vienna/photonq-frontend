@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import ContentContainer from "../../../Layout/ContentContainer";
 import { secondaryDark, primaryDark } from "../../../../theme/theme.config";
 import EditorSectionHeader from "./EditorSectionHeader";
@@ -14,6 +14,16 @@ import {
 import SettingsImage from "./SettingsImage";
 import { usePossibleClusterConfigsQubitComputing } from "../../../../hook/hook.experiment";
 import { CircuitConfig } from "../../../../circuitConfig/circuits4Dv004";
+import TextFieldWithIcon from "../../../TextFieldWithIcon";
+import { CircuitAngleName } from "../../../../model/types/type.experiment";
+
+const greekIconSources = [
+  "/images/phi.svg",
+  "/images/phi.svg",
+  "/images/phi.svg",
+];
+
+const angleNames: CircuitAngleName[] = ["alpha", "beta", "gamma"];
 
 export default function QubitComputingSection({
   setExperiment,
@@ -29,6 +39,50 @@ export default function QubitComputingSection({
   const getSrc = () => {
     return `/circuitConfig/qc_circuit_model/${experiment.config?.qc_circuit_model}`;
   };
+
+  const getAngleValue = (angleName: CircuitAngleName) => {
+    return (
+      experiment.qubitComputing.circuitAngles.find(
+        (angle) => angle.circuitAngleName === angleName
+      )?.circuitAngleValue || "0"
+    );
+  };
+
+  const handleAngleInputChange = (
+    value: string,
+    angleName: CircuitAngleName
+  ) => {
+    setExperiment((prev) => ({
+      ...prev,
+      qubitComputing: {
+        ...prev.qubitComputing,
+        circuitAngles: prev.qubitComputing.circuitAngles.map((angle) =>
+          angle.circuitAngleName === angleName
+            ? {
+                ...angle,
+                circuitAngleValue: Math.min(Math.abs(Number(value)), 360),
+              }
+            : angle
+        ),
+      },
+    }));
+  };
+
+  useEffect(() => {
+    // adds array of empty Angles to the experiment
+    setExperiment((prev) => ({
+      ...prev,
+      qubitComputing: {
+        ...prev.qubitComputing,
+        circuitAngles: Array.from({
+          length: 4 - (experiment.config?.qc_encoded_qubits || 4),
+        }).map((_, index) => ({
+          circuitAngleName: angleNames[index],
+          circuitAngleValue: 0,
+        })),
+      },
+    }));
+  }, [experiment.config?.qc_encoded_qubits]);
 
   return (
     <ContentContainer
@@ -46,20 +100,23 @@ export default function QubitComputingSection({
           </p>
         </div>
         <div className={"absolute top-0 right-0 p-4"}>
-          <Switch
-            defaultChecked
-            onChange={() => {
-              setExperiment((prev) => ({
-                ...prev,
-                withQubitConfig: !prev.withQubitConfig,
-              }));
-            }}
-          />
+          <div className={"flex items-center space-x-4"}>
+            <p>{experiment.withQubitConfig ? "On" : "Off"}</p>
+            <Switch
+              checked={experiment.withQubitConfig}
+              onChange={() => {
+                setExperiment((prev) => ({
+                  ...prev,
+                  withQubitConfig: !prev.withQubitConfig,
+                }));
+              }}
+            />
+          </div>
         </div>
       </div>
       {configs.length && experiment.withQubitConfig && (
-        <div className={"flex justify-between text-white"}>
-          <div className={"space-y-3"}>
+        <div className={"flex space-x-10 text-white"}>
+          <div className={"space-y-3 w-1/2"}>
             <h3 className={"font-bold"}>{t("Circuit Configuration")}</h3>
             <div className={"flex space-x-6"}>
               <div>
@@ -75,12 +132,26 @@ export default function QubitComputingSection({
                 />
               </div>
               <div>
-                <p>{`${t("Encoded quibits:")} ${
+                <p>{`${t("Encoded quibts:")} ${
                   experiment.config?.qc_encoded_qubits || "0"
                 }`}</p>
                 <p>{`${t("CPhase gate:")} ${
                   experiment.config?.qc_cphase_gates || "0"
                 }`}</p>
+                <div className={"space-y-3 mt-2"}>
+                  {Array.from({
+                    length: 4 - (experiment.config?.qc_encoded_qubits || 4),
+                  }).map((_, index) => (
+                    <TextFieldWithIcon
+                      key={index}
+                      iconsSrc={greekIconSources[index]}
+                      value={"" + getAngleValue(angleNames[index])}
+                      setValue={(value) => {
+                        handleAngleInputChange(value, angleNames[index]);
+                      }}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -143,25 +214,30 @@ function CircuitConfigSelector({
 
   return (
     <React.Fragment>
-      <Button onClick={handleOnClick} className={"p-1 bg-primaryDark"}>
+      <Button
+        style={{ backgroundColor: primaryDark }}
+        onClick={handleOnClick}
+        className={"p-1"}
+      >
         <img src={getSrc(currentConfig)} />
       </Button>
       <Popper open={!!anchorEl} anchorEl={anchorEl} placement={"right"}>
         <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
           <Paper
             className={"overflow-auto space-y-8 p-4"}
-            style={{ backgroundColor: primaryDark }}
+            style={{ backgroundColor: secondaryDark }}
           >
             {Object.keys(groupedConfigs)
               .filter((key) => groupedConfigs[key as any].length)
               .map((key) => (
-                <div key={key}>
+                <div className={"space-y-2"} key={key}>
                   <h3 className={"font-bold text-white"}>{`Encoded Qubits ${
                     groupedConfigs[key as any][0]?.qc_encoded_qubits
                   }`}</h3>
-                  <div className={"flex"}>
+                  <div className={"flex space-x-2"}>
                     {groupedConfigs[key as any].map((config) => (
                       <Button
+                        style={{ backgroundColor: primaryDark }}
                         onClick={() => {
                           setCurrentConfig(config);
                           setAnchorEl(null);

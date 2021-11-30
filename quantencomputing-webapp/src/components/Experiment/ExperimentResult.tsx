@@ -8,11 +8,16 @@ import { secondaryDark } from "../../theme/theme.config";
 import { useTranslation } from "react-i18next";
 import { format } from "date-fns";
 import SettingsImage from "./Editor/Sections/SettingsImage";
-import { getConfig } from "../../model/model.experiment";
+import {
+  getComputationParameters,
+  getConfig,
+  getExecutionIndicators,
+} from "../../model/model.experiment";
+import AnimatedLoadingIcon from "../AnimatedLoadingIcon";
 
 interface ExperimentResultProps {
   experiment: Experiment;
-  experimentResult: ExperimentResult;
+  experimentResult?: ExperimentResult;
 }
 
 export default function ExperimentResultContainer({
@@ -21,6 +26,13 @@ export default function ExperimentResultContainer({
 }: ExperimentResultProps) {
   const config = useMemo(() => getConfig(experiment), [experiment]);
   const { t } = useTranslation();
+
+  if (!experimentResult)
+    return (
+      <div className={"h-screen flex items-center justify-center"}>
+        <AnimatedLoadingIcon />
+      </div>
+    );
 
   /**
    *
@@ -63,18 +75,29 @@ export default function ExperimentResultContainer({
           />
         </div>
       </div>
-      <div>{config?.qc_circuit_model && <img src={getQubitConfigSrc()} />}</div>
-      <div className={"flex justify-between text-white"}>
-        <div>
-          <h3 className={"font-bold"}>{t("Computation parameters")}</h3>
-          {Object.keys(experiment).map((key) => (
-            <div key={key} className={"flex justify-between"}>
-              <p>{key}</p>
+      <div style={{ width: "fit-content" }} className={"bg-primaryDark p-1"}>
+        {config?.qc_circuit_model && <img src={getQubitConfigSrc()} />}
+      </div>
+      <div className={"flex space-x-32 text-white"}>
+        <div className={"space-y-3"}>
+          <h3 className={"font-bold text-xl"}>{t("Computation parameters")}</h3>
+          {getComputationParameters(experiment, config!).map((param, index) => (
+            <div key={index} className={"flex justify-between space-x-12"}>
+              <p>{param.label}</p>
+              <p>{param.value}</p>
             </div>
           ))}
         </div>
-        <div>
-          <h3 className={"font-bold"}>{t("Execution Indicators")}</h3>
+        <div className={"space-y-3"}>
+          <h3 className={"font-bold text-xl"}>{t("Execution Indicators")}</h3>
+          {getExecutionIndicators(experiment.id, experimentResult!).map(
+            (param, index) => (
+              <div key={index} className={"flex justify-between space-x-12"}>
+                <p>{param.label}</p>
+                <p>{param.value}</p>
+              </div>
+            )
+          )}
         </div>
       </div>
     </ContentContainer>
