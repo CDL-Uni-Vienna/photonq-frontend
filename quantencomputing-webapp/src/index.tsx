@@ -6,9 +6,12 @@ import "./i18n/i18n";
 import "./index.css";
 
 function main() {
-  // if (window.location.hostname.includes("localhost")) {
-  //   require("./api-mock");
-  // }
+  if (
+    process.env.REACT_APP_MOCK_API === "True" &&
+    window.location.hostname.includes("localhost")
+  ) {
+    require("./api-mock");
+  }
   ReactDOM.render(
     <React.StrictMode>
       <React.Suspense fallback={"...loading"}>
