@@ -1,11 +1,12 @@
 import {
+  BASE_ENDPOINT_URL,
   BaseApiFetchPayload,
+  Endpoint,
   GetExperimentResponse,
   Method,
-  Endpoint,
-  BASE_ENDPOINT_URL,
 } from "./types/type.api";
 import { CreateExperimentPayload, Experiment } from "./types/type.experiment";
+import { LoginCredentials, LoginResponse } from "./types/type.login";
 
 /**
  *
@@ -98,6 +99,24 @@ export async function createExperiment(
   });
   if (!response.ok) {
     throw new Error("Could not create Experiment: " + experimentPayload);
+  }
+  return response.json();
+}
+
+/**
+ *
+ * @param credentials
+ */
+export async function loginWthUserNameAndPassword(
+  credentials: LoginCredentials
+): Promise<LoginResponse> {
+  const response = await baseApiFetch({
+    method: Method.POST,
+    endpoint: Endpoint.Login,
+    body: credentials,
+  });
+  if (!response.ok) {
+    throw new Error("Could not login with credentials: " + credentials);
   }
   return response.json();
 }
