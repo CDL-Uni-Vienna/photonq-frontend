@@ -16,7 +16,7 @@ export interface RegisterCredentials extends LoginCredentials {
 export interface LoginResponse {
   expires: string;
   token: string;
-  id: 3;
+  id: number;
   name: string;
   username: string;
 }

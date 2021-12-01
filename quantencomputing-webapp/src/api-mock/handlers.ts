@@ -48,7 +48,7 @@ export const handlers = [
   rest.post("/login", (req: RestRequest<any>, res, context) => {
     return res(
       context.delay(500),
-      context.status(200),
+      context.status(201),
       context.json({
         expires: new Date().toISOString(),
         token: "jdfklsjdflashdflaksj",

@@ -13,13 +13,7 @@ import {
 import { AuthContext } from "../../../providers/AuthProvider";
 import { User } from "../../../model/types/type.user";
 
-const tableKeys: (keyof User)[] = [
-  "country",
-  "lastName",
-  "firstName",
-  "email",
-  "occupation",
-];
+const tableKeys: (keyof User)[] = ["country", "name", "username", "occupation"];
 
 export default function ProfileDetailSection() {
   const { t } = useTranslation();
