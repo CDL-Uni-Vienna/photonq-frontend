@@ -62,8 +62,6 @@ export const handlers = [
       context.delay(500),
       context.status(201),
       context.json({
-        expires: new Date().toISOString(),
-        token: "jdfklsjdflashdflaksj",
         id: 1,
         ...req.body,
       })
