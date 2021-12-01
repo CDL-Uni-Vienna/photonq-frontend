@@ -8,6 +8,8 @@ export const BASE_ENDPOINT_URL =
 export enum Endpoint {
   Experiment = "/experiment",
   Experiments = "/experiments",
+  Login = "/login",
+  Register = "/register",
 }
 
 export enum Method {
