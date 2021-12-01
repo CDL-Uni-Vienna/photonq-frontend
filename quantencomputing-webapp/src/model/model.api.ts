@@ -6,7 +6,11 @@ import {
   Method,
 } from "./types/type.api";
 import { CreateExperimentPayload, Experiment } from "./types/type.experiment";
-import { LoginCredentials, LoginResponse } from "./types/type.login";
+import {
+  LoginCredentials,
+  LoginResponse,
+  RegisterCredentials,
+} from "./types/type.auth";
 
 /**
  *
@@ -117,6 +121,26 @@ export async function loginWthUserNameAndPassword(
   });
   if (!response.ok) {
     throw new Error("Could not login with credentials: " + credentials);
+  }
+  return response.json();
+}
+
+/**
+ *
+ * @param credentials
+ */
+export async function register(
+  credentials: RegisterCredentials
+): Promise<LoginResponse> {
+  const response = await baseApiFetch({
+    method: Method.POST,
+    endpoint: Endpoint.Register,
+    body: credentials,
+  });
+  if (!response.ok) {
+    throw new Error(
+      "Authorization information is missing or invalid. " + credentials
+    );
   }
   return response.json();
 }

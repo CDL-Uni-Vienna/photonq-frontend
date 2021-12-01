@@ -10,7 +10,7 @@ import { withRouter, RouteComponentProps } from "react-router";
 import { loginWthUserNameAndPassword } from "../../model/model.api";
 import { response } from "msw";
 import LoadingButton from "../LoadingButton";
-import { LoginCredentials } from "../../model/types/type.login";
+import { LoginCredentials } from "../../model/types/type.auth";
 import { red } from "@mui/material/colors";
 
 export default withRouter(function LoginForm(props: RouteComponentProps<any>) {
