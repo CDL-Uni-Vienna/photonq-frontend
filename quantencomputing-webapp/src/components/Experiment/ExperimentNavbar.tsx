@@ -53,7 +53,15 @@ export default withRouter(function ExperimentNavbar({
             />
           </div>
           <div className={"flex justify-end items-center"}>
-            <DropDownButton>{t("Run")}</DropDownButton>
+            <DropDownButton
+              onClick={() =>
+                history.push(
+                  getPathWithId(experiment.id, Path.ExperimentResult)
+                )
+              }
+            >
+              {t("Run")}
+            </DropDownButton>
           </div>
         </div>
       </nav>

@@ -20,6 +20,7 @@ import { getExperiment } from "../model/model.api";
 export function useSelectedExperiment(id: string) {
   const getDefaultData = (name: string): ExperimentWithConfigs => ({
     ...getDefaultExperimentConfig(name),
+    id: name,
     withQubitConfig: true,
   });
 

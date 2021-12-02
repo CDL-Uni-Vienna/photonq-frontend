@@ -5,9 +5,13 @@ import ContextMenu from "../ProjectTable/ContextMenu";
 
 interface DropDownButtonProps {
   children: ReactNode;
+  onClick?: () => void;
 }
 
-export default function DropDownButton({ children }: DropDownButtonProps) {
+export default function DropDownButton({
+  children,
+  onClick,
+}: DropDownButtonProps) {
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -21,6 +25,7 @@ export default function DropDownButton({ children }: DropDownButtonProps) {
   return (
     <div className={"flex items-center h-full"}>
       <Button
+        onClick={onClick}
         style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
         className={"h-1/2"}
         variant={"contained"}
