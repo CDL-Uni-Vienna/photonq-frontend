@@ -15,7 +15,6 @@ interface ContextMenuProps {
 }
 
 export default function ContextMenu({
-  setIsOpen,
   isOpen,
   anchorEl,
   actions,
