@@ -24,9 +24,9 @@ export const handlers = [
       context.delay(500),
       context.status(201),
       context.json([
-        getDefaultExperimentConfig("A"),
-        getDefaultExperimentConfig("B"),
-        getDefaultExperimentConfig("C"),
+        { ...getDefaultExperimentConfig("A"), id: "1" },
+        { ...getDefaultExperimentConfig("B"), id: "2" },
+        { ...getDefaultExperimentConfig("C"), id: "3" },
       ])
     );
   }),

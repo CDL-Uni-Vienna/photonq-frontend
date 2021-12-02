@@ -27,8 +27,6 @@ interface ActionCellProps
 
 export default withRouter(function ActionCell({
   row,
-  setData,
-  history,
   setAddExperimentDialogProps,
 }: ActionCellProps) {
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
