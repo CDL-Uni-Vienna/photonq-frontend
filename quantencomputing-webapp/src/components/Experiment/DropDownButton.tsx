@@ -1,16 +1,18 @@
 import React, { ReactNode, useState } from "react";
 import { Button } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import ContextMenu from "../ProjectTable/ContextMenu";
+import ContextMenu, { ContextMenuAction } from "../ProjectTable/ContextMenu";
 
 interface DropDownButtonProps {
   children: ReactNode;
   onClick?: () => void;
+  actions: ContextMenuAction<any>[];
 }
 
 export default function DropDownButton({
   children,
   onClick,
+  actions,
 }: DropDownButtonProps) {
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -49,10 +51,7 @@ export default function DropDownButton({
         isOpen={isContextMenuOpen}
         setIsOpen={setIsContextMenuOpen}
         anchorEl={anchorEl}
-        actions={[
-          { label: "Action1", action: () => {} },
-          { label: "Action2", action: () => {} },
-        ]}
+        actions={actions}
       />
     </div>
   );

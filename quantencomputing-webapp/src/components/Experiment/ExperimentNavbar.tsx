@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { RouteComponentProps, withRouter } from "react-router";
 import { getPathWithId, Path } from "../../model/model.routes";
@@ -7,6 +7,8 @@ import clsx from "clsx";
 import { format } from "date-fns";
 import DropDownButton from "./DropDownButton";
 import { useSelectedExperiment } from "../../hook/hook.experiment";
+import { ExperimentState } from "../../model/types/type.experiment";
+import SystemDialog from "../SystemDialog/SystemDialog";
 
 interface ExperimentTopBarProps extends RouteComponentProps<{ id: string }> {}
 
@@ -16,7 +18,10 @@ export default withRouter(function ExperimentNavbar({
   history,
 }: ExperimentTopBarProps) {
   const { t } = useTranslation();
-  const { experiment, isLoading } = useSelectedExperiment(match.params.id);
+  const { experiment, isLoading, setExperiment } = useSelectedExperiment(
+    match.params.id
+  );
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
     <div className={"relative w-full text-white"}>
@@ -54,6 +59,14 @@ export default withRouter(function ExperimentNavbar({
           </div>
           <div className={"flex justify-end items-center"}>
             <DropDownButton
+              actions={[
+                {
+                  label: "Set Max Runtime",
+                  action: () => {
+                    setIsDialogOpen(true);
+                  },
+                },
+              ]}
               onClick={() =>
                 history.push(
                   getPathWithId(experiment.id, Path.ExperimentResult)
@@ -65,6 +78,24 @@ export default withRouter(function ExperimentNavbar({
           </div>
         </div>
       </nav>
+      {isDialogOpen &&
+        experiment.status !== ExperimentState.Failed &&
+        experiment.status !== ExperimentState.Done && (
+          <SystemDialog
+            inputType={"number"}
+            isOpen={isDialogOpen}
+            setIsOpen={setIsDialogOpen}
+            label={"Max Runtime"}
+            buttonText={"Save"}
+            onButtonClick={(input) =>
+              setExperiment((prev) => ({
+                ...prev,
+                maxRuntime: input ? +input : experiment.maxRuntime,
+              }))
+            }
+            title={"Set Max Runtime"}
+          />
+        )}
     </div>
   );
 });
