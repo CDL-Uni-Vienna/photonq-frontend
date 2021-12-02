@@ -156,7 +156,7 @@ function EncodedQubitInput({
         <TextFieldWithIcon
           isDisabled={isDisabled() || inputsDisabled}
           iconsSrc={"/images/theta.svg"}
-          value={"" + getValue(nr, "theta") || "0"}
+          value={"" + (getValue(nr, "theta") || "0")}
           setValue={(value) => {
             handleOnChange(value, "theta");
           }}
@@ -164,7 +164,7 @@ function EncodedQubitInput({
         <TextFieldWithIcon
           isDisabled={isDisabled() || inputsDisabled}
           iconsSrc={"/images/phi.svg"}
-          value={"" + getValue(nr, "phi") || "0"}
+          value={"" + (getValue(nr, "phi") || "0")}
           setValue={(value) => handleOnChange(value, "phi")}
         />
       </div>

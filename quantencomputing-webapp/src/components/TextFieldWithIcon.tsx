@@ -23,12 +23,15 @@ export default function TextFieldWithIcon({
           style: {
             color: "white",
           },
+          step: 0.1,
         }}
-        value={value}
         type={"number"}
+        value={value}
         disabled={isDisabled}
         size={"small"}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) => {
+          setValue(e.target.value);
+        }}
         color={"primary"}
         className={clsx({
           ["bg-primaryDark rounded-sm"]: !isDisabled,

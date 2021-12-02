@@ -8,10 +8,12 @@ import { ExperimentState } from "../model/types/type.experiment";
 import AnimatedLoadingIcon from "../components/AnimatedLoadingIcon";
 import ExperimentResult from "../components/Experiment/ExperimentResult";
 import clsx from "clsx";
+import { useTranslation } from "react-i18next";
 
 export default withRouter(function ResultsPage(
   props: RouteComponentProps<{ id: string }>
 ) {
+  const { t } = useTranslation();
   const { experiment, experimentResult } = useSelectedExperiment(
     props.match.params.id
   );
@@ -26,8 +28,15 @@ export default withRouter(function ResultsPage(
       <PageLayout>
         <NavbarPadding />
         {experiment.status === ExperimentState.Running ? (
-          <div className={"h-screen flex justify-center items-center"}>
+          <div
+            className={
+              "h-screen flex flex-col justify-center items-center space-y-5"
+            }
+          >
             <AnimatedLoadingIcon />
+            <p className={"text-white text-lg"}>
+              {t("Quantum computing your results …")}
+            </p>
           </div>
         ) : (
           <ExperimentResult
