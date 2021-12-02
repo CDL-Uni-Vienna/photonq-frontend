@@ -33,12 +33,8 @@ export default function ProfileDetailSection() {
   };
 
   return (
-    <ProfileSection>
-      <ProfileSectionHeader
-        header={t("Details")}
-        withEditButton
-        onClick={() => setIsEditing((prev) => !prev)}
-      />
+    <ProfileSection withBottomSpace>
+      <ProfileSectionHeader header={t("Details")} />
       <ProfileContentContainer>
         <Table>
           <TableBody>

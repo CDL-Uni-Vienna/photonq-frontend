@@ -5,8 +5,11 @@ import { AuthContext } from "../../../providers/AuthProvider";
 import PersonIcon from "@mui/icons-material/Person";
 import ProfileContentContainer from "../ProfileContentContainer";
 
+/**
+ * @deprecated
+ */
 export default function ProfileImageSection() {
-  const { value: user, setValue: setUser } = useContext(AuthContext);
+  const { value: user } = useContext(AuthContext);
 
   return (
     <ProfileSection>
