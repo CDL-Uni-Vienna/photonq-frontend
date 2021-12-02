@@ -19,6 +19,9 @@ export default withRouter(({ match }: RouteComponentProps<{ id: string }>) => {
   const { experiment, setExperiment, isLoading } = useSelectedExperiment(
     match.params.id
   );
+
+  console.log(experiment);
+
   const inputsDisabled = useMemo(
     () => experiment.status !== ExperimentState.Running,
     [experiment]
