@@ -11,11 +11,17 @@ import {
   getConfig,
   getDefaultExperimentConfig,
 } from "../../../model/model.experiment";
+import { useMemo } from "react";
+import { ExperimentState } from "../../../model/types/type.experiment";
 
 export default withRouter(({ match }: RouteComponentProps<{ id: string }>) => {
   const { t } = useTranslation();
   const { experiment, setExperiment, isLoading } = useSelectedExperiment(
     match.params.id
+  );
+  const inputsDisabled = useMemo(
+    () => experiment.status === ExperimentState.Running,
+    [experiment]
   );
 
   const reset = () => {
@@ -44,19 +50,22 @@ export default withRouter(({ match }: RouteComponentProps<{ id: string }>) => {
     <div className={"space-y-20 py-16"}>
       <DemultiplexerSection />
       <ClusterStateSection
+        inputsDisabled={inputsDisabled}
         experiment={experiment}
         setExperiment={setExperiment}
       />
       <QubitComputingSection
+        inputsDisabled={inputsDisabled}
         experiment={experiment}
         setExperiment={setExperiment}
       />
       <QubitMeasurementSection
+        inputsDisabled={inputsDisabled}
         experiment={experiment}
         setExperiment={setExperiment}
       />
       <div className={"flex justify-end space-x-4"}>
-        <Button variant={"outlined"} onClick={reset}>
+        <Button disabled={inputsDisabled} variant={"outlined"} onClick={reset}>
           {t("Reset")}
         </Button>
       </div>

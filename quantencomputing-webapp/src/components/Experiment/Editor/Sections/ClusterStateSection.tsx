@@ -14,11 +14,13 @@ import { usePossibleClusterConfigsPresetSettings } from "../../../../hook/hook.e
 export interface EditorSectionProps {
   experiment: ExperimentWithConfigs;
   setExperiment: React.Dispatch<React.SetStateAction<ExperimentWithConfigs>>;
+  inputsDisabled?: boolean;
 }
 
 export default function ClusterStateSection({
   setExperiment,
   experiment,
+  inputsDisabled,
 }: EditorSectionProps) {
   const { t } = useTranslation();
   const { currentCircuitConfigs: configs } =
@@ -81,8 +83,10 @@ export default function ClusterStateSection({
             {[2, 3, 4].map((nr) => (
               <Button
                 disabled={
-                  nr !== 4 &&
-                  experiment.clusterState.presetSettings === PresetSetting.Ghz
+                  inputsDisabled ||
+                  (nr !== 4 &&
+                    experiment.clusterState.presetSettings ===
+                      PresetSetting.Ghz)
                 }
                 onClick={() => setExperimentQubitNr(nr)}
                 variant={isButtonActive(nr)}
@@ -97,6 +101,7 @@ export default function ClusterStateSection({
           <h3 className={"text-white font-bold"}>{t("Preset Settings")}</h3>
           <div className={"flex space-x-1 items-center"}>
             <Select
+              disabled={inputsDisabled}
               size={"small"}
               className={"bg-primaryDark"}
               color={"primary"}
