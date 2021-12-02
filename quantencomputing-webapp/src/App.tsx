@@ -29,6 +29,7 @@ function App() {
                   <route.page />
                 </Route>
               ))}
+              <PrivateRoute path={"/"} redirectPath={Path.Login} />
             </Switch>
           </BrowserRouter>
         </AuthProvider>
