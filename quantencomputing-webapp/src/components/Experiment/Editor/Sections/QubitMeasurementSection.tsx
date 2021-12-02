@@ -5,7 +5,6 @@ import { secondaryDark } from "../../../../theme/theme.config";
 import EditorSectionHeader from "./EditorSectionHeader";
 import { useTranslation } from "react-i18next";
 import SettingsImage from "./SettingsImage";
-import { TextField } from "@mui/material";
 import clsx from "clsx";
 import { getEmptyEncodedQubitMeasurement } from "../../../../model/model.experiment";
 import { EncodedQubitMeasurement } from "../../../../model/types/type.experiment";
@@ -14,6 +13,7 @@ import TextFieldWithIcon from "../../../TextFieldWithIcon";
 export default function QubitMeasurementSection({
   setExperiment,
   experiment,
+  inputsDisabled,
 }: EditorSectionProps) {
   const { t } = useTranslation();
 
@@ -45,12 +45,14 @@ export default function QubitMeasurementSection({
         <div className={"flex space-x-5 w-1/2"}>
           <div className={"space-y-7"}>
             <EncodedQubitInput
+              inputsDisabled={inputsDisabled}
               nr={1}
               experiment={experiment}
               encodedQubits={experiment.config?.qm_number_of_qubits}
               setExperiment={setExperiment}
             />
             <EncodedQubitInput
+              inputsDisabled={inputsDisabled}
               nr={2}
               experiment={experiment}
               encodedQubits={experiment.config?.qm_number_of_qubits}
@@ -59,12 +61,14 @@ export default function QubitMeasurementSection({
           </div>
           <div className={"space-y-7"}>
             <EncodedQubitInput
+              inputsDisabled={inputsDisabled}
               nr={3}
               experiment={experiment}
               encodedQubits={experiment.config?.qm_number_of_qubits}
               setExperiment={setExperiment}
             />
             <EncodedQubitInput
+              inputsDisabled={inputsDisabled}
               nr={4}
               experiment={experiment}
               encodedQubits={experiment.config?.qm_number_of_qubits}
@@ -99,6 +103,7 @@ function EncodedQubitInput({
   encodedQubits,
   experiment,
   setExperiment,
+  inputsDisabled,
 }: {
   nr: number;
   encodedQubits?: number | null;
@@ -149,7 +154,7 @@ function EncodedQubitInput({
         })}
       >
         <TextFieldWithIcon
-          isDisabled={isDisabled()}
+          isDisabled={isDisabled() || inputsDisabled}
           iconsSrc={"/images/theta.svg"}
           value={"" + getValue(nr, "theta") || "0"}
           setValue={(value) => {
@@ -157,7 +162,7 @@ function EncodedQubitInput({
           }}
         />
         <TextFieldWithIcon
-          isDisabled={isDisabled()}
+          isDisabled={isDisabled() || inputsDisabled}
           iconsSrc={"/images/phi.svg"}
           value={"" + getValue(nr, "phi") || "0"}
           setValue={(value) => handleOnChange(value, "phi")}

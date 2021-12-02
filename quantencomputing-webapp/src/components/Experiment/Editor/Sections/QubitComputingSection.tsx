@@ -28,6 +28,7 @@ const angleNames: CircuitAngleName[] = ["alpha", "beta", "gamma"];
 export default function QubitComputingSection({
   setExperiment,
   experiment,
+  inputsDisabled,
 }: EditorSectionProps) {
   const { currentConfigs: configs } = usePossibleClusterConfigsQubitComputing(
     experiment,
@@ -103,6 +104,7 @@ export default function QubitComputingSection({
           <div className={"flex items-center space-x-4"}>
             <p>{experiment.withQubitConfig ? "On" : "Off"}</p>
             <Switch
+              disabled={inputsDisabled}
               checked={experiment.withQubitConfig}
               onChange={() => {
                 setExperiment((prev) => ({
@@ -121,6 +123,7 @@ export default function QubitComputingSection({
             <div className={"flex space-x-6"}>
               <div>
                 <CircuitConfigSelector
+                  inputsDisabled={inputsDisabled}
                   currentConfig={experiment.config}
                   configs={configs}
                   setCurrentConfig={(circuit: CircuitConfig) => {
@@ -143,6 +146,7 @@ export default function QubitComputingSection({
                     length: 4 - (experiment.config?.qc_encoded_qubits || 4),
                   }).map((_, index) => (
                     <TextFieldWithIcon
+                      isDisabled={inputsDisabled}
                       key={index}
                       iconsSrc={greekIconSources[index]}
                       value={"" + getAngleValue(angleNames[index])}
@@ -172,16 +176,19 @@ export default function QubitComputingSection({
  * @param configs
  * @param currentConfig
  * @param setCurrentConfig
+ * @param inputsDisabled
  * @constructor
  */
 function CircuitConfigSelector({
   configs,
   currentConfig,
   setCurrentConfig,
+  inputsDisabled,
 }: {
   configs: CircuitConfig[];
   currentConfig: CircuitConfig | undefined;
   setCurrentConfig: (config: CircuitConfig) => void;
+  inputsDisabled?: boolean;
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -215,11 +222,12 @@ function CircuitConfigSelector({
   return (
     <React.Fragment>
       <Button
+        disabled={inputsDisabled}
         style={{ backgroundColor: primaryDark }}
         onClick={handleOnClick}
         className={"p-1"}
       >
-        <img src={getSrc(currentConfig)} />
+        <img src={getSrc(currentConfig)} alt={""} />
       </Button>
       <Popper open={!!anchorEl} anchorEl={anchorEl} placement={"right"}>
         <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
@@ -244,7 +252,7 @@ function CircuitConfigSelector({
                         }}
                         key={config.circuit_id}
                       >
-                        <img src={getSrc(config)} />
+                        <img src={getSrc(config)} alt={""} />
                       </Button>
                     ))}
                   </div>
