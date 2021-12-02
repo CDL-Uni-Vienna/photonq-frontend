@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { CustomTableCellProps } from "./type.customTableCells";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { IconButton } from "@mui/material";
 import ContextMenu from "../ContextMenu";
 import { RouteComponentProps, withRouter } from "react-router";
 import { AddExperimentDialogProps } from "../../../model/types/type.experiment";
+import { deleteExperiment } from "../../../model/model.api";
+import { ProjectExperimentDataContext } from "../../../providers/ProjectExperimentDataProvider";
 
 enum ProjectActions {
   AddNewExperiment = "Add new Experiment",
@@ -31,6 +33,9 @@ export default withRouter(function ActionCell({
 }: ActionCellProps) {
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const {
+    experiments: { setValue: setExperiments },
+  } = useContext(ProjectExperimentDataContext);
 
   const handleOnClick = (
     e: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLButtonElement>
@@ -48,16 +53,31 @@ export default withRouter(function ActionCell({
       },
       {
         label: ProjectActions.Download,
-        action: () => {},
+        action: () => {
+          const blob = new Blob([JSON.stringify(row.original)]);
+          const href = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = href;
+          link.download = `${row.original.experimentName}.json`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        },
       },
       {
         label: ProjectActions.Delete,
-        action: () => {},
+        action: async () => {
+          setExperiments((prev) =>
+            prev.filter((e) => e.id !== row.original.id)
+          );
+          await deleteExperiment(row.original.id);
+        },
       },
-      {
-        label: ProjectActions.Share,
-        action: () => {},
-      },
+      // Not relevant for release 1
+      // {
+      //   label: ProjectActions.Share,
+      //   action: () => {},
+      // },
     ];
   };
 
