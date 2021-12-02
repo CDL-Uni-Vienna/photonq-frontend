@@ -1,7 +1,5 @@
 import React, { useContext, useState } from "react";
 import {
-  Button,
-  CircularProgress,
   Dialog,
   DialogContent,
   DialogTitle,
@@ -17,8 +15,11 @@ import {
 import { getDefaultExperimentConfig } from "../../model/model.experiment";
 import { createExperiment } from "../../model/model.api";
 import LoadingButton from "../LoadingButton";
+import { RouteComponentProps, withRouter } from "react-router";
+import { getPathWithId, Path } from "../../model/model.routes";
+import { Experiment } from "../../model/types/type.experiment";
 
-interface SystemDialogProps {
+interface SystemDialogProps extends RouteComponentProps<{ id: string }> {
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
   onButtonClick?: () => void;
@@ -28,7 +29,8 @@ interface SystemDialogProps {
   variant: keyof ProjectExperimentDataProviderProps<any, any>;
 }
 
-export default function SystemDialog({
+export default withRouter(function SystemDialog({
+  history,
   onButtonClick,
   buttonText,
   title,
@@ -52,9 +54,16 @@ export default function SystemDialog({
     );
     setData((prev: any) => [...prev, experiment]);
     setIsLoading(() => false);
+    return experiment;
+  };
+
+  const resetDialog = () => {
+    setIsOpen(false);
+    setInput("");
   };
 
   const handleOnClick = async () => {
+    let experiment: Experiment;
     if (onButtonClick) {
       onButtonClick();
     } else if (variant === "experiments") {
@@ -62,10 +71,10 @@ export default function SystemDialog({
         setErrorMassage("Can't be empty");
         return;
       }
-      await createNewExperiment();
+      experiment = await createNewExperiment();
+      history.push(getPathWithId(experiment.id, Path.SingleExperiment));
     }
-    setIsOpen(false);
-    setInput("");
+    resetDialog();
   };
 
   return (
@@ -103,4 +112,4 @@ export default function SystemDialog({
       </DialogContent>
     </Dialog>
   );
-}
+});

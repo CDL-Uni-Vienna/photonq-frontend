@@ -28,7 +28,7 @@ export function getTableColumns(t: TFunction): MainTableColumn[] {
     {
       accessor: "status",
       Header: ({ column }) =>
-        SortableTableCellHeader({ title: "State", column: column as any }),
+        SortableTableCellHeader({ title: "Status", column: column as any }),
       id: "status",
       Cell: StateCell,
     },

@@ -7,10 +7,7 @@ import ExperimentEditor from "../components/Experiment/Editor/ExperimentEditor";
 export default function EditorPage() {
   return (
     <div className={"bg-primaryDark"}>
-      <ExperimentNavbar
-        experimentName={"Experiment"}
-        experimentCreatedAt={new Date()}
-      />
+      <ExperimentNavbar />
       <PageLayout>
         <NavbarPadding />
         <ExperimentEditor />

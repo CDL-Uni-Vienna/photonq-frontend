@@ -1,6 +1,9 @@
 import { Experiment, ExperimentResult } from "./type.experiment";
 
-export const BASE_ENDPOINT_URL = process.env.REACT_APP_BASE_URL;
+export const BASE_ENDPOINT_URL =
+  process.env.REACT_APP_MOCK_API === "True"
+    ? ""
+    : process.env.REACT_APP_BASE_URL;
 
 export enum Endpoint {
   Experiment = "/experiment",

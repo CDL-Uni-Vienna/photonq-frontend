@@ -1,12 +1,15 @@
 import {
+  ResultParameters,
   CreateExperimentPayload,
   EncodedQubitMeasurement,
   Experiment,
   ExperimentState,
   ExperimentWithConfigs,
   PresetSetting,
+  ExperimentResult,
 } from "./types/type.experiment";
 import { CircuitConfig, circuitConfigs } from "../circuitConfig/circuits4Dv004";
+import { format } from "date-fns";
 
 /**
  * Returns an Experiment with default configuration
@@ -17,7 +20,7 @@ export function getDefaultExperimentConfig(experimentName: string): Experiment {
   return {
     createdAt: Date.now(),
     clusterState: {
-      amountQubits: 3,
+      amountQubits: 2,
       presetSettings: PresetSetting.Linear,
     },
     qubitComputing: {
@@ -34,7 +37,7 @@ export function getDefaultExperimentConfig(experimentName: string): Experiment {
       ],
     },
     encodedQubitMeasurements: [],
-    circuitId: 3,
+    circuitId: 5,
     experimentName,
     projectId: "",
     maxRuntime: 120,
@@ -123,4 +126,93 @@ export function getEmptyEncodedQubitMeasurement(
     phi: 0,
     theta: 0,
   };
+}
+
+/**
+ *
+ * @param experimentId
+ * @param experimentResult
+ */
+export function getExecutionIndicators(
+  experimentId: string,
+  experimentResult: ExperimentResult
+): ResultParameters[] {
+  return [
+    {
+      label: "Execution Start Time",
+      value: format(new Date(experimentResult.startTime), "Ppp"),
+    },
+    {
+      label: "Total Counts",
+      value: experimentResult.totalCounts,
+    },
+    {
+      label: "Number of Detectors Used",
+      value: experimentResult.numberOfDetectors,
+    },
+    {
+      label: "Single Photon Rate",
+      value: experimentResult.singlePhotonRate,
+    },
+    {
+      label: "Expected Execution ID",
+      value: experimentId,
+    },
+    {
+      label: "Total Time",
+      value: experimentResult.totalTime,
+    },
+  ];
+}
+
+/**
+ *
+ * @param experiment
+ * @param config
+ */
+export function getComputationParameters(
+  experiment: Experiment,
+  config: CircuitConfig
+): ResultParameters[] {
+  return [
+    {
+      label: "Physical qubits",
+      value: experiment.clusterState.amountQubits,
+    },
+    {
+      label: "Encoded qubits",
+      value: config.qc_encoded_qubits || 0,
+    },
+    {
+      label: "Computation configruation",
+      value: experiment.qubitComputing.circuitConfiguration,
+    },
+    {
+      label: "CPhase gates",
+      value: config.qc_cphase_gates || 0,
+    },
+    {
+      label: "Computing parameters",
+      value: convertToAngleString(
+        experiment.qubitComputing.circuitAngles.map(
+          (val) => val.circuitAngleValue
+        )
+      ),
+    },
+    {
+      label: "Projection Parameters",
+      value: convertToAngleString(experiment.encodedQubitMeasurements),
+    },
+  ];
+}
+
+function convertToAngleString(angles: number[] | EncodedQubitMeasurement[]) {
+  return `[${angles
+    .map((angle, index) => {
+      if (typeof angle === "number") {
+        return `${angle}°`;
+      }
+      return `[${angle.phi}°, ${angle.theta}°]`;
+    })
+    .join(", ")}]`;
 }

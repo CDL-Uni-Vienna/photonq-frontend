@@ -18,6 +18,12 @@ export interface CircuitConfig {
   results_circuit_model: string;
 }
 
+// bei 1 encoded qubits werden 3 parameter gebracht, bei 2 werden 2 parameter gebracht, bei 3 1 parameter gebracht
+// bei reset einfach default einfuegen
+// expected Execution id ist die experiment id
+// computing parameters: sind die Winkel bei der qubit computing eingabe
+// projection paramaters sind die qubit measurments
+
 export const circuitConfigs: CircuitConfig[] = [
   {
     circuit_id: 1,

@@ -36,7 +36,7 @@ export default function ContextMenu({
     <Popper placement={"bottom-start"} anchorEl={anchorEl} open={isOpen}>
       <List dense={variant === "small"} component={Paper}>
         {actions.map(({ label, action }, index) => (
-          <MenuItem onClick={(e) => handleOnClick(e, action)} key={index}>
+          <MenuItem divider onClick={(e) => handleOnClick(e, action)} key={index}>
             <ListItemText primary={label} />
           </MenuItem>
         ))}
