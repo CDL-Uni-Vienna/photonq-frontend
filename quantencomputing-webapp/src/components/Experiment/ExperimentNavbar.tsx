@@ -16,7 +16,7 @@ export default withRouter(function ExperimentNavbar({
   history,
 }: ExperimentTopBarProps) {
   const { t } = useTranslation();
-  const { experiment } = useSelectedExperiment(match.params.id);
+  const { experiment, isLoading } = useSelectedExperiment(match.params.id);
 
   return (
     <div className={"relative w-full text-white"}>
@@ -29,9 +29,14 @@ export default withRouter(function ExperimentNavbar({
               src="/images/logo-white.png"
               alt="Logo of the university of vienna"
             />
-            <h2 className={"text-xl font-bold"}>{`${
-              experiment.experimentName
-            } - ${format(experiment.createdAt, "P")}`}</h2>
+            <h2 className={"text-xl font-bold transition duration-200"}>
+              {isLoading
+                ? ""
+                : `${experiment.experimentName} - ${format(
+                    experiment.createdAt,
+                    "P"
+                  )}`}
+            </h2>
           </div>
           <div className={"flex space-x-4 items-center justify-center"}>
             <ExperimentLinkElement
