@@ -20,7 +20,7 @@ export default withRouter(({ match }: RouteComponentProps<{ id: string }>) => {
     match.params.id
   );
   const inputsDisabled = useMemo(
-    () => experiment.status === ExperimentState.Running,
+    () => experiment.status !== ExperimentState.Running,
     [experiment]
   );
 

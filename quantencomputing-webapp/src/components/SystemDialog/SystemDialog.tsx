@@ -1,5 +1,6 @@
 import React, { useContext, useState } from "react";
 import {
+  Button,
   Dialog,
   DialogContent,
   DialogTitle,
@@ -13,8 +14,6 @@ import {
   ProjectExperimentDataProviderProps,
 } from "../../providers/ProjectExperimentDataProvider";
 import { getDefaultExperimentConfig } from "../../model/model.experiment";
-import { createExperiment } from "../../model/model.api";
-import LoadingButton from "../LoadingButton";
 import { RouteComponentProps, withRouter } from "react-router";
 import { getPathWithId, Path } from "../../model/model.routes";
 import { Experiment } from "../../model/types/type.experiment";
@@ -42,20 +41,9 @@ export default withRouter(function SystemDialog({
   const { t } = useTranslation();
   const [input, setInput] = useState("");
   const [errorMassage, setErrorMassage] = useState<string>();
-  const [isLoading, setIsLoading] = useState(false);
   const {
     [variant]: { setValue: setData },
   } = useContext(ProjectExperimentDataContext);
-
-  const createNewExperiment = async () => {
-    setIsLoading(true);
-    const experiment = await createExperiment(
-      getDefaultExperimentConfig(input)
-    );
-    setData((prev: any) => [...prev, experiment]);
-    setIsLoading(() => false);
-    return experiment;
-  };
 
   const resetDialog = () => {
     setIsOpen(false);
@@ -71,8 +59,13 @@ export default withRouter(function SystemDialog({
         setErrorMassage("Can't be empty");
         return;
       }
-      experiment = await createNewExperiment();
-      history.push(getPathWithId(experiment.id, Path.SingleExperiment));
+      experiment = getDefaultExperimentConfig(input);
+      history.push(
+        getPathWithId(
+          experiment.experimentName.replace(/\s/g, ""),
+          Path.SingleExperiment
+        )
+      );
     }
     resetDialog();
   };
@@ -101,13 +94,13 @@ export default withRouter(function SystemDialog({
             variant={"outlined"}
             size={"small"}
           />
-          <LoadingButton
-            isLoading={isLoading}
-            text={buttonText}
+          <Button
             className={"self-end"}
             onClick={handleOnClick}
             variant={"contained"}
-          />
+          >
+            {buttonText}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

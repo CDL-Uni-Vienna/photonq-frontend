@@ -23,7 +23,7 @@ export default function PrivateRoute({
       path={path}
       exact={exact}
       render={({ location }) =>
-        user ? (
+        user || isDebug ? (
           children
         ) : (
           <Redirect

@@ -18,22 +18,28 @@ import { getExperiment } from "../model/model.api";
  * @param id
  */
 export function useSelectedExperiment(id: string) {
-  const getDefaultData = (): ExperimentWithConfigs => ({
-    ...getDefaultExperimentConfig("Experiment"),
+  const getDefaultData = (name: string): ExperimentWithConfigs => ({
+    ...getDefaultExperimentConfig(name),
     withQubitConfig: true,
   });
 
   const [experimentResult, setExperimentResult] = useState<ExperimentResult>();
   const [experiment, setExperiment] = useState<ExperimentWithConfigs>(
-    getDefaultData()
+    getDefaultData(id)
   );
   const [isLoading, setIsLoading] = useState(true);
 
   const getData = async () => {
-    const res = await getExperiment(id);
-    setExperiment((prev) => ({ ...prev, ...res.experimentConfiguration }));
-    setExperimentResult(res.experimentResult);
-    setIsLoading(false);
+    try {
+      const res = await getExperiment(id);
+      setExperiment((prev) => ({ ...prev, ...res.experimentConfiguration }));
+      setExperimentResult(res.experimentResult);
+    } catch (e) {
+      // This case means that the id is a name of an experiment not an actual Id.
+      // So we use the default data and let the user edit his newly created experiment.
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
