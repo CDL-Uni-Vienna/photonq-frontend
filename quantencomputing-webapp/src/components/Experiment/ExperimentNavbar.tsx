@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { RouteComponentProps, withRouter } from "react-router";
 import { getPathWithId, Path } from "../../model/model.routes";
@@ -20,6 +20,10 @@ export default withRouter(function ExperimentNavbar({
   const { t } = useTranslation();
   const { experiment, isLoading, setExperiment } = useSelectedExperiment(
     match.params.id
+  );
+  const isRunButtonDisabled = useMemo(
+    () => experiment.status !== ExperimentState.Running,
+    [experiment]
   );
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -59,6 +63,7 @@ export default withRouter(function ExperimentNavbar({
           </div>
           <div className={"flex justify-end items-center"}>
             <DropDownButton
+              isDisabled={isRunButtonDisabled}
               actions={[
                 {
                   label: "Set Max Runtime",

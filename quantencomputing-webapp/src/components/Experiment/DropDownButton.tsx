@@ -7,12 +7,14 @@ interface DropDownButtonProps {
   children: ReactNode;
   onClick?: () => void;
   actions: ContextMenuAction<any>[];
+  isDisabled?: boolean;
 }
 
 export default function DropDownButton({
   children,
   onClick,
   actions,
+  isDisabled,
 }: DropDownButtonProps) {
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -27,6 +29,7 @@ export default function DropDownButton({
   return (
     <div className={"flex items-center h-full"}>
       <Button
+        disabled={isDisabled}
         onClick={onClick}
         style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
         className={"h-1/2"}
@@ -35,6 +38,7 @@ export default function DropDownButton({
         {children}
       </Button>
       <Button
+        disabled={isDisabled}
         onClick={handleOnClick}
         style={{
           minWidth: 20,
