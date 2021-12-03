@@ -3,14 +3,14 @@ image: node:16
 pipelines:
   branches:
     main:
-      - step:
-          name: Test
-          caches:
-            - node
-          script:
-            - cd quantencomputing-webapp
-            - npm ci
-            - npm test
+      # - step:
+      #     name: Test
+      #     caches:
+      #       - node
+      #     script:
+      #       - cd quantencomputing-webapp
+      #       - npm ci
+      #       - npm test
       - step:
           name: Build Production
           caches:
