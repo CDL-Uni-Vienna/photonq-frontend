@@ -1,6 +1,5 @@
 import {
   ResultParameters,
-  CreateExperimentPayload,
   EncodedQubitMeasurement,
   Experiment,
   ExperimentState,
@@ -70,13 +69,10 @@ export function filterSingleCircuitConfigClusterState(
   ) {
     return false;
   }
-  if (
-    circuitConfig.csp_preset_settings_name !==
+  return (
+    circuitConfig.csp_preset_settings_name ===
     experiment.clusterState.presetSettings
-  ) {
-    return false;
-  }
-  return true;
+  );
 }
 
 /**
@@ -105,13 +101,10 @@ export function filterSingleCircuitConfigQubitComputing(
   ) {
     return false;
   }
-  if (
+  return !(
     experiment.config &&
     experiment.config.qm_circuit_model === circuitConfig.qm_circuit_model
-  ) {
-    return false;
-  }
-  return true;
+  );
 }
 
 /**
@@ -208,7 +201,7 @@ export function getComputationParameters(
 
 function convertToAngleString(angles: number[] | EncodedQubitMeasurement[]) {
   return `[${angles
-    .map((angle, index) => {
+    .map((angle) => {
       if (typeof angle === "number") {
         return `${angle}°`;
       }

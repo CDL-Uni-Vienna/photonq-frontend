@@ -22,7 +22,7 @@ export default function SectionHeader({
   return (
     <div
       className={clsx("flex justify-between", {
-        ["py-16"]: withVerticalSpacing,
+        "py-16": withVerticalSpacing,
       })}
     >
       <Typography variant={"h4"} component={"h1"} fontWeight={"bold"}>

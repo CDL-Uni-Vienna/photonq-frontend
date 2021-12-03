@@ -45,7 +45,7 @@ export default function TextFieldWithIcon({
         }}
         color={"primary"}
         className={clsx({
-          ["bg-primaryDark rounded-sm"]: !isDisabled,
+          "bg-primaryDark rounded-sm": !isDisabled,
         })}
       />
     </div>

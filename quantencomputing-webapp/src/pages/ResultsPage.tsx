@@ -21,7 +21,7 @@ export default withRouter(function ResultsPage(
   return (
     <div
       className={clsx("bg-primaryDark h-screen", {
-        ["overflow-hidden"]: experiment.status === ExperimentState.Running,
+        "overflow-hidden": experiment.status === ExperimentState.Running,
       })}
     >
       <ExperimentNavbar />

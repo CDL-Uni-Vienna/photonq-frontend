@@ -18,7 +18,7 @@ export default function ContentContainer({
   return (
     <Paper
       className={clsx(className, {
-        ["p-4"]: withPadding,
+        "p-4": withPadding,
       })}
       style={{ backgroundColor: color }}
     >

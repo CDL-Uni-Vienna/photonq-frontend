@@ -18,7 +18,7 @@ const tableKeys: (keyof User)[] = ["country", "name", "username", "occupation"];
 export default function ProfileDetailSection() {
   const { t } = useTranslation();
   const { value: user, setValue: setUser } = useContext(AuthContext);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing] = useState(false);
 
   if (!user) return null;
 

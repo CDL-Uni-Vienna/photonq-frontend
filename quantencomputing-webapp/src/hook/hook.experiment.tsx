@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  Experiment,
   ExperimentResult,
   ExperimentWithConfigs,
 } from "../model/types/type.experiment";
@@ -45,6 +44,7 @@ export function useSelectedExperiment(id: string) {
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line
   }, []);
 
   return {
@@ -78,6 +78,7 @@ export function usePossibleClusterConfigsPresetSettings(
     if (filteredConfigs.length) {
       setExperiment((prev) => ({ ...prev, config: filteredConfigs[0] }));
     }
+    // eslint-disable-next-line
   }, [
     experiment.clusterState.amountQubits,
     experiment.clusterState.presetSettings,
@@ -119,6 +120,7 @@ export function usePossibleClusterConfigsQubitComputing(
 
   useEffect(() => {
     adaptData();
+    // eslint-disable-next-line
   }, [currentCircuitConfigs, experiment.withQubitConfig]);
 
   return { currentConfigs };

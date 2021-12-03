@@ -18,7 +18,9 @@ export default function SettingsImage({
   }, [src]);
 
   return (
+    // eslint-disable-next-line
     <img
+      alt={"Configuration Image"}
       src={source}
       onError={() => onError?.(setSource)}
       style={{

@@ -124,7 +124,7 @@ function ExperimentLinkElement({
     <Link
       style={{ textTransform: "uppercase" }}
       className={clsx("text-lg duration-300 transform hover:scale-110", {
-        ["text-primary"]: highlight,
+        "text-primary": highlight,
       })}
       to={getPathWithId(id, path)}
     >

@@ -34,8 +34,8 @@ export default function Navbar() {
         className={clsx(
           "left-0 right-0 border-b bg-white z-30 flex justify-center",
           {
-            ["absolute"]: !mobileNavBarOpen,
-            ["fixed"]: mobileNavBarOpen,
+            absolute: !mobileNavBarOpen,
+            fixed: mobileNavBarOpen,
           }
         )}
       >
@@ -70,8 +70,8 @@ export default function Navbar() {
           className={clsx(
             "lg:hidden fixed flex overflow-hidden justify-start items-center inset-0 h-full w-full bg-primaryLight px-8",
             {
-              ["hidden"]: !mobileNavBarOpen,
-              ["block"]: mobileNavBarOpen,
+              hidden: !mobileNavBarOpen,
+              block: mobileNavBarOpen,
             }
           )}
         >

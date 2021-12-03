@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import AuthFormContainer from "./AuthFormContainer";
-import { Button, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import PasswordField from "./PasswordField";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";

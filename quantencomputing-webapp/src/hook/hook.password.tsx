@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import zxcvbn from "zxcvbn";
 
 const MIN_PASSWORD_STRENGTH = 3;

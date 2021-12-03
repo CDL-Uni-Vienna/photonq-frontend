@@ -1,6 +1,5 @@
 import { rest, RestRequest } from "msw";
 import { getDefaultExperimentConfig } from "../model/model.experiment";
-import { Experiment } from "../model/types/type.experiment";
 
 export const handlers = [
   rest.get("/experiment/:experimentId", (req, res, context) => {

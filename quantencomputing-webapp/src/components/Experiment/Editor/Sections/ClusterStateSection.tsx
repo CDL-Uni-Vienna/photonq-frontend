@@ -122,7 +122,12 @@ export default function ClusterStateSection({
                 </MenuItem>
               ))}
             </Select>
-            <img className={"max-h-8"} src={getSvgSource(true)} />
+            {/*eslint-disable-next-line*/}
+            <img
+              className={"max-h-8"}
+              src={getSvgSource(true)}
+              alt={"Cluster State configuration image"}
+            />
           </div>
         </div>
       </div>

@@ -18,6 +18,7 @@ export default function AnimatedLoadingIcon() {
       cycleBottomUp();
     }, 1200);
     return () => clearInterval(i);
+    // eslint-disable-next-line
   }, []);
 
   return (

@@ -1,14 +1,11 @@
 import React, { useState } from "react";
-import { Button, Checkbox, FormControlLabel, TextField } from "@mui/material";
+import { Checkbox, FormControlLabel, TextField } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import PasswordField from "./PasswordField";
 import AuthFormContainer from "./AuthFormContainer";
 import { Link } from "react-router-dom";
 import { Path } from "../../model/model.routes";
-import {
-  MIN_PASSWORD_LENGTH,
-  usePasswordStrength,
-} from "../../hook/hook.password";
+import { usePasswordStrength } from "../../hook/hook.password";
 import { RegisterCredentials } from "../../model/types/type.auth";
 import { register } from "../../model/model.api";
 import { RouteComponentProps, withRouter } from "react-router";

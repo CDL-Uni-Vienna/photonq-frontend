@@ -36,7 +36,6 @@ export default function ExperimentResultContainer({
 
   /**
    *
-   * @param experiment
    * @param fallback
    */
   const getResultSvgSrc = (fallback?: boolean) => {
@@ -76,7 +75,10 @@ export default function ExperimentResultContainer({
         </div>
       </div>
       <div style={{ width: "fit-content" }} className={"bg-primaryDark p-1"}>
-        {config?.qc_circuit_model && <img src={getQubitConfigSrc()} />}
+        {config?.qc_circuit_model && (
+          // eslint-disable-next-line jsx-a11y/img-redundant-alt
+          <img src={getQubitConfigSrc()} alt={"Circuit Modal config image"} />
+        )}
       </div>
       <div className={"flex space-x-32 text-white"}>
         <div className={"space-y-3"}>

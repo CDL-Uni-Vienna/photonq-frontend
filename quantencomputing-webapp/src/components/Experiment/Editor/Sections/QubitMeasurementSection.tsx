@@ -29,6 +29,7 @@ export default function QubitMeasurementSection({
         length: experiment.config?.qm_number_of_qubits || 0,
       }).map((_, index) => getEmptyEncodedQubitMeasurement(index + 1)),
     }));
+    // eslint-disable-next-line
   }, [experiment.config?.qm_number_of_qubits]);
 
   return (
@@ -96,6 +97,9 @@ export default function QubitMeasurementSection({
  *
  * @param nr
  * @param encodedQubits
+ * @param experiment
+ * @param setExperiment
+ * @param inputsDisabled
  * @constructor
  */
 function EncodedQubitInput({
@@ -145,12 +149,12 @@ function EncodedQubitInput({
     <div className={"space-y-3"}>
       <h3
         className={clsx("font-bold", {
-          ["text-gray-500"]: isDisabled(),
+          "text-gray-500": isDisabled(),
         })}
       >{`${t("Encoded Qubit")} ${nr}`}</h3>
       <div
         className={clsx("space-y-3", {
-          ["text-gray-500"]: isDisabled(),
+          "text-gray-500": isDisabled(),
         })}
       >
         <TextFieldWithIcon

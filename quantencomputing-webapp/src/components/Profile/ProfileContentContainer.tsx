@@ -13,7 +13,7 @@ export default function ProfileContentContainer({
   return (
     <div
       className={clsx("border p-6", {
-        ["space-y-5"]: withSpaceBetween,
+        "space-y-5": withSpaceBetween,
       })}
     >
       {children}

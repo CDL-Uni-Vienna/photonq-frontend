@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import ContentContainer from "../../../Layout/ContentContainer";
 import { secondaryDark, primaryDark } from "../../../../theme/theme.config";
 import EditorSectionHeader from "./EditorSectionHeader";
@@ -83,6 +83,7 @@ export default function QubitComputingSection({
         })),
       },
     }));
+    // eslint-disable-next-line
   }, [experiment.config?.qc_encoded_qubits]);
 
   return (
@@ -201,7 +202,7 @@ function CircuitConfigSelector({
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
-  const groupConfigs = () => {
+  const groupConfigs = useCallback(() => {
     const groupedConfigs: { [key: number]: CircuitConfig[] } = {
       1: [],
       2: [],
@@ -215,9 +216,9 @@ function CircuitConfigSelector({
       }
     });
     return groupedConfigs;
-  };
+  }, [configs]);
 
-  const groupedConfigs = useMemo(() => groupConfigs(), [configs]);
+  const groupedConfigs = useMemo(() => groupConfigs(), [groupConfigs]);
 
   return (
     <React.Fragment>
