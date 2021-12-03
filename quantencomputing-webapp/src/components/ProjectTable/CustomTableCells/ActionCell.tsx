@@ -7,6 +7,7 @@ import { RouteComponentProps, withRouter } from "react-router";
 import { AddExperimentDialogProps } from "../../../model/types/type.experiment";
 import { deleteExperiment } from "../../../model/model.api";
 import { ProjectExperimentDataContext } from "../../../providers/ProjectExperimentDataProvider";
+import { getPathWithId, Path } from "../../../model/model.routes";
 
 enum ProjectActions {
   AddNewExperiment = "Add new Experiment",
@@ -28,6 +29,7 @@ interface ActionCellProps
 export default withRouter(function ActionCell({
   row,
   setAddExperimentDialogProps,
+  history,
 }: ActionCellProps) {
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -47,7 +49,9 @@ export default withRouter(function ActionCell({
     return [
       {
         label: ProjectActions.Run,
-        action: () => {},
+        action: () => {
+          history.push(getPathWithId(row.original.id, Path.ExperimentResult));
+        },
       },
       {
         label: ProjectActions.Download,
