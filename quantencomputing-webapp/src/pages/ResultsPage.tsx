@@ -10,6 +10,7 @@ import ExperimentResult from "../components/Experiment/ExperimentResult";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
 import DownloadButton from "../components/DownloadButton";
+import { downloadData } from "../utils/utils.download";
 
 export default withRouter(function ResultsPage(
   props: RouteComponentProps<{ id: string }>
@@ -47,7 +48,16 @@ export default withRouter(function ResultsPage(
               experiment={experiment}
             />
             <div className={"flex justify-end mt-8"}>
-              <DownloadButton>{t("Results")}</DownloadButton>
+              <DownloadButton
+                onClick={() => {
+                  downloadData(experiment.experimentName, {
+                    experimentConfigs: experiment,
+                    result: experimentResult,
+                  });
+                }}
+              >
+                {t("Results")}
+              </DownloadButton>
             </div>
           </div>
         )}

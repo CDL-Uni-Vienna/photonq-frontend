@@ -8,6 +8,7 @@ import { AddExperimentDialogProps } from "../../../model/types/type.experiment";
 import { deleteExperiment } from "../../../model/model.api";
 import { ProjectExperimentDataContext } from "../../../providers/ProjectExperimentDataProvider";
 import { getPathWithId, Path } from "../../../model/model.routes";
+import { downloadData } from "../../../utils/utils.download";
 
 enum ProjectActions {
   AddNewExperiment = "Add new Experiment",
@@ -56,14 +57,7 @@ export default withRouter(function ActionCell({
       {
         label: ProjectActions.Download,
         action: () => {
-          const blob = new Blob([JSON.stringify(row.original)]);
-          const href = URL.createObjectURL(blob);
-          const link = document.createElement("a");
-          link.href = href;
-          link.download = `${row.original.experimentName}.json`;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
+          downloadData(row.original.experimentName, row.original);
         },
       },
       {

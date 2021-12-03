@@ -15,6 +15,7 @@ import {
 } from "../../model/model.experiment";
 import AnimatedLoadingIcon from "../AnimatedLoadingIcon";
 import DownloadButton from "../DownloadButton";
+import { downloadData } from "../../utils/utils.download";
 
 interface ExperimentResultProps {
   experiment: Experiment;
@@ -90,7 +91,11 @@ export default function ExperimentResultContainer({
               <p>{param.value}</p>
             </div>
           ))}
-          <DownloadButton>{t("Computation Configuration File")}</DownloadButton>
+          <DownloadButton
+            onClick={() => downloadData(experiment.experimentName, experiment)}
+          >
+            {t("Computation Configuration File")}
+          </DownloadButton>
         </div>
         <div className={"space-y-4"}>
           <h3 className={"font-bold text-xl"}>{t("Execution Indicators")}</h3>
@@ -102,7 +107,16 @@ export default function ExperimentResultContainer({
               </div>
             )
           )}
-          <DownloadButton>{t("Execution Metadata File")}</DownloadButton>
+          <DownloadButton
+            onClick={() =>
+              downloadData(
+                `${experiment.experimentName}-results`,
+                experimentResult
+              )
+            }
+          >
+            {t("Execution Metadata File")}
+          </DownloadButton>
         </div>
       </div>
     </ContentContainer>
