@@ -43,10 +43,16 @@ function BaseStateCell({
   icon: ReactNode;
   color?: string;
 }) {
+  const removeUpperCase = (val: string) => {
+    return val
+      .toLowerCase()
+      .replace(/\b[a-z]/g, (letter) => letter.toUpperCase());
+  };
+
   const { t } = useTranslation();
   return (
     <div style={{ color }} className={"flex space-x-4 items-center"}>
-      <p style={{ width: 70 }}>{t(value)}</p>
+      <p style={{ width: 70 }}>{t(removeUpperCase(value))}</p>
       {icon}
     </div>
   );
