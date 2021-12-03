@@ -9,6 +9,7 @@ import AnimatedLoadingIcon from "../components/AnimatedLoadingIcon";
 import ExperimentResult from "../components/Experiment/ExperimentResult";
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
+import DownloadButton from "../components/DownloadButton";
 
 export default withRouter(function ResultsPage(
   props: RouteComponentProps<{ id: string }>
@@ -40,10 +41,15 @@ export default withRouter(function ResultsPage(
             </p>
           </div>
         ) : (
-          <ExperimentResult
-            experimentResult={experimentResult}
-            experiment={experiment}
-          />
+          <div>
+            <ExperimentResult
+              experimentResult={experimentResult}
+              experiment={experiment}
+            />
+            <div className={"flex justify-end mt-8"}>
+              <DownloadButton>{t("Results")}</DownloadButton>
+            </div>
+          </div>
         )}
       </PageLayout>
     </div>

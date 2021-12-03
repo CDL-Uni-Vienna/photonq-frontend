@@ -14,6 +14,7 @@ import {
   getExecutionIndicators,
 } from "../../model/model.experiment";
 import AnimatedLoadingIcon from "../AnimatedLoadingIcon";
+import DownloadButton from "../DownloadButton";
 
 interface ExperimentResultProps {
   experiment: Experiment;
@@ -81,7 +82,7 @@ export default function ExperimentResultContainer({
         )}
       </div>
       <div className={"flex space-x-32 text-white"}>
-        <div className={"space-y-3"}>
+        <div className={"space-y-4"}>
           <h3 className={"font-bold text-xl"}>{t("Computation parameters")}</h3>
           {getComputationParameters(experiment, config!).map((param, index) => (
             <div key={index} className={"flex justify-between space-x-12"}>
@@ -89,8 +90,9 @@ export default function ExperimentResultContainer({
               <p>{param.value}</p>
             </div>
           ))}
+          <DownloadButton>{t("Computation Configuration File")}</DownloadButton>
         </div>
-        <div className={"space-y-3"}>
+        <div className={"space-y-4"}>
           <h3 className={"font-bold text-xl"}>{t("Execution Indicators")}</h3>
           {getExecutionIndicators(experiment.id, experimentResult!).map(
             (param, index) => (
@@ -100,6 +102,7 @@ export default function ExperimentResultContainer({
               </div>
             )
           )}
+          <DownloadButton>{t("Execution Metadata File")}</DownloadButton>
         </div>
       </div>
     </ContentContainer>
