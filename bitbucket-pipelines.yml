@@ -3,7 +3,6 @@ image: node:16
 pipelines:
   branches:
     main:
-      -parallel:
       # - step:
       #     name: Test
       #     caches:
@@ -22,7 +21,6 @@ pipelines:
               - npm run build -- --output-path=build-production
             artifacts:
               - quantencomputing-webapp/build-production/**
-      -parallel:
         - step:
             name: Push Docker to DockerHub
             services:
@@ -38,20 +36,20 @@ pipelines:
               - docker tag $IMAGE:$TAG $IMAGE:latest
               - docker push $IMAGE:$TAG
               - docker push $IMAGE:latest
-      - step:
-          name: Update Version
-          caches:
-            - node
-          script:
-            - apt-get update && apt-get -y install jq
-            - cd quantencomputing-webapp
-            - npm ci
-            - declare -x VERSION=$(jq -r '.version' package.json)
-            - git tag -f $VERSION
-            - git remote -v
-            - git push origin -f --tags
-            - npm run autoversion
-            - declare -x VERSION=$(jq -r '.version' package.json)
-            - git add .
-            - git commit -m "[skip CI] Update version to $VERSION"
-            - git push
+        - step:
+            name: Update Version
+            caches:
+              - node
+            script:
+              - apt-get update && apt-get -y install jq
+              - cd quantencomputing-webapp
+              - npm ci
+              - declare -x VERSION=$(jq -r '.version' package.json)
+              - git tag -f $VERSION
+              - git remote -v
+              - git push origin -f --tags
+              - npm run autoversion
+              - declare -x VERSION=$(jq -r '.version' package.json)
+              - git add .
+              - git commit -m "[skip CI] Update version to $VERSION"
+              - git push  
