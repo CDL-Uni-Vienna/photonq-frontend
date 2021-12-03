@@ -3,6 +3,7 @@ image: node:16
 pipelines:
   branches:
     main:
+      -parallel:
       # - step:
       #     name: Test
       #     caches:
@@ -11,32 +12,32 @@ pipelines:
       #       - cd quantencomputing-webapp
       #       - npm ci
       #       - npm test
-      - step:
-          name: Build Production
-          caches:
-            - node
-          script:
-            - cd quantencomputing-webapp
-            - npm ci
-            - npm run build -- --output-path=build-production
-          artifacts:
-            - quantencomputing-webapp/build-production/**
-
-      - step:
-          name: Push Docker to DockerHub
-          services:
-            - docker
-          script:
-            - mv quantencomputing-webapp/build-production .
-            - apt-get update && apt-get -y install jq
-            - declare -x VERSION=$(jq -r '.version' package.json)
-            - IMAGE=univie-oqc/oqc-frontend
-            - TAG=$VERSION
-            - docker login --username "${DOCKER_HUB_USER}" --password "${DOCKER_HUB_PASSWORD}"
-            - docker build -t $IMAGE:$TAG .
-            - docker tag $IMAGE:$TAG $IMAGE:latest
-            - docker push $IMAGE:$TAG
-            - docker push $IMAGE:latest
+        - step:
+            name: Build Production
+            caches:
+              - node
+            script:
+              - cd quantencomputing-webapp
+              - npm ci
+              - npm run build -- --output-path=build-production
+            artifacts:
+              - quantencomputing-webapp/build-production/**
+      -parallel:
+        - step:
+            name: Push Docker to DockerHub
+            services:
+              - docker
+            script:
+              - cd quantencomputing-webapp
+              - apt-get update && apt-get -y install jq
+              - declare -x VERSION=$(jq -r '.version' package.json)
+              - IMAGE=univie-oqc/oqc-frontend
+              - TAG=$VERSION
+              - docker login --username "${DOCKER_HUB_USER}" --password "${DOCKER_HUB_PASSWORD}"
+              - docker build -t $IMAGE:$TAG .
+              - docker tag $IMAGE:$TAG $IMAGE:latest
+              - docker push $IMAGE:$TAG
+              - docker push $IMAGE:latest
       - step:
           name: Update Version
           caches:
