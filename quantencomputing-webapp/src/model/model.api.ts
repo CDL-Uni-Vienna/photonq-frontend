@@ -24,10 +24,13 @@ async function baseApiFetch<T>({
   method,
   endpoint,
   body,
+  token,
 }: BaseApiFetchPayload<T>) {
   return fetch(`${BASE_ENDPOINT_URL}${endpoint}${params ? "/" + params : ""}`, {
     headers: {
+      Accept: "application/json",
       "Content-Type": "application/json",
+      Authorization: token ? `Token ${token}` : "",
     },
     method,
     body: JSON.stringify(body),
@@ -39,12 +42,14 @@ async function baseApiFetch<T>({
  * @param id
  */
 export async function getExperiment(
-  id: string
+  id: string,
+  token: string
 ): Promise<GetExperimentResponse> {
   const response = await baseApiFetch({
     method: Method.GET,
     params: id,
     endpoint: Endpoint.Experiment,
+    token,
   });
   if (!response.ok) throw new Error("Could not get Experiment " + id);
   return response.json();
@@ -53,10 +58,11 @@ export async function getExperiment(
 /**
  *
  */
-export async function getExperiments(): Promise<Experiment[]> {
+export async function getExperiments(token: string): Promise<Experiment[]> {
   const response = await baseApiFetch({
     method: Method.GET,
     endpoint: Endpoint.Experiments,
+    token,
   });
   if (!response.ok) throw new Error("Could not get Experiments");
   return response.json();
@@ -69,21 +75,23 @@ export async function getExperiments(): Promise<Experiment[]> {
  */
 export async function updateExperiment(
   id: string,
-  newExperiment: CreateExperimentPayload
+  newExperiment: CreateExperimentPayload,
+  token: string
 ): Promise<Experiment> {
-  await deleteExperiment(id);
-  return createExperiment(newExperiment);
+  await deleteExperiment(id, token);
+  return createExperiment(newExperiment, token);
 }
 
 /**
  *
  * @param id
  */
-export async function deleteExperiment(id: string) {
+export async function deleteExperiment(id: string, token: string) {
   const response = await baseApiFetch({
     method: Method.DELETE,
     params: id,
     endpoint: Endpoint.Experiment,
+    token,
   });
   if (!response.ok) throw new Error("Could not delete Experiment: " + id);
   return response;
@@ -94,12 +102,14 @@ export async function deleteExperiment(id: string) {
  * @param experimentPayload
  */
 export async function createExperiment(
-  experimentPayload: CreateExperimentPayload
+  experimentPayload: CreateExperimentPayload,
+  token: string
 ): Promise<Experiment> {
   const response = await baseApiFetch<CreateExperimentPayload>({
     method: Method.POST,
     endpoint: Endpoint.Experiment,
     body: experimentPayload,
+    token,
   });
   if (!response.ok) {
     throw new Error("Could not create Experiment: " + experimentPayload);

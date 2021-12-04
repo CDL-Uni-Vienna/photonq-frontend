@@ -39,6 +39,7 @@ export default withRouter(function LoginForm(props: RouteComponentProps<any>) {
         password: loginValues.password,
       });
       setUser({
+        token: reponse.token,
         id: reponse.id,
         username: reponse.username,
         name: response.name,
