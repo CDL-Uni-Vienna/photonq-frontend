@@ -4,11 +4,17 @@ import { RouteComponentProps, withRouter } from "react-router";
 import { getPathWithId, Path } from "../../model/model.routes";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
-import { format } from "date-fns";
 import DropDownButton from "./DropDownButton";
 import { useSelectedExperiment } from "../../hook/hook.experiment";
-import { ExperimentState } from "../../model/types/type.experiment";
+import {
+  CreateExperimentPayload,
+  Experiment,
+  ExperimentState,
+} from "../../model/types/type.experiment";
 import SystemDialog from "../SystemDialog/SystemDialog";
+import { createExperiment } from "../../model/model.api";
+import { useConnectedUser } from "../../hook/hook.user";
+import { deleteProps } from "../../utils/utils.object";
 
 interface ExperimentTopBarProps extends RouteComponentProps<{ id: string }> {}
 
@@ -18,6 +24,7 @@ export default withRouter(function ExperimentNavbar({
   history,
 }: ExperimentTopBarProps) {
   const { t } = useTranslation();
+  const user = useConnectedUser();
   const { experiment, isLoading, setExperiment } = useSelectedExperiment(
     match.params.id
   );
@@ -26,6 +33,15 @@ export default withRouter(function ExperimentNavbar({
     [experiment]
   );
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const runExperiment = async () => {
+    const createExperimentPayload = deleteProps<
+      CreateExperimentPayload,
+      Experiment
+    >(Object.assign({}, experiment), ["id", "status", "projectId"]);
+    await createExperiment(createExperimentPayload, user!.token);
+    history.push(getPathWithId(experiment.id, Path.ExperimentResult));
+  };
 
   return (
     <div className={"relative w-full text-white"}>
@@ -39,12 +55,7 @@ export default withRouter(function ExperimentNavbar({
               alt="Logo of the university of vienna"
             />
             <h2 className={"text-xl font-bold transition duration-200"}>
-              {isLoading
-                ? ""
-                : `${experiment.experimentName} - ${format(
-                    experiment.createdAt,
-                    "P"
-                  )}`}
+              {isLoading ? "" : experiment.experimentName}
             </h2>
           </div>
           <div className={"flex space-x-4 items-center justify-center"}>
@@ -72,11 +83,7 @@ export default withRouter(function ExperimentNavbar({
                   },
                 },
               ]}
-              onClick={() =>
-                history.push(
-                  getPathWithId(experiment.id, Path.ExperimentResult)
-                )
-              }
+              onClick={runExperiment}
             >
               {t("Run")}
             </DropDownButton>

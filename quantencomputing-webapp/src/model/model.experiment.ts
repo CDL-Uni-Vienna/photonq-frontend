@@ -17,7 +17,6 @@ import { format } from "date-fns";
  */
 export function getDefaultExperimentConfig(experimentName: string): Experiment {
   return {
-    createdAt: Date.now(),
     clusterState: {
       amountQubits: 2,
       presetSettings: PresetSetting.Linear,

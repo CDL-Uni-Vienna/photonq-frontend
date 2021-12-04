@@ -6,8 +6,8 @@ export const BASE_ENDPOINT_URL =
     : process.env.REACT_APP_BASE_URL;
 
 export enum Endpoint {
-  Experiment = "/experiment",
-  Experiments = "/experiments",
+  Experiment = "/experiments/",
+  Experiments = "/experiments/",
   Login = "/login/",
   Register = "/register/",
 }

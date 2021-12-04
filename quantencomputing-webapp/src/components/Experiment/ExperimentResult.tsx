@@ -64,7 +64,7 @@ export default function ExperimentResultContainer({
       <div className={"text-white"}>
         <h2 className={"text-2xl font-bold"}>{t("Results")}</h2>
         <p className={"font-bold"}>
-          {format(new Date(experiment.createdAt), "Pp")}
+          {format(new Date(experimentResult.startTime), "Pp")}
         </p>
       </div>
       <div className={"flex"}>

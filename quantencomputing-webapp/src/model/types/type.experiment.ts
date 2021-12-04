@@ -51,7 +51,6 @@ export type CreateExperimentPayload = Omit<Experiment, "status" | "id">;
  * Represents the Object that is returned from the api
  */
 export interface Experiment {
-  createdAt: number;
   clusterState: {
     amountQubits: number;
     presetSettings: PresetSetting;

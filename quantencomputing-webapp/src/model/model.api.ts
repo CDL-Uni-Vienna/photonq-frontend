@@ -72,6 +72,7 @@ export async function getExperiments(token: string): Promise<Experiment[]> {
  *
  * @param id
  * @param newExperiment
+ * @param token
  */
 export async function updateExperiment(
   id: string,
@@ -85,6 +86,7 @@ export async function updateExperiment(
 /**
  *
  * @param id
+ * @param token
  */
 export async function deleteExperiment(id: string, token: string) {
   const response = await baseApiFetch({
@@ -100,6 +102,7 @@ export async function deleteExperiment(id: string, token: string) {
 /**
  *
  * @param experimentPayload
+ * @param token
  */
 export async function createExperiment(
   experimentPayload: CreateExperimentPayload,
