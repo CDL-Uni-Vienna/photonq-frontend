@@ -9,6 +9,7 @@ import { deleteExperiment } from "../../../model/model.api";
 import { ProjectExperimentDataContext } from "../../../providers/ProjectExperimentDataProvider";
 import { getPathWithId, Path } from "../../../model/model.routes";
 import { downloadData } from "../../../utils/utils.download";
+import { useConnectedUser } from "../../../hook/hook.user";
 
 enum ProjectActions {
   AddNewExperiment = "Add new Experiment",
@@ -34,6 +35,7 @@ export default withRouter(function ActionCell({
 }: ActionCellProps) {
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const user = useConnectedUser();
   const {
     experiments: { setValue: setExperiments },
   } = useContext(ProjectExperimentDataContext);
@@ -66,7 +68,7 @@ export default withRouter(function ActionCell({
           setExperiments((prev) =>
             prev.filter((e) => e.id !== row.original.id)
           );
-          await deleteExperiment(row.original.id);
+          await deleteExperiment(row.original.id, user!.token);
         },
       },
       // Not relevant for release 1

@@ -10,6 +10,7 @@ import {
 } from "../model/model.experiment";
 import { CircuitConfig, circuitConfigs } from "../circuitConfig/circuits4Dv004";
 import { getExperiment } from "../model/model.api";
+import { useConnectedUser } from "./hook.user";
 
 /**
  * This hook is used to get the experiment from the server.
@@ -17,6 +18,7 @@ import { getExperiment } from "../model/model.api";
  * @param id
  */
 export function useSelectedExperiment(id: string) {
+  const user = useConnectedUser();
   const getDefaultData = (name: string): ExperimentWithConfigs => ({
     ...getDefaultExperimentConfig(name),
     id: name,
@@ -31,7 +33,7 @@ export function useSelectedExperiment(id: string) {
 
   const getData = async () => {
     try {
-      const res = await getExperiment(id);
+      const res = await getExperiment(id, user!.token);
       setExperiment((prev) => ({ ...prev, ...res.experimentConfiguration }));
       setExperimentResult(res.experimentResult);
     } catch (e) {

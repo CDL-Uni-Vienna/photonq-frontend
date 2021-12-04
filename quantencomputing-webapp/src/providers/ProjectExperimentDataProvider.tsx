@@ -3,6 +3,7 @@ import { BaseProviderType } from "../model/types/type.provider";
 import { CircularProgress } from "@mui/material";
 import { Experiment } from "../model/types/type.experiment";
 import { getExperiments } from "../model/model.api";
+import { useConnectedUser } from "../hook/hook.user";
 
 export interface ProjectExperimentDataProviderProps<
   P extends Array<any>,
@@ -27,12 +28,13 @@ interface Props {
 export default function ProjectExperimentDataContextProvider({
   children,
 }: Props) {
+  const user = useConnectedUser();
   const [isLoading, setIsLoading] = useState(true);
   const [projects, setProjects] = useState([]);
   const [experiments, setExperiments] = useState<Experiment[]>([]);
 
   const getData = async () => {
-    const res = await getExperiments();
+    const res = await getExperiments(user!.token);
     setExperiments(res);
     setIsLoading(() => false);
   };
