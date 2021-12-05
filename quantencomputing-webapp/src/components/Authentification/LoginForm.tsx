@@ -16,7 +16,7 @@ import { red } from "@mui/material/colors";
 export default withRouter(function LoginForm(props: RouteComponentProps<any>) {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
-  const { setValue: setUser } = useContext(AuthContext);
+  const { value: user, setValue: setUser } = useContext(AuthContext);
   const [error, setError] = useState("");
   const [loginValues, setLoginValue] = useState<LoginCredentials>({
     username: "",
@@ -34,14 +34,14 @@ export default withRouter(function LoginForm(props: RouteComponentProps<any>) {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const reponse = await loginWthUserNameAndPassword({
+      const response = await loginWthUserNameAndPassword({
         username: loginValues.username,
         password: loginValues.password,
       });
       setUser({
-        token: reponse.token,
-        id: reponse.id,
-        username: reponse.username,
+        token: response.token,
+        id: response.id,
+        username: response.email,
         name: response.name,
       });
       setError("");

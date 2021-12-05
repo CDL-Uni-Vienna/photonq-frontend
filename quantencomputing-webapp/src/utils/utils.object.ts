@@ -4,8 +4,9 @@
  * @param props
  */
 export function deleteProps<T, V>(obj: V, props: (keyof V)[]): T {
+  const objCopy: V = Object.assign({}, obj);
   for (const prop of props) {
-    delete obj[prop];
+    delete objCopy[prop];
   }
-  return obj as unknown as T;
+  return objCopy as unknown as T;
 }

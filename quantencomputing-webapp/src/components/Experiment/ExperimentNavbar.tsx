@@ -8,8 +8,8 @@ import DropDownButton from "./DropDownButton";
 import { useSelectedExperiment } from "../../hook/hook.experiment";
 import {
   CreateExperimentPayload,
-  Experiment,
   ExperimentState,
+  ExperimentWithConfigs,
 } from "../../model/types/type.experiment";
 import SystemDialog from "../SystemDialog/SystemDialog";
 import { createExperiment } from "../../model/model.api";
@@ -37,8 +37,8 @@ export default withRouter(function ExperimentNavbar({
   const runExperiment = async () => {
     const createExperimentPayload = deleteProps<
       CreateExperimentPayload,
-      Experiment
-    >(Object.assign({}, experiment), ["id", "status", "projectId"]);
+      ExperimentWithConfigs
+    >(experiment, ["id", "status", "withQubitConfig"]);
     await createExperiment(createExperimentPayload, user!.token);
     history.push(getPathWithId(experiment.id, Path.ExperimentResult));
   };
