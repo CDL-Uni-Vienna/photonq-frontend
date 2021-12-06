@@ -47,6 +47,7 @@ export default withRouter(function ExperimentNavbar({
     } catch (e) {
       console.error(e);
       setError(true);
+      setTimeout(() => setError(false), 5000);
     }
   };
 
