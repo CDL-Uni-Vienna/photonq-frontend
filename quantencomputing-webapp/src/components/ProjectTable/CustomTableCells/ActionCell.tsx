@@ -7,7 +7,6 @@ import { RouteComponentProps, withRouter } from "react-router";
 import { AddExperimentDialogProps } from "../../../model/types/type.experiment";
 import { deleteExperiment } from "../../../model/model.api";
 import { ProjectExperimentDataContext } from "../../../providers/ProjectExperimentDataProvider";
-import { getPathWithId, Path } from "../../../model/model.routes";
 import { downloadData } from "../../../utils/utils.download";
 import { useConnectedUser } from "../../../hook/hook.user";
 
@@ -50,12 +49,12 @@ export default withRouter(function ActionCell({
 
   const getBaseActions = () => {
     return [
-      {
-        label: ProjectActions.Run,
-        action: () => {
-          history.push(getPathWithId(row.original.id, Path.ExperimentResult));
-        },
-      },
+      // {
+      //   label: ProjectActions.Run,
+      //   action: () => {
+      //     history.push(getPathWithId(row.original.id, Path.ExperimentResult));
+      //   },
+      // },
       {
         label: ProjectActions.Download,
         action: () => {
