@@ -17,6 +17,8 @@ import { useConnectedUser } from "../../hook/hook.user";
 import { deleteProps } from "../../utils/utils.object";
 import SystemAlert from "../SystemAlert";
 
+const MAX_RUNTIME = 120;
+
 interface ExperimentTopBarProps extends RouteComponentProps<{ id: string }> {}
 
 export default withRouter(function ExperimentNavbar({
@@ -101,19 +103,23 @@ export default withRouter(function ExperimentNavbar({
       {isDialogOpen &&
         experiment.status !== ExperimentState.Failed &&
         experiment.status !== ExperimentState.Done && (
-          <SystemDialog
-            inputType={"number"}
-            isOpen={isDialogOpen}
-            setIsOpen={setIsDialogOpen}
-            label={"Max Runtime"}
-            buttonText={"Save"}
-            onButtonClick={(input) =>
+          <MaxRuntimeDialog
+            currentMaxRuntime={experiment.maxRuntime.toString()}
+            open={isDialogOpen}
+            isOpen={setIsDialogOpen}
+            onButtonClick={(input) => {
+              if (!input) return;
+              if (+input > MAX_RUNTIME) {
+                return `Has to be smaller or equal than ${MAX_RUNTIME}`;
+              }
+              if (+input < 1) {
+                return `Has to be at least 1`;
+              }
               setExperiment((prev) => ({
                 ...prev,
-                maxRuntime: input ? +input : experiment.maxRuntime,
-              }))
-            }
-            title={"Set Max Runtime"}
+                maxRuntime: +input,
+              }));
+            }}
           />
         )}
       {error && !isLoading && (
@@ -124,6 +130,31 @@ export default withRouter(function ExperimentNavbar({
     </div>
   );
 });
+
+/**
+ *
+ * @param props
+ * @constructor
+ */
+function MaxRuntimeDialog(props: {
+  open: boolean;
+  isOpen: (value: ((prevState: boolean) => boolean) | boolean) => void;
+  onButtonClick: (input?: string) => string | undefined;
+  currentMaxRuntime: string;
+}) {
+  return (
+    <SystemDialog
+      defaultInput={props.currentMaxRuntime}
+      inputType={"number"}
+      isOpen={props.open}
+      setIsOpen={props.isOpen}
+      label={"Max Runtime"}
+      buttonText={"Save"}
+      onButtonClick={props.onButtonClick}
+      title={"Set Max Runtime"}
+    />
+  );
+}
 
 /**
  *

@@ -18,12 +18,13 @@ import { Experiment } from "../../model/types/type.experiment";
 interface SystemDialogProps extends RouteComponentProps<{ id: string }> {
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
-  onButtonClick?: (value?: string) => void;
+  onButtonClick?: (value?: string) => string | void;
   buttonText: string;
   title: string;
   label: string;
   variant?: keyof ProjectExperimentDataProviderProps<any, any>;
   inputType?: string;
+  defaultInput?: string;
 }
 
 export default withRouter(function SystemDialog({
@@ -36,9 +37,10 @@ export default withRouter(function SystemDialog({
   setIsOpen,
   variant,
   inputType,
+  defaultInput,
 }: SystemDialogProps) {
   const { t } = useTranslation();
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(defaultInput || "");
   const [errorMassage, setErrorMassage] = useState<string>();
 
   const resetDialog = () => {
@@ -49,7 +51,11 @@ export default withRouter(function SystemDialog({
   const handleOnClick = async () => {
     let experiment: Experiment;
     if (onButtonClick) {
-      onButtonClick(input);
+      const error = onButtonClick(input);
+      if (error) {
+        setErrorMassage(error);
+        return;
+      }
     } else if (variant === "experiments") {
       if (!input.length) {
         setErrorMassage("Can't be empty");
