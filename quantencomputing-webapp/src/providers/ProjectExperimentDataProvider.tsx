@@ -1,6 +1,6 @@
 import React, { createContext, ReactNode, useEffect, useState } from "react";
 import { BaseProviderType } from "../model/types/type.provider";
-import { CircularProgress } from "@mui/material";
+import { Alert, CircularProgress } from "@mui/material";
 import { Experiment } from "../model/types/type.experiment";
 import { getExperiments } from "../model/model.api";
 import { useConnectedUser } from "../hook/hook.user";
@@ -32,11 +32,18 @@ export default function ProjectExperimentDataContextProvider({
   const [isLoading, setIsLoading] = useState(true);
   const [projects, setProjects] = useState([]);
   const [experiments, setExperiments] = useState<Experiment[]>([]);
+  const [error, setError] = useState<boolean>(false);
 
   const getData = async () => {
-    const res = await getExperiments(user!.token);
-    setExperiments(res);
-    setIsLoading(() => false);
+    try {
+      const res = await getExperiments(user!.token);
+      setExperiments(res);
+    } catch (e) {
+      console.error(e);
+      setError(true);
+    } finally {
+      setIsLoading(() => false);
+    }
   };
 
   useEffect(() => {
@@ -60,6 +67,11 @@ export default function ProjectExperimentDataContextProvider({
       }}
     >
       {children}
+      {error && (
+        <Alert className={"absolute bottom-3 right-3"} severity="error">
+          Could not get Experiments
+        </Alert>
+      )}
     </ProjectExperimentDataContext.Provider>
   );
 }

@@ -7,7 +7,7 @@ export const BASE_ENDPOINT_URL =
 
 export enum Endpoint {
   Experiment = "/experiments",
-  Experiments = "/experiments",
+  Experiments = "/experiment",
   Login = "/login/",
   Register = "/register/",
 }
