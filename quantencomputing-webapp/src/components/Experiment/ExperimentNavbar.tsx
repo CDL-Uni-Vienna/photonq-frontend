@@ -33,14 +33,20 @@ export default withRouter(function ExperimentNavbar({
     [experiment]
   );
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [error, setError] = useState(false);
 
   const runExperiment = async () => {
-    const createExperimentPayload = deleteProps<
-      CreateExperimentPayload,
-      ExperimentWithConfigs
-    >(experiment, ["id", "status", "withQubitConfig"]);
-    await createExperiment(createExperimentPayload, user!.token);
-    history.push(getPathWithId(experiment.id, Path.ExperimentResult));
+    try {
+      const createExperimentPayload = deleteProps<
+        CreateExperimentPayload,
+        ExperimentWithConfigs
+      >(experiment, ["id", "status", "withQubitConfig"]);
+      await createExperiment(createExperimentPayload, user!.token);
+      history.push(getPathWithId(experiment.id, Path.ExperimentResult));
+    } catch (e) {
+      console.error(e);
+      setError(true);
+    }
   };
 
   return (

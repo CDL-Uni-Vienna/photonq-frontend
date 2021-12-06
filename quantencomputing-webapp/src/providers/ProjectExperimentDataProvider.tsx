@@ -4,6 +4,7 @@ import { Alert, CircularProgress } from "@mui/material";
 import { Experiment } from "../model/types/type.experiment";
 import { getExperiments } from "../model/model.api";
 import { useConnectedUser } from "../hook/hook.user";
+import SystemAlert from "../components/SystemAlert";
 
 export interface ProjectExperimentDataProviderProps<
   P extends Array<any>,
@@ -38,6 +39,7 @@ export default function ProjectExperimentDataContextProvider({
     try {
       const res = await getExperiments(user!.token);
       setExperiments(res);
+      setError(false);
     } catch (e) {
       console.error(e);
       setError(true);
@@ -67,10 +69,8 @@ export default function ProjectExperimentDataContextProvider({
       }}
     >
       {children}
-      {error && (
-        <Alert className={"absolute bottom-3 right-3"} severity="error">
-          Could not get Experiments
-        </Alert>
+      {error && !isLoading && (
+        <SystemAlert severity="error">Could not get Experiments</SystemAlert>
       )}
     </ProjectExperimentDataContext.Provider>
   );
