@@ -4,10 +4,11 @@ import PageLayout from "../components/Layout/PageLayout";
 import NavbarPadding from "../components/Layout/NavbarPadding";
 import { Grid } from "@mui/material";
 import AuthContent from "../components/Authentification/AuthContent";
+import AuthPageLayout from "../components/Layout/AuthPageLayout";
 
 export default function RegisterPage() {
   return (
-    <>
+    <AuthPageLayout>
       <div className={"2xl:hidden"}>
         <NavbarPadding />
       </div>
@@ -32,6 +33,6 @@ export default function RegisterPage() {
           />
         </Grid>
       </Grid>
-    </>
+    </AuthPageLayout>
   );
 }

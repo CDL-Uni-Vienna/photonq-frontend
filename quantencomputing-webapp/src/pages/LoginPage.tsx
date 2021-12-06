@@ -4,10 +4,11 @@ import NavbarPadding from "../components/Layout/NavbarPadding";
 import { Grid } from "@mui/material";
 import AuthContent from "../components/Authentification/AuthContent";
 import LoginForm from "../components/Authentification/LoginForm";
+import AuthPageLayout from "../components/Layout/AuthPageLayout";
 
 export default function LoginPage() {
   return (
-    <>
+    <AuthPageLayout>
       <div className={"md:hidden"}>
         <NavbarPadding />
       </div>
@@ -32,6 +33,6 @@ export default function LoginPage() {
           />
         </Grid>
       </Grid>
-    </>
+    </AuthPageLayout>
   );
 }
