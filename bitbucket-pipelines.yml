@@ -50,7 +50,7 @@ pipelines:
             - git tag -f $VERSION
             - git remote -v
             - git push origin -f --tags
-            - npm run autoversion
+            - npm --no-git-tag-version version patch
             - declare -x VERSION=$(jq -r '.version' package.json)
             - git add .
             - git commit -m "[skip CI] Update version to $VERSION"
