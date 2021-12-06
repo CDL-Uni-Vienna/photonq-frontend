@@ -8,7 +8,6 @@ import { Path } from "../../model/model.routes";
 import { AuthContext } from "../../providers/AuthProvider";
 import { withRouter, RouteComponentProps } from "react-router";
 import { loginWthUserNameAndPassword } from "../../model/model.api";
-import { response } from "msw";
 import LoadingButton from "../LoadingButton";
 import { LoginCredentials } from "../../model/types/type.auth";
 import { red } from "@mui/material/colors";
@@ -16,7 +15,7 @@ import { red } from "@mui/material/colors";
 export default withRouter(function LoginForm(props: RouteComponentProps<any>) {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
-  const { value: user, setValue: setUser } = useContext(AuthContext);
+  const { setValue: setUser } = useContext(AuthContext);
   const [error, setError] = useState("");
   const [loginValues, setLoginValue] = useState<LoginCredentials>({
     username: "",
