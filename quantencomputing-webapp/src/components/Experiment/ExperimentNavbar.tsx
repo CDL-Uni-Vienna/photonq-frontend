@@ -15,6 +15,7 @@ import SystemDialog from "../SystemDialog/SystemDialog";
 import { createExperiment } from "../../model/model.api";
 import { useConnectedUser } from "../../hook/hook.user";
 import { deleteProps } from "../../utils/utils.object";
+import SystemAlert from "../SystemAlert";
 
 interface ExperimentTopBarProps extends RouteComponentProps<{ id: string }> {}
 
@@ -114,6 +115,11 @@ export default withRouter(function ExperimentNavbar({
             title={"Set Max Runtime"}
           />
         )}
+      {error && !isLoading && (
+        <SystemAlert severity={"error"}>
+          {t("Could not run Experiment")}
+        </SystemAlert>
+      )}
     </div>
   );
 });
