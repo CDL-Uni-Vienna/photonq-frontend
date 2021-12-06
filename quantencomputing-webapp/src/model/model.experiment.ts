@@ -176,7 +176,7 @@ export function getComputationParameters(
       value: config.qc_encoded_qubits || 0,
     },
     {
-      label: "Computation configruation",
+      label: "Computation configuration",
       value: experiment.qubitComputing.circuitConfiguration,
     },
     {
