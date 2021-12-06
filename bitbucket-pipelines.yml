@@ -11,16 +11,16 @@ pipelines:
       #       - cd quantencomputing-webapp
       #       - npm ci
       #       - npm test
-        - step:
-            name: Build Production
-            caches:
-              - node
-            script:
-              - cd quantencomputing-webapp
-              - npm ci
-              - npm run build -- --output-path=build-production
-            artifacts:
-              - quantencomputing-webapp/build-production/**
+      #  - step:
+      #      name: Build Production
+      #      caches:
+      #        - node
+      #      script:
+      #        - cd quantencomputing-webapp
+      #        - npm ci
+      #        - npm run build -- --output-path=build-production
+      #      artifacts:
+      #        - quantencomputing-webapp/build-production/**
         - step:
             name: Push Docker to DockerHub
             size: 2x # double the amount of resources for this step
