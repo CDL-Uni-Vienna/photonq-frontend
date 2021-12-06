@@ -32,7 +32,7 @@ pipelines:
               - IMAGE=ghcr.io/uwe-squer/quantencomputing-webapp
               - TAG=$VERSION
 #              - docker login --username "${DOCKER_HUB_USER}" --password "${DOCKER_HUB_PASSWORD}"
-              - docker login --username "${GHCR_USER}" --password "${GHCR_PASS}"
+              - docker login ghcr.io --username "${GHCR_USER}" --password "${GHCR_PASS}"
               - docker build -t $IMAGE:$TAG .
               - docker tag $IMAGE:$TAG $IMAGE:latest
               - docker push $IMAGE:$TAG
