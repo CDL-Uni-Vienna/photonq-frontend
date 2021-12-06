@@ -52,7 +52,8 @@ export const handlers = [
         expires: new Date().toISOString(),
         token: "jdfklsjdflassshdflaksj",
         id: 1,
-        ...req.body,
+        email: req.body.username,
+        name: req.body.name,
       })
     );
   }),
