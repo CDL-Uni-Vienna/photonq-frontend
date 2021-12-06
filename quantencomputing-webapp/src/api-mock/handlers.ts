@@ -2,7 +2,7 @@ import { rest, RestRequest } from "msw";
 import { getDefaultExperimentConfig } from "../model/model.experiment";
 
 export const handlers = [
-  rest.get("/experiment/:experimentId", (req, res, context) => {
+  rest.get("/experiments/:experimentId", (req, res, context) => {
     return res(
       context.delay(500),
       context.status(201),
@@ -29,7 +29,7 @@ export const handlers = [
       ])
     );
   }),
-  rest.post("/experiment", (req: RestRequest<any>, res, context) => {
+  rest.post("/experiments", (req: RestRequest<any>, res, context) => {
     console.warn(req);
     return res(
       context.delay(500),

@@ -8,7 +8,7 @@ import AuthContent from "../components/Authentification/AuthContent";
 export default function RegisterPage() {
   return (
     <PageLayout>
-      <div className={"md:hidden"}>
+      <div className={"2xl:hidden"}>
         <NavbarPadding />
       </div>
       <Grid container columnSpacing={12}>
