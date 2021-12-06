@@ -7,17 +7,21 @@ import LoginForm from "../components/Authentification/LoginForm";
 
 export default function LoginPage() {
   return (
-    <PageLayout>
+    <>
       <div className={"md:hidden"}>
         <NavbarPadding />
       </div>
       <Grid container columnSpacing={12}>
         <Grid item md={7}>
-          <div
-            className={"pt-8 md:pt-0 md:h-screen flex flex-col justify-center"}
-          >
-            <LoginForm />
-          </div>
+          <PageLayout>
+            <div
+              className={
+                "pt-8 md:pt-0 md:h-screen flex flex-col justify-center"
+              }
+            >
+              <LoginForm />
+            </div>
+          </PageLayout>
         </Grid>
         <Grid item md={5}>
           <AuthContent
@@ -28,6 +32,6 @@ export default function LoginPage() {
           />
         </Grid>
       </Grid>
-    </PageLayout>
+    </>
   );
 }

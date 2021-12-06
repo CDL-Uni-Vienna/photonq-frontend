@@ -7,17 +7,21 @@ import AuthContent from "../components/Authentification/AuthContent";
 
 export default function RegisterPage() {
   return (
-    <PageLayout>
+    <>
       <div className={"2xl:hidden"}>
         <NavbarPadding />
       </div>
       <Grid container columnSpacing={12}>
         <Grid item md={7}>
-          <div
-            className={"pt-8 md:pt-0 md:h-screen flex flex-col justify-center"}
-          >
-            <RegisterForm />
-          </div>
+          <PageLayout>
+            <div
+              className={
+                "pt-8 md:pt-0 md:h-screen flex flex-col justify-center"
+              }
+            >
+              <RegisterForm />
+            </div>
+          </PageLayout>
         </Grid>
         <Grid item md={5}>
           <AuthContent
@@ -28,6 +32,6 @@ export default function RegisterPage() {
           />
         </Grid>
       </Grid>
-    </PageLayout>
+    </>
   );
 }
