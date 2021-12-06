@@ -1,11 +1,4 @@
-FROM node:lts-alpine
-WORKDIR /usr/src/app
-COPY package*.json ./
-
-RUN npm ci
-
-COPY . .
-RUN npm run build
-
-EXPOSE 3000
-CMD [ "npm", "start" ]
+FROM nginxinc/nginx-unprivileged:1.20-alpine
+COPY build /usr/share/nginx/html
+EXPOSE 8080
+CMD ["nginx", "-g", "daemon off;"]
