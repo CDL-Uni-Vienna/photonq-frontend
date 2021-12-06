@@ -33,6 +33,8 @@
   },
   "scripts": {
     "start": "craco start",
+    "dev-local-api": "REACT_APP_BASE_URL=http://localhost:8080/api REACT_APP_MOCK_API=False npm start",
+    "dev-mock-api": "REACT_APP_MOCK_API=True npm start",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject"

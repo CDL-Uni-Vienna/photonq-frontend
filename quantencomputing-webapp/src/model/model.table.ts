@@ -18,13 +18,13 @@ export function getTableColumns(t: TFunction): MainTableColumn[] {
       id: "name",
       Cell: ProjectNameCell,
     },
-    {
-      accessor: "createdAt",
-      Header: ({ column }) =>
-        SortableTableCellHeader({ title: "Created", column: column as any }),
-      id: "createdAt",
-      Cell: ({ value }) => format(new Date(value), "PP-p"),
-    },
+    // {
+    //   accessor: "createdAt",
+    //   Header: ({ column }) =>
+    //     SortableTableCellHeader({ title: "Created", column: column as any }),
+    //   id: "createdAt",
+    //   Cell: ({ value }) => format(new Date(value), "PP-p"),
+    // },
     {
       accessor: "status",
       Header: ({ column }) =>
