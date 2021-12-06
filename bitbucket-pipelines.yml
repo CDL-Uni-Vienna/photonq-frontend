@@ -23,6 +23,7 @@ pipelines:
               - quantencomputing-webapp/build-production/**
         - step:
             name: Push Docker to DockerHub
+            size: 2x # double the amount of resources for this step
             services:
               - docker
             script:
