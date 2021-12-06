@@ -6,7 +6,7 @@ import ExperimentEditor from "../components/Experiment/Editor/ExperimentEditor";
 
 export default function EditorPage() {
   return (
-    <div className={"bg-primaryDark"}>
+    <div style={{ backgroundColor: "#222328" }}>
       <ExperimentNavbar />
       <PageLayout>
         <NavbarPadding />
