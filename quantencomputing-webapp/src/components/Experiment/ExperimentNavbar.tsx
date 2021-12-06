@@ -147,8 +147,8 @@ function ExperimentLinkElement({
   return (
     <Link
       style={{ textTransform: "uppercase" }}
-      className={clsx("text-lg duration-300 transform hover:scale-110", {
-        "text-primary": highlight,
+      className={clsx("text-lg duration-300 transform hover:underline", {
+        "underline font-bold": highlight,
       })}
       to={getPathWithId(id, path)}
     >
