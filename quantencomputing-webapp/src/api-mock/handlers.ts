@@ -3,6 +3,9 @@ import { getDefaultExperimentConfig } from "../model/model.experiment";
 
 export const handlers = [
   rest.get("/experiments/:experimentId", (req, res, context) => {
+    if (!["1", "2", "3"].includes(req.params.experimentId)) {
+      return res(context.delay(500), context.status(500));
+    }
     return res(
       context.delay(500),
       context.status(201),
