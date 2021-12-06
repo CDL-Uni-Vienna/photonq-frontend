@@ -39,7 +39,7 @@ export default withRouter(function RegisterForm(
     setIsLoading(true);
     const registerCredentials: RegisterCredentials = {
       name: `${registerValues.firstName} ${registerValues.secondName}`,
-      username: registerValues.email,
+      email: registerValues.email,
       password: registerValues.password,
     };
     try {
