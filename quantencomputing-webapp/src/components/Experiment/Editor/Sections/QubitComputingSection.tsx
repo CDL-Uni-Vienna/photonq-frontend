@@ -103,7 +103,6 @@ export default function QubitComputingSection({
         </div>
         <div className={"absolute top-0 right-0 p-4"}>
           <div className={"flex items-center space-x-4"}>
-            <p>{experiment.withQubitConfig ? "On" : "Off"}</p>
             <Switch
               disabled={inputsDisabled}
               checked={experiment.withQubitConfig}
@@ -114,6 +113,7 @@ export default function QubitComputingSection({
                 }));
               }}
             />
+            <p>{experiment.withQubitConfig ? "On" : "Off"}</p>
           </div>
         </div>
       </div>
