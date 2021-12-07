@@ -32,8 +32,11 @@ export default withRouter(function ExperimentNavbar({
     match.params.id
   );
   const isRunButtonDisabled = useMemo(
-    () => experiment.status !== ExperimentState.Running,
-    [experiment]
+    () =>
+      experiment.status !== ExperimentState.Running ||
+      experiment.id !== experiment.experimentName ||
+      isLoading,
+    [experiment, isLoading]
   );
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [error, setError] = useState(false);
