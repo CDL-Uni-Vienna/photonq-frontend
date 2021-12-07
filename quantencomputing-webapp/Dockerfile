@@ -1,4 +1,6 @@
-FROM nginxinc/nginx-unprivileged:1.20-alpine
-COPY build /usr/share/nginx/html
+FROM node:lts-alpine
+COPY build build
+RUN npm install -g serve
+
 EXPOSE 8080
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["serve", "-s", "build", "-l", "8080"]
