@@ -24,13 +24,13 @@ export default withRouter(function ResultsPage(
     <div
       className={clsx("bg-primaryDark h-full pb-14", {
         "overflow-hidden h-screen":
-          experiment.status === ExperimentState.Running,
+          experiment.status !== ExperimentState.Running,
       })}
     >
       <ExperimentNavbar />
       <PageLayout>
         <NavbarPadding />
-        {experiment.status === ExperimentState.Running ? (
+        {experiment.status !== ExperimentState.Running ? (
           <div
             className={
               "h-screen flex flex-col justify-center items-center space-y-5"

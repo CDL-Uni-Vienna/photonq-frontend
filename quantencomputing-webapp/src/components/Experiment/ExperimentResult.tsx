@@ -36,10 +36,6 @@ export default function ExperimentResultContainer({
       </div>
     );
 
-  /**
-   *
-   * @param fallback
-   */
   const getResultSvgSrc = (fallback?: boolean) => {
     if (fallback) {
       return `/circuitConfig/qm_circuit_model/${
@@ -59,7 +55,7 @@ export default function ExperimentResultContainer({
     <ContentContainer
       withPadding
       color={secondaryDark}
-      className={"space-y-5 mt-16"}
+      className={"space-y-10 mt-16"}
     >
       <div className={"text-white"}>
         <h2 className={"text-2xl font-bold"}>{t("Results")}</h2>
@@ -83,7 +79,7 @@ export default function ExperimentResultContainer({
         )}
       </div>
       <div className={"flex space-x-32 text-white"}>
-        <div className={"space-y-4"}>
+        <div className={"space-y-5"}>
           <h3 className={"font-bold text-xl"}>{t("Computation parameters")}</h3>
           {getComputationParameters(experiment, config!).map((param, index) => (
             <div key={index} className={"flex justify-between space-x-12"}>
@@ -97,7 +93,7 @@ export default function ExperimentResultContainer({
             {t("Computation Configuration File")}
           </DownloadButton>
         </div>
-        <div className={"space-y-4"}>
+        <div className={"space-y-5"}>
           <h3 className={"font-bold text-xl"}>{t("Execution Indicators")}</h3>
           {getExecutionIndicators(experiment.id, experimentResult!).map(
             (param, index) => (
