@@ -94,27 +94,27 @@ export default function QubitComputingSection({
     >
       <div className={"flex text-white"}>
         <div>
-          <EditorSectionHeader header={"Qubit Computing"} />
+          <div className={"flex items-center space-x-5"}>
+            <EditorSectionHeader header={"Qubit Computing"} />
+            <div className={"flex items-center space-x-2"}>
+              <Switch
+                disabled={inputsDisabled}
+                checked={experiment.withQubitConfig}
+                onChange={() => {
+                  setExperiment((prev) => ({
+                    ...prev,
+                    withQubitConfig: !prev.withQubitConfig,
+                  }));
+                }}
+              />
+              <p>{experiment.withQubitConfig ? "On" : "Off"}</p>
+            </div>
+          </div>
           <p>
             {t(
               "Implement different quantum circuits byu rearranging the prepared cluster state"
             )}
           </p>
-        </div>
-        <div className={"absolute top-0 right-0 p-4"}>
-          <div className={"flex items-center space-x-4"}>
-            <Switch
-              disabled={inputsDisabled}
-              checked={experiment.withQubitConfig}
-              onChange={() => {
-                setExperiment((prev) => ({
-                  ...prev,
-                  withQubitConfig: !prev.withQubitConfig,
-                }));
-              }}
-            />
-            <p>{experiment.withQubitConfig ? "On" : "Off"}</p>
-          </div>
         </div>
       </div>
       {configs.length && experiment.withQubitConfig && (
