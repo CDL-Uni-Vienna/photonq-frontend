@@ -82,8 +82,8 @@ export function usePossibleClusterConfigsPresetSettings(
     }
     // eslint-disable-next-line
   }, [
-    experiment.clusterState.amountQubits,
-    experiment.clusterState.presetSettings,
+    experiment.ComputeSettings.clusterState.amountQubits,
+    experiment.ComputeSettings.clusterState.presetSettings,
   ]);
 
   return { currentCircuitConfigs };

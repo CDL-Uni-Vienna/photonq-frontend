@@ -27,26 +27,41 @@ export default function ClusterStateSection({
     usePossibleClusterConfigsPresetSettings(experiment, setExperiment);
 
   const setExperimentQubitNr = (nr: number) => {
-    if (experiment.clusterState.presetSettings === PresetSetting.Ghz) return;
+    if (
+      experiment.ComputeSettings.clusterState.presetSettings ===
+      PresetSetting.Ghz
+    )
+      return;
     setExperiment((prev) => ({
       ...prev,
-      clusterState: { ...prev.clusterState, amountQubits: nr },
+      ComputeSettings: {
+        ...prev.ComputeSettings,
+        clusterState: {
+          ...prev.ComputeSettings.clusterState,
+          amountQubits: nr,
+        },
+      },
     }));
   };
 
   const setExperimentPresetSettings = (value: PresetSetting) => {
     setExperiment((prev) => ({
       ...prev,
-      clusterState: {
-        amountQubits:
-          value === PresetSetting.Ghz ? 4 : prev.clusterState.amountQubits,
-        presetSettings: value,
+      ComputeSettings: {
+        ...prev.ComputeSettings,
+        clusterState: {
+          amountQubits:
+            value === PresetSetting.Ghz
+              ? 4
+              : prev.ComputeSettings.clusterState.amountQubits,
+          presetSettings: value,
+        },
       },
     }));
   };
 
   const isButtonActive = (nr: number) => {
-    return experiment.clusterState.amountQubits === nr
+    return experiment.ComputeSettings.clusterState.amountQubits === nr
       ? "contained"
       : undefined;
   };
@@ -85,7 +100,7 @@ export default function ClusterStateSection({
                 disabled={
                   inputsDisabled ||
                   (nr !== 4 &&
-                    experiment.clusterState.presetSettings ===
+                    experiment.ComputeSettings.clusterState.presetSettings ===
                       PresetSetting.Ghz)
                 }
                 onClick={() => setExperimentQubitNr(nr)}
@@ -107,7 +122,7 @@ export default function ClusterStateSection({
               color={"primary"}
               defaultValue={PresetSetting.Linear}
               style={{ color: "white" }}
-              value={experiment.clusterState.presetSettings}
+              value={experiment.ComputeSettings.clusterState.presetSettings}
               onChange={(e) =>
                 setExperimentPresetSettings(e.target.value as PresetSetting)
               }

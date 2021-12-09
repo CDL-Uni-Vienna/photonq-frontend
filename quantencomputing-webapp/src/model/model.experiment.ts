@@ -17,24 +17,26 @@ import { format } from "date-fns";
  */
 export function getDefaultExperimentConfig(experimentName: string): Experiment {
   return {
-    clusterState: {
-      amountQubits: 2,
-      presetSettings: PresetSetting.Linear,
+    ComputeSettings: {
+      clusterState: {
+        amountQubits: 2,
+        presetSettings: PresetSetting.Linear,
+      },
+      qubitComputing: {
+        circuitConfiguration: "horseshoe",
+        circuitAngles: [
+          {
+            circuitAngleName: "alpha",
+            circuitAngleValue: 0,
+          },
+          {
+            circuitAngleName: "beta",
+            circuitAngleValue: 0,
+          },
+        ],
+      },
+      encodedQubitMeasurements: [],
     },
-    qubitComputing: {
-      circuitConfiguration: "horseshoe",
-      circuitAngles: [
-        {
-          circuitAngleName: "alpha",
-          circuitAngleValue: 0,
-        },
-        {
-          circuitAngleName: "beta",
-          circuitAngleValue: 0,
-        },
-      ],
-    },
-    encodedQubitMeasurements: [],
     circuitId: 5,
     experimentName,
     projectId: "",
@@ -64,13 +66,14 @@ export function filterSingleCircuitConfigClusterState(
   experiment: ExperimentWithConfigs
 ) {
   if (
-    circuitConfig.csp_number_of_qubits !== experiment.clusterState.amountQubits
+    circuitConfig.csp_number_of_qubits !==
+    experiment.ComputeSettings.clusterState.amountQubits
   ) {
     return false;
   }
   return (
     circuitConfig.csp_preset_settings_name ===
-    experiment.clusterState.presetSettings
+    experiment.ComputeSettings.clusterState.presetSettings
   );
 }
 
@@ -169,7 +172,7 @@ export function getComputationParameters(
   return [
     {
       label: "Physical qubits",
-      value: experiment.clusterState.amountQubits,
+      value: experiment.ComputeSettings.clusterState.amountQubits,
     },
     {
       label: "Encoded qubits",
@@ -177,7 +180,7 @@ export function getComputationParameters(
     },
     {
       label: "Computation configuration",
-      value: experiment.qubitComputing.circuitConfiguration,
+      value: experiment.ComputeSettings.qubitComputing.circuitConfiguration,
     },
     {
       label: "CPhase gates",
@@ -186,14 +189,16 @@ export function getComputationParameters(
     {
       label: "Computing parameters",
       value: convertToAngleString(
-        experiment.qubitComputing.circuitAngles.map(
+        experiment.ComputeSettings.qubitComputing.circuitAngles.map(
           (val) => val.circuitAngleValue
         )
       ),
     },
     {
       label: "Projection Parameters",
-      value: convertToAngleString(experiment.encodedQubitMeasurements),
+      value: convertToAngleString(
+        experiment.ComputeSettings.encodedQubitMeasurements
+      ),
     },
   ];
 }

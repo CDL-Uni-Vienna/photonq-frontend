@@ -51,15 +51,17 @@ export type CreateExperimentPayload = Omit<Experiment, "status" | "id">;
  * Represents the Object that is returned from the api
  */
 export interface Experiment {
-  clusterState: {
-    amountQubits: number;
-    presetSettings: PresetSetting;
+  ComputeSettings: {
+    clusterState: {
+      amountQubits: number;
+      presetSettings: PresetSetting;
+    };
+    qubitComputing: {
+      circuitConfiguration: string;
+      circuitAngles: CircuitAngle[];
+    };
+    encodedQubitMeasurements: EncodedQubitMeasurement[];
   };
-  qubitComputing: {
-    circuitConfiguration: string;
-    circuitAngles: CircuitAngle[];
-  };
-  encodedQubitMeasurements: EncodedQubitMeasurement[];
   circuitId: number;
   experimentName: string;
   projectId?: string;

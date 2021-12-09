@@ -122,17 +122,19 @@ function EncodedQubitInput({
   ) => {
     setExperiment((prev) => ({
       ...prev,
-      encodedQubitMeasurements: prev.encodedQubitMeasurements.map(
-        (measurement) => {
-          if (measurement.encodedQubitIndex === nr) {
-            return {
-              ...measurement,
-              [variant]: Math.min(Math.abs(Number(value)), 360),
-            };
-          }
-          return measurement;
-        }
-      ),
+      ComputeSettings: {
+        ...prev.ComputeSettings,
+        encodedQubitMeasurements:
+          prev.ComputeSettings.encodedQubitMeasurements.map((measurement) => {
+            if (measurement.encodedQubitIndex === nr) {
+              return {
+                ...measurement,
+                [variant]: Math.min(Math.abs(Number(value)), 360),
+              };
+            }
+            return measurement;
+          }),
+      },
     }));
   };
 
@@ -140,7 +142,7 @@ function EncodedQubitInput({
     nr: number,
     angle: keyof Omit<EncodedQubitMeasurement, "nr">
   ) => {
-    return experiment.encodedQubitMeasurements.find(
+    return experiment.ComputeSettings.encodedQubitMeasurements.find(
       (measurement) => measurement.encodedQubitIndex === nr
     )?.[angle];
   };

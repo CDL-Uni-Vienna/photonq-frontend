@@ -43,7 +43,7 @@ export default function QubitComputingSection({
 
   const getAngleValue = (angleName: CircuitAngleName) => {
     return (
-      experiment.qubitComputing.circuitAngles.find(
+      experiment.ComputeSettings.qubitComputing.circuitAngles.find(
         (angle) => angle.circuitAngleName === angleName
       )?.circuitAngleValue || "0"
     );
@@ -55,16 +55,20 @@ export default function QubitComputingSection({
   ) => {
     setExperiment((prev) => ({
       ...prev,
-      qubitComputing: {
-        ...prev.qubitComputing,
-        circuitAngles: prev.qubitComputing.circuitAngles.map((angle) =>
-          angle.circuitAngleName === angleName
-            ? {
-                ...angle,
-                circuitAngleValue: Math.min(Math.abs(Number(value)), 360),
-              }
-            : angle
-        ),
+      ComputeSettings: {
+        ...prev.ComputeSettings,
+        qubitComputing: {
+          ...prev.ComputeSettings.qubitComputing,
+          circuitAngles: prev.ComputeSettings.qubitComputing.circuitAngles.map(
+            (angle) =>
+              angle.circuitAngleName === angleName
+                ? {
+                    ...angle,
+                    circuitAngleValue: Math.min(Math.abs(Number(value)), 360),
+                  }
+                : angle
+          ),
+        },
       },
     }));
   };
@@ -74,7 +78,7 @@ export default function QubitComputingSection({
     setExperiment((prev) => ({
       ...prev,
       qubitComputing: {
-        ...prev.qubitComputing,
+        ...prev.ComputeSettings.qubitComputing,
         circuitAngles: Array.from({
           length: 4 - (experiment.config?.qc_encoded_qubits || 4),
         }).map((_, index) => ({
