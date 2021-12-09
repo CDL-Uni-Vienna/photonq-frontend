@@ -22,7 +22,7 @@ export default withRouter(({ match }: RouteComponentProps<{ id: string }>) => {
 
   const inputsDisabled = useMemo(
     () =>
-      experiment.status !== ExperimentState.Running ||
+      experiment.status !== ExperimentState.IN_QUEUE ||
       experiment.id !== experiment.experimentName, // when id and name are equal the experiment has not been created yet
     [experiment]
   );

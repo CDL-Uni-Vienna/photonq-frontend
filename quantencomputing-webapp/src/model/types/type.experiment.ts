@@ -11,6 +11,7 @@ export enum PresetSetting {
 }
 
 export enum ExperimentState {
+  IN_QUEUE = "IN QUEUE",
   Running = "RUNNING",
   Failed = "FAILED",
   Done = "DONE",

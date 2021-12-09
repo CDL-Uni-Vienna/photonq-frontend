@@ -33,7 +33,7 @@ export default withRouter(function ExperimentNavbar({
   );
   const isRunButtonDisabled = useMemo(
     () =>
-      experiment.status !== ExperimentState.Running ||
+      experiment.status !== ExperimentState.IN_QUEUE ||
       experiment.id !== experiment.experimentName ||
       isLoading,
     [experiment, isLoading]
@@ -46,7 +46,7 @@ export default withRouter(function ExperimentNavbar({
       const createExperimentPayload = deleteProps<
         CreateExperimentPayload,
         ExperimentWithConfigs
-      >(experiment, ["id", "status", "withQubitConfig"]);
+      >(experiment, ["id", "withQubitConfig"]);
       await createExperiment(createExperimentPayload, user!.token);
       history.push(getPathWithId(experiment.id, Path.ExperimentResult));
     } catch (e) {
