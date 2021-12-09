@@ -1,15 +1,15 @@
 import React, { ReactNode } from "react";
 import { CustomTableCellProps } from "./type.customTableCells";
-import TimerIcon from "@mui/icons-material/Timer";
+import HourglassBottomIcon from "@mui/icons-material/HourglassBottom";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import PendingIcon from "@mui/icons-material/PendingOutlined";
 import { useTranslation } from "react-i18next";
 import { ExperimentState } from "../../../model/types/type.experiment";
 
 export default function StateCell({
   value,
 }: CustomTableCellProps<ExperimentState>) {
-  console.log(value);
   switch (value) {
     case ExperimentState.Done:
       return (
@@ -28,7 +28,9 @@ export default function StateCell({
         />
       );
     case ExperimentState.Running:
-      return <BaseStateCell value={value} icon={<TimerIcon />} />;
+      return <BaseStateCell value={value} icon={<HourglassBottomIcon />} />;
+    case ExperimentState.IN_QUEUE:
+      return <BaseStateCell value={value} icon={<PendingIcon />} />;
     default:
       return null;
   }

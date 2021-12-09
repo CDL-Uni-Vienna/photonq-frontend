@@ -44,7 +44,7 @@ export default function ProjectExperimentDataContextProvider({
       console.error(e);
       setError(true);
     } finally {
-      setIsLoading(() => false);
+      setIsLoading((_) => false);
     }
   };
 
