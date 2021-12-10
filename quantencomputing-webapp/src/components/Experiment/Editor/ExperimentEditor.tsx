@@ -23,7 +23,7 @@ export default withRouter(({ match }: RouteComponentProps<{ id: string }>) => {
   const inputsDisabled = useMemo(
     () =>
       experiment.status !== ExperimentState.IN_QUEUE ||
-      experiment.id !== experiment.experimentName, // when id and name are equal the experiment has not been created yet
+      experiment.experimentId !== experiment.experimentName, // when id and name are equal the experiment has not been created yet
     [experiment]
   );
 
@@ -36,7 +36,7 @@ export default withRouter(({ match }: RouteComponentProps<{ id: string }>) => {
       ...defaultExperiment,
       config: config,
       withQubitConfig: !!config?.qc_encoded_onoff,
-      id: experiment.id,
+      experimentId: experiment.experimentId,
       projectId: experiment.projectId,
     }));
   };

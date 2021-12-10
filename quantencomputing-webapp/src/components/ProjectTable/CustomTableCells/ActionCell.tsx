@@ -65,9 +65,9 @@ export default withRouter(function ActionCell({
         label: ProjectActions.Delete,
         action: async () => {
           setExperiments((prev) =>
-            prev.filter((e) => e.id !== row.original.id)
+            prev.filter((e) => e.experimentId !== row.original.experimentId)
           );
-          await deleteExperiment(row.original.id, user!.token);
+          await deleteExperiment(row.original.experimentId, user!.token);
         },
       },
       // Not relevant for release 1

@@ -95,14 +95,15 @@ export default function ExperimentResultContainer({
         </div>
         <div className={"space-y-5"}>
           <h3 className={"font-bold text-xl"}>{t("Execution Indicators")}</h3>
-          {getExecutionIndicators(experiment.id, experimentResult!).map(
-            (param, index) => (
-              <div key={index} className={"flex justify-between space-x-12"}>
-                <p>{param.label}</p>
-                <p>{param.value}</p>
-              </div>
-            )
-          )}
+          {getExecutionIndicators(
+            experiment.experimentId,
+            experimentResult!
+          ).map((param, index) => (
+            <div key={index} className={"flex justify-between space-x-12"}>
+              <p>{param.label}</p>
+              <p>{param.value}</p>
+            </div>
+          ))}
           <DownloadButton
             onClick={() =>
               downloadData(

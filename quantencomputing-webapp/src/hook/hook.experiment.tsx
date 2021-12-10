@@ -21,7 +21,7 @@ export function useSelectedExperiment(id: string) {
   const user = useConnectedUser();
   const getDefaultData = (name: string): ExperimentWithConfigs => ({
     ...getDefaultExperimentConfig(name),
-    id: name,
+    experimentId: name,
     withQubitConfig: true,
   });
 
@@ -34,6 +34,7 @@ export function useSelectedExperiment(id: string) {
   const getData = async () => {
     try {
       const res = await getExperiment(id, user!.token);
+      console.log(res);
       setExperiment((prev) => ({ ...prev, ...res.experimentConfiguration }));
       setExperimentResult(res.experimentResult);
     } catch (e) {

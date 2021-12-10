@@ -72,8 +72,11 @@ export default withRouter(function MainTable({
                   {...row.getRowProps()}
                   onClick={() =>
                     history.push(
-                      //@ts-ignore
-                      getPathWithId(row.original.id, Path.SingleExperiment)
+                      getPathWithId(
+                        //@ts-ignore
+                        row.original.experimentId,
+                        Path.SingleExperiment
+                      )
                     )
                   }
                 >

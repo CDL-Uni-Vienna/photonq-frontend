@@ -46,7 +46,10 @@ export interface ExperimentResult {
 /**
  * Used to create a new experiment
  */
-export type CreateExperimentPayload = Omit<Experiment, "status" | "id">;
+export type CreateExperimentPayload = Omit<
+  Experiment,
+  "status" | "experimentId"
+>;
 
 /**
  * Represents the Object that is returned from the api
@@ -67,7 +70,7 @@ export interface Experiment {
   experimentName: string;
   projectId?: string;
   maxRuntime: number;
-  id: string;
+  experimentId: string;
   status: ExperimentState;
 }
 

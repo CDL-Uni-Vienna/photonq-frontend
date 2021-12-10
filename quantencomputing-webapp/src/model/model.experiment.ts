@@ -41,7 +41,7 @@ export function getDefaultExperimentConfig(experimentName: string): Experiment {
     experimentName,
     projectId: "",
     maxRuntime: 120,
-    id: "615c5752d99d8706d46409f9",
+    experimentId: "615c5752d99d8706d46409f9",
     status: ExperimentState.IN_QUEUE,
   };
 }
