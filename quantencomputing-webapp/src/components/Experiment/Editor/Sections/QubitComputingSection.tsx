@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import ContentContainer from "../../../Layout/ContentContainer";
 import { secondaryDark, primaryDark } from "../../../../theme/theme.config";
 import EditorSectionHeader from "./EditorSectionHeader";
@@ -28,6 +28,7 @@ const angleNames: CircuitAngleName[] = ["alpha", "beta", "gamma"];
 export default function QubitComputingSection({
   setExperiment,
   experiment,
+  inputsDisabled,
 }: EditorSectionProps) {
   const { currentConfigs: configs } = usePossibleClusterConfigsQubitComputing(
     experiment,
@@ -42,7 +43,7 @@ export default function QubitComputingSection({
 
   const getAngleValue = (angleName: CircuitAngleName) => {
     return (
-      experiment.qubitComputing.circuitAngles.find(
+      experiment.ComputeSettings.qubitComputing.circuitAngles.find(
         (angle) => angle.circuitAngleName === angleName
       )?.circuitAngleValue || "0"
     );
@@ -54,16 +55,20 @@ export default function QubitComputingSection({
   ) => {
     setExperiment((prev) => ({
       ...prev,
-      qubitComputing: {
-        ...prev.qubitComputing,
-        circuitAngles: prev.qubitComputing.circuitAngles.map((angle) =>
-          angle.circuitAngleName === angleName
-            ? {
-                ...angle,
-                circuitAngleValue: Math.min(Math.abs(Number(value)), 360),
-              }
-            : angle
-        ),
+      ComputeSettings: {
+        ...prev.ComputeSettings,
+        qubitComputing: {
+          ...prev.ComputeSettings.qubitComputing,
+          circuitAngles: prev.ComputeSettings.qubitComputing.circuitAngles.map(
+            (angle) =>
+              angle.circuitAngleName === angleName
+                ? {
+                    ...angle,
+                    circuitAngleValue: Math.min(Math.abs(Number(value)), 360),
+                  }
+                : angle
+          ),
+        },
       },
     }));
   };
@@ -73,7 +78,7 @@ export default function QubitComputingSection({
     setExperiment((prev) => ({
       ...prev,
       qubitComputing: {
-        ...prev.qubitComputing,
+        ...prev.ComputeSettings.qubitComputing,
         circuitAngles: Array.from({
           length: 4 - (experiment.config?.qc_encoded_qubits || 4),
         }).map((_, index) => ({
@@ -82,6 +87,7 @@ export default function QubitComputingSection({
         })),
       },
     }));
+    // eslint-disable-next-line
   }, [experiment.config?.qc_encoded_qubits]);
 
   return (
@@ -92,26 +98,27 @@ export default function QubitComputingSection({
     >
       <div className={"flex text-white"}>
         <div>
-          <EditorSectionHeader header={"Qubit Computing"} />
+          <div className={"flex items-center space-x-5"}>
+            <EditorSectionHeader header={"Qubit Computing"} />
+            <div className={"flex items-center space-x-2"}>
+              <Switch
+                disabled={inputsDisabled}
+                checked={experiment.withQubitConfig}
+                onChange={() => {
+                  setExperiment((prev) => ({
+                    ...prev,
+                    withQubitConfig: !prev.withQubitConfig,
+                  }));
+                }}
+              />
+              <p>{experiment.withQubitConfig ? "On" : "Off"}</p>
+            </div>
+          </div>
           <p>
             {t(
               "Implement different quantum circuits byu rearranging the prepared cluster state"
             )}
           </p>
-        </div>
-        <div className={"absolute top-0 right-0 p-4"}>
-          <div className={"flex items-center space-x-4"}>
-            <p>{experiment.withQubitConfig ? "On" : "Off"}</p>
-            <Switch
-              checked={experiment.withQubitConfig}
-              onChange={() => {
-                setExperiment((prev) => ({
-                  ...prev,
-                  withQubitConfig: !prev.withQubitConfig,
-                }));
-              }}
-            />
-          </div>
         </div>
       </div>
       {configs.length && experiment.withQubitConfig && (
@@ -121,6 +128,7 @@ export default function QubitComputingSection({
             <div className={"flex space-x-6"}>
               <div>
                 <CircuitConfigSelector
+                  inputsDisabled={inputsDisabled}
                   currentConfig={experiment.config}
                   configs={configs}
                   setCurrentConfig={(circuit: CircuitConfig) => {
@@ -143,6 +151,7 @@ export default function QubitComputingSection({
                     length: 4 - (experiment.config?.qc_encoded_qubits || 4),
                   }).map((_, index) => (
                     <TextFieldWithIcon
+                      isDisabled={inputsDisabled}
                       key={index}
                       iconsSrc={greekIconSources[index]}
                       value={"" + getAngleValue(angleNames[index])}
@@ -172,16 +181,19 @@ export default function QubitComputingSection({
  * @param configs
  * @param currentConfig
  * @param setCurrentConfig
+ * @param inputsDisabled
  * @constructor
  */
 function CircuitConfigSelector({
   configs,
   currentConfig,
   setCurrentConfig,
+  inputsDisabled,
 }: {
   configs: CircuitConfig[];
   currentConfig: CircuitConfig | undefined;
   setCurrentConfig: (config: CircuitConfig) => void;
+  inputsDisabled?: boolean;
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -194,7 +206,7 @@ function CircuitConfigSelector({
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
 
-  const groupConfigs = () => {
+  const groupConfigs = useCallback(() => {
     const groupedConfigs: { [key: number]: CircuitConfig[] } = {
       1: [],
       2: [],
@@ -208,18 +220,19 @@ function CircuitConfigSelector({
       }
     });
     return groupedConfigs;
-  };
+  }, [configs]);
 
-  const groupedConfigs = useMemo(() => groupConfigs(), [configs]);
+  const groupedConfigs = useMemo(() => groupConfigs(), [groupConfigs]);
 
   return (
     <React.Fragment>
       <Button
+        disabled={inputsDisabled}
         style={{ backgroundColor: primaryDark }}
         onClick={handleOnClick}
         className={"p-1"}
       >
-        <img src={getSrc(currentConfig)} />
+        <img src={getSrc(currentConfig)} alt={""} />
       </Button>
       <Popper open={!!anchorEl} anchorEl={anchorEl} placement={"right"}>
         <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
@@ -244,7 +257,7 @@ function CircuitConfigSelector({
                         }}
                         key={config.circuit_id}
                       >
-                        <img src={getSrc(config)} />
+                        <img src={getSrc(config)} alt={""} />
                       </Button>
                     ))}
                   </div>

@@ -14,37 +14,54 @@ import { usePossibleClusterConfigsPresetSettings } from "../../../../hook/hook.e
 export interface EditorSectionProps {
   experiment: ExperimentWithConfigs;
   setExperiment: React.Dispatch<React.SetStateAction<ExperimentWithConfigs>>;
+  inputsDisabled?: boolean;
 }
 
 export default function ClusterStateSection({
   setExperiment,
   experiment,
+  inputsDisabled,
 }: EditorSectionProps) {
   const { t } = useTranslation();
   const { currentCircuitConfigs: configs } =
     usePossibleClusterConfigsPresetSettings(experiment, setExperiment);
 
   const setExperimentQubitNr = (nr: number) => {
-    if (experiment.clusterState.presetSettings === PresetSetting.Ghz) return;
+    if (
+      experiment.ComputeSettings.clusterState.presetSettings ===
+      PresetSetting.Ghz
+    )
+      return;
     setExperiment((prev) => ({
       ...prev,
-      clusterState: { ...prev.clusterState, amountQubits: nr },
+      ComputeSettings: {
+        ...prev.ComputeSettings,
+        clusterState: {
+          ...prev.ComputeSettings.clusterState,
+          amountQubits: nr,
+        },
+      },
     }));
   };
 
   const setExperimentPresetSettings = (value: PresetSetting) => {
     setExperiment((prev) => ({
       ...prev,
-      clusterState: {
-        amountQubits:
-          value === PresetSetting.Ghz ? 4 : prev.clusterState.amountQubits,
-        presetSettings: value,
+      ComputeSettings: {
+        ...prev.ComputeSettings,
+        clusterState: {
+          amountQubits:
+            value === PresetSetting.Ghz
+              ? 4
+              : prev.ComputeSettings.clusterState.amountQubits,
+          presetSettings: value,
+        },
       },
     }));
   };
 
   const isButtonActive = (nr: number) => {
-    return experiment.clusterState.amountQubits === nr
+    return experiment.ComputeSettings.clusterState.amountQubits === nr
       ? "contained"
       : undefined;
   };
@@ -81,8 +98,10 @@ export default function ClusterStateSection({
             {[2, 3, 4].map((nr) => (
               <Button
                 disabled={
-                  nr !== 4 &&
-                  experiment.clusterState.presetSettings === PresetSetting.Ghz
+                  inputsDisabled ||
+                  (nr !== 4 &&
+                    experiment.ComputeSettings.clusterState.presetSettings ===
+                      PresetSetting.Ghz)
                 }
                 onClick={() => setExperimentQubitNr(nr)}
                 variant={isButtonActive(nr)}
@@ -97,12 +116,13 @@ export default function ClusterStateSection({
           <h3 className={"text-white font-bold"}>{t("Preset Settings")}</h3>
           <div className={"flex space-x-1 items-center"}>
             <Select
+              disabled={inputsDisabled}
               size={"small"}
               className={"bg-primaryDark"}
               color={"primary"}
               defaultValue={PresetSetting.Linear}
               style={{ color: "white" }}
-              value={experiment.clusterState.presetSettings}
+              value={experiment.ComputeSettings.clusterState.presetSettings}
               onChange={(e) =>
                 setExperimentPresetSettings(e.target.value as PresetSetting)
               }
@@ -117,7 +137,12 @@ export default function ClusterStateSection({
                 </MenuItem>
               ))}
             </Select>
-            <img className={"max-h-8"} src={getSvgSource(true)} />
+            {/*eslint-disable-next-line*/}
+            <img
+              className={"max-h-8"}
+              src={getSvgSource(true)}
+              alt={"Cluster State configuration image"}
+            />
           </div>
         </div>
       </div>

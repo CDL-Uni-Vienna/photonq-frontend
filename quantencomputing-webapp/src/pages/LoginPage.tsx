@@ -4,20 +4,25 @@ import NavbarPadding from "../components/Layout/NavbarPadding";
 import { Grid } from "@mui/material";
 import AuthContent from "../components/Authentification/AuthContent";
 import LoginForm from "../components/Authentification/LoginForm";
+import AuthPageLayout from "../components/Layout/AuthPageLayout";
 
 export default function LoginPage() {
   return (
-    <PageLayout>
+    <AuthPageLayout>
       <div className={"md:hidden"}>
         <NavbarPadding />
       </div>
       <Grid container columnSpacing={12}>
         <Grid item md={7}>
-          <div
-            className={"pt-8 md:pt-0 md:h-screen flex flex-col justify-center"}
-          >
-            <LoginForm />
-          </div>
+          <PageLayout>
+            <div
+              className={
+                "pt-8 md:pt-0 md:h-screen flex flex-col justify-center"
+              }
+            >
+              <LoginForm />
+            </div>
+          </PageLayout>
         </Grid>
         <Grid item md={5}>
           <AuthContent
@@ -28,6 +33,6 @@ export default function LoginPage() {
           />
         </Grid>
       </Grid>
-    </PageLayout>
+    </AuthPageLayout>
   );
 }

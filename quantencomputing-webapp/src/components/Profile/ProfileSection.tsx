@@ -13,7 +13,7 @@ export default function ProfileSection({
   return (
     <div
       className={clsx("pt-16 px-8 space-y-3", {
-        ["pb-16"]: withBottomSpace,
+        "pb-16": withBottomSpace,
       })}
     >
       {children}

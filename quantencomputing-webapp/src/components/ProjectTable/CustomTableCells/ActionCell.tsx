@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { CustomTableCellProps } from "./type.customTableCells";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { IconButton } from "@mui/material";
 import ContextMenu from "../ContextMenu";
 import { RouteComponentProps, withRouter } from "react-router";
 import { AddExperimentDialogProps } from "../../../model/types/type.experiment";
+import { deleteExperiment } from "../../../model/model.api";
+import { ProjectExperimentDataContext } from "../../../providers/ProjectExperimentDataProvider";
+import { downloadData } from "../../../utils/utils.download";
+import { useConnectedUser } from "../../../hook/hook.user";
 
 enum ProjectActions {
   AddNewExperiment = "Add new Experiment",
@@ -25,12 +29,15 @@ interface ActionCellProps
 
 export default withRouter(function ActionCell({
   row,
-  setData,
-  history,
   setAddExperimentDialogProps,
+  history,
 }: ActionCellProps) {
   const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const user = useConnectedUser();
+  const {
+    experiments: { setValue: setExperiments },
+  } = useContext(ProjectExperimentDataContext);
 
   const handleOnClick = (
     e: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLButtonElement>
@@ -42,22 +49,32 @@ export default withRouter(function ActionCell({
 
   const getBaseActions = () => {
     return [
-      {
-        label: ProjectActions.Run,
-        action: () => {},
-      },
+      // {
+      //   label: ProjectActions.Run,
+      //   action: () => {
+      //     history.push(getPathWithId(row.original.id, Path.ExperimentResult));
+      //   },
+      // },
       {
         label: ProjectActions.Download,
-        action: () => {},
+        action: () => {
+          downloadData(row.original.experimentName, row.original);
+        },
       },
       {
         label: ProjectActions.Delete,
-        action: () => {},
+        action: async () => {
+          setExperiments((prev) =>
+            prev.filter((e) => e.id !== row.original.id)
+          );
+          await deleteExperiment(row.original.id, user!.token);
+        },
       },
-      {
-        label: ProjectActions.Share,
-        action: () => {},
-      },
+      // Not relevant for release 1
+      // {
+      //   label: ProjectActions.Share,
+      //   action: () => {},
+      // },
     ];
   };
 

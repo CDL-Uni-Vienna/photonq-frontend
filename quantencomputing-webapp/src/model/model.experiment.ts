@@ -1,6 +1,5 @@
 import {
   ResultParameters,
-  CreateExperimentPayload,
   EncodedQubitMeasurement,
   Experiment,
   ExperimentState,
@@ -18,31 +17,32 @@ import { format } from "date-fns";
  */
 export function getDefaultExperimentConfig(experimentName: string): Experiment {
   return {
-    createdAt: Date.now(),
-    clusterState: {
-      amountQubits: 2,
-      presetSettings: PresetSetting.Linear,
+    ComputeSettings: {
+      clusterState: {
+        amountQubits: 2,
+        presetSettings: PresetSetting.Linear,
+      },
+      qubitComputing: {
+        circuitConfiguration: "horseshoe",
+        circuitAngles: [
+          {
+            circuitAngleName: "alpha",
+            circuitAngleValue: 0,
+          },
+          {
+            circuitAngleName: "beta",
+            circuitAngleValue: 0,
+          },
+        ],
+      },
+      encodedQubitMeasurements: [],
     },
-    qubitComputing: {
-      circuitConfiguration: "horseshoe",
-      circuitAngles: [
-        {
-          circuitAngleName: "alpha",
-          circuitAngleValue: 0,
-        },
-        {
-          circuitAngleName: "beta",
-          circuitAngleValue: 0,
-        },
-      ],
-    },
-    encodedQubitMeasurements: [],
     circuitId: 5,
     experimentName,
     projectId: "",
     maxRuntime: 120,
     id: "615c5752d99d8706d46409f9",
-    status: ExperimentState.Running,
+    status: ExperimentState.IN_QUEUE,
   };
 }
 
@@ -66,17 +66,15 @@ export function filterSingleCircuitConfigClusterState(
   experiment: ExperimentWithConfigs
 ) {
   if (
-    circuitConfig.csp_number_of_qubits !== experiment.clusterState.amountQubits
+    circuitConfig.csp_number_of_qubits !==
+    experiment.ComputeSettings.clusterState.amountQubits
   ) {
     return false;
   }
-  if (
-    circuitConfig.csp_preset_settings_name !==
-    experiment.clusterState.presetSettings
-  ) {
-    return false;
-  }
-  return true;
+  return (
+    circuitConfig.csp_preset_settings_name ===
+    experiment.ComputeSettings.clusterState.presetSettings
+  );
 }
 
 /**
@@ -105,13 +103,10 @@ export function filterSingleCircuitConfigQubitComputing(
   ) {
     return false;
   }
-  if (
+  return !(
     experiment.config &&
     experiment.config.qm_circuit_model === circuitConfig.qm_circuit_model
-  ) {
-    return false;
-  }
-  return true;
+  );
 }
 
 /**
@@ -177,15 +172,15 @@ export function getComputationParameters(
   return [
     {
       label: "Physical qubits",
-      value: experiment.clusterState.amountQubits,
+      value: experiment.ComputeSettings.clusterState.amountQubits,
     },
     {
       label: "Encoded qubits",
       value: config.qc_encoded_qubits || 0,
     },
     {
-      label: "Computation configruation",
-      value: experiment.qubitComputing.circuitConfiguration,
+      label: "Computation configuration",
+      value: experiment.ComputeSettings.qubitComputing.circuitConfiguration,
     },
     {
       label: "CPhase gates",
@@ -194,21 +189,23 @@ export function getComputationParameters(
     {
       label: "Computing parameters",
       value: convertToAngleString(
-        experiment.qubitComputing.circuitAngles.map(
+        experiment.ComputeSettings.qubitComputing.circuitAngles.map(
           (val) => val.circuitAngleValue
         )
       ),
     },
     {
       label: "Projection Parameters",
-      value: convertToAngleString(experiment.encodedQubitMeasurements),
+      value: convertToAngleString(
+        experiment.ComputeSettings.encodedQubitMeasurements
+      ),
     },
   ];
 }
 
 function convertToAngleString(angles: number[] | EncodedQubitMeasurement[]) {
   return `[${angles
-    .map((angle, index) => {
+    .map((angle) => {
       if (typeof angle === "number") {
         return `${angle}°`;
       }

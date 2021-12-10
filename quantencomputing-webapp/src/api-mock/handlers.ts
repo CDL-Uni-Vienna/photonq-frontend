@@ -1,9 +1,11 @@
 import { rest, RestRequest } from "msw";
 import { getDefaultExperimentConfig } from "../model/model.experiment";
-import { Experiment } from "../model/types/type.experiment";
 
 export const handlers = [
-  rest.get("/experiment/:experimentId", (req, res, context) => {
+  rest.get("/experiments/:experimentId", (req, res, context) => {
+    if (!["1", "2", "3"].includes(req.params.experimentId)) {
+      return res(context.delay(500), context.status(500));
+    }
     return res(
       context.delay(500),
       context.status(201),
@@ -24,13 +26,13 @@ export const handlers = [
       context.delay(500),
       context.status(201),
       context.json([
-        getDefaultExperimentConfig("A"),
-        getDefaultExperimentConfig("B"),
-        getDefaultExperimentConfig("C"),
+        { ...getDefaultExperimentConfig("A"), id: "1" },
+        { ...getDefaultExperimentConfig("B"), id: "2" },
+        { ...getDefaultExperimentConfig("C"), id: "3" },
       ])
     );
   }),
-  rest.post("/experiment", (req: RestRequest<any>, res, context) => {
+  rest.post("/experiments", (req: RestRequest<any>, res, context) => {
     console.warn(req);
     return res(
       context.delay(500),
@@ -44,5 +46,28 @@ export const handlers = [
   }),
   rest.delete("/experiment/:experimentId", (req, res, context) => {
     return res(context.delay(500), context.status(201));
+  }),
+  rest.post("/login", (req: RestRequest<any>, res, context) => {
+    return res(
+      context.delay(500),
+      context.status(201),
+      context.json({
+        expires: new Date().toISOString(),
+        token: "jdfklsjdflassshdflaksj",
+        id: 1,
+        email: req.body.username,
+        name: req.body.name,
+      })
+    );
+  }),
+  rest.post("/register", (req: RestRequest<any>, res, context) => {
+    return res(
+      context.delay(500),
+      context.status(201),
+      context.json({
+        id: 1,
+        ...req.body,
+      })
+    );
   }),
 ];

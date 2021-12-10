@@ -10,16 +10,7 @@ import {
 } from "@mui/material";
 import { getTableColumns } from "../../model/model.table";
 import { useTranslation } from "react-i18next";
-import {
-  Row,
-  useExpanded,
-  UseExpandedRowProps,
-  useSortBy,
-  useTable,
-} from "react-table";
-import NestedTable from "./NestedTable";
-import { AnimatePresence, motion } from "framer-motion";
-import { MainTableColumn } from "../../model/types/type.table";
+import { useExpanded, useSortBy, useTable } from "react-table";
 import { AddExperimentDialogProps } from "../../model/types/type.experiment";
 import { ProjectExperimentDataContext } from "../../providers/ProjectExperimentDataProvider";
 import { RouteComponentProps, withRouter } from "react-router";
@@ -114,26 +105,26 @@ export default withRouter(function MainTable({
 });
 
 /**
- *
+ * Not Relevant for Release 1
  */
-function NestedTableContainer(props: {
-  row: Row & UseExpandedRowProps<any>;
-  mainTableColumns: MainTableColumn[];
-}) {
-  return (
-    <AnimatePresence>
-      {props.row.isExpanded && (
-        <motion.tr
-          transition={{ duration: 0.4 }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <TableCell colSpan={props.mainTableColumns.length}>
-            <NestedTable />
-          </TableCell>
-        </motion.tr>
-      )}
-    </AnimatePresence>
-  );
-}
+// function NestedTableContainer(props: {
+//   row: Row & UseExpandedRowProps<any>;
+//   mainTableColumns: MainTableColumn[];
+// }) {
+//   return (
+//     <AnimatePresence>
+//       {props.row.isExpanded && (
+//         <motion.tr
+//           transition={{ duration: 0.4 }}
+//           initial={{ opacity: 0 }}
+//           animate={{ opacity: 1 }}
+//           exit={{ opacity: 0 }}
+//         >
+//           <TableCell colSpan={props.mainTableColumns.length}>
+//             <NestedTable />
+//           </TableCell>
+//         </motion.tr>
+//       )}
+//     </AnimatePresence>
+//   );
+// }

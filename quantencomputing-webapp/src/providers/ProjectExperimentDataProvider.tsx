@@ -1,14 +1,10 @@
-import React, {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import React, { createContext, ReactNode, useEffect, useState } from "react";
 import { BaseProviderType } from "../model/types/type.provider";
 import { CircularProgress } from "@mui/material";
 import { Experiment } from "../model/types/type.experiment";
 import { getExperiments } from "../model/model.api";
+import { useConnectedUser } from "../hook/hook.user";
+import SystemAlert from "../components/SystemAlert";
 
 export interface ProjectExperimentDataProviderProps<
   P extends Array<any>,
@@ -33,18 +29,28 @@ interface Props {
 export default function ProjectExperimentDataContextProvider({
   children,
 }: Props) {
+  const user = useConnectedUser();
   const [isLoading, setIsLoading] = useState(true);
   const [projects, setProjects] = useState([]);
   const [experiments, setExperiments] = useState<Experiment[]>([]);
+  const [error, setError] = useState<boolean>(false);
 
   const getData = async () => {
-    const res = await getExperiments();
-    setExperiments(res);
-    setIsLoading(() => false);
+    try {
+      const res = await getExperiments(user!.token);
+      setExperiments(res);
+      setError(false);
+    } catch (e) {
+      console.error(e);
+      setError(true);
+    } finally {
+      setIsLoading((_) => false);
+    }
   };
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (isLoading) {
@@ -63,6 +69,9 @@ export default function ProjectExperimentDataContextProvider({
       }}
     >
       {children}
+      {error && !isLoading && (
+        <SystemAlert severity="error">Could not get Experiments</SystemAlert>
+      )}
     </ProjectExperimentDataContext.Provider>
   );
 }

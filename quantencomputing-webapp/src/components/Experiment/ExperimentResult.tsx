@@ -14,6 +14,8 @@ import {
   getExecutionIndicators,
 } from "../../model/model.experiment";
 import AnimatedLoadingIcon from "../AnimatedLoadingIcon";
+import DownloadButton from "../DownloadButton";
+import { downloadData } from "../../utils/utils.download";
 
 interface ExperimentResultProps {
   experiment: Experiment;
@@ -34,11 +36,6 @@ export default function ExperimentResultContainer({
       </div>
     );
 
-  /**
-   *
-   * @param experiment
-   * @param fallback
-   */
   const getResultSvgSrc = (fallback?: boolean) => {
     if (fallback) {
       return `/circuitConfig/qm_circuit_model/${
@@ -58,12 +55,12 @@ export default function ExperimentResultContainer({
     <ContentContainer
       withPadding
       color={secondaryDark}
-      className={"space-y-5 mt-16"}
+      className={"space-y-10 mt-16"}
     >
       <div className={"text-white"}>
         <h2 className={"text-2xl font-bold"}>{t("Results")}</h2>
         <p className={"font-bold"}>
-          {format(new Date(experiment.createdAt), "Pp")}
+          {format(new Date(experimentResult.startTime), "Pp")}
         </p>
       </div>
       <div className={"flex"}>
@@ -76,10 +73,13 @@ export default function ExperimentResultContainer({
         </div>
       </div>
       <div style={{ width: "fit-content" }} className={"bg-primaryDark p-1"}>
-        {config?.qc_circuit_model && <img src={getQubitConfigSrc()} />}
+        {config?.qc_circuit_model && (
+          // eslint-disable-next-line jsx-a11y/img-redundant-alt
+          <img src={getQubitConfigSrc()} alt={"Circuit Modal config image"} />
+        )}
       </div>
       <div className={"flex space-x-32 text-white"}>
-        <div className={"space-y-3"}>
+        <div className={"space-y-5"}>
           <h3 className={"font-bold text-xl"}>{t("Computation parameters")}</h3>
           {getComputationParameters(experiment, config!).map((param, index) => (
             <div key={index} className={"flex justify-between space-x-12"}>
@@ -87,8 +87,13 @@ export default function ExperimentResultContainer({
               <p>{param.value}</p>
             </div>
           ))}
+          <DownloadButton
+            onClick={() => downloadData(experiment.experimentName, experiment)}
+          >
+            {t("Computation Configuration File")}
+          </DownloadButton>
         </div>
-        <div className={"space-y-3"}>
+        <div className={"space-y-5"}>
           <h3 className={"font-bold text-xl"}>{t("Execution Indicators")}</h3>
           {getExecutionIndicators(experiment.id, experimentResult!).map(
             (param, index) => (
@@ -98,6 +103,16 @@ export default function ExperimentResultContainer({
               </div>
             )
           )}
+          <DownloadButton
+            onClick={() =>
+              downloadData(
+                `${experiment.experimentName}-results`,
+                experimentResult
+              )
+            }
+          >
+            {t("Execution Metadata File")}
+          </DownloadButton>
         </div>
       </div>
     </ContentContainer>

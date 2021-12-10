@@ -1,21 +1,20 @@
 import React, { MouseEvent } from "react";
 import { List, ListItemText, MenuItem, Paper, Popper } from "@mui/material";
 
-interface ContextMenuAction {
+export interface ContextMenuAction<T> {
   label: string;
-  action: () => void;
+  action: (val?: T) => void;
 }
 
 interface ContextMenuProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   anchorEl: HTMLElement | null;
-  actions: ContextMenuAction[];
+  actions: ContextMenuAction<any>[];
   variant?: "small" | "large";
 }
 
 export default function ContextMenu({
-  setIsOpen,
   isOpen,
   anchorEl,
   actions,
@@ -36,7 +35,11 @@ export default function ContextMenu({
     <Popper placement={"bottom-start"} anchorEl={anchorEl} open={isOpen}>
       <List dense={variant === "small"} component={Paper}>
         {actions.map(({ label, action }, index) => (
-          <MenuItem divider onClick={(e) => handleOnClick(e, action)} key={index}>
+          <MenuItem
+            divider
+            onClick={(e) => handleOnClick(e, action)}
+            key={index}
+          >
             <ListItemText primary={label} />
           </MenuItem>
         ))}

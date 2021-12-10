@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { TextField } from "@mui/material";
 import clsx from "clsx";
 
@@ -15,23 +15,37 @@ export default function TextFieldWithIcon({
   setValue,
   isDisabled,
 }: TextFieldWithIconProps) {
+  const [input, setInput] = useState(value);
+
+  useLayoutEffect(() => {
+    setInput(value);
+  }, [value]);
+
   return (
     <div className={"flex items-center space-x-2"}>
       <embed src={iconsSrc} />
       <TextField
+        onBlur={(event) => {
+          const currentValue = input.replace(",", ".");
+          setValue(currentValue);
+          setInput(currentValue.length ? currentValue.replace(".", ",") : "0");
+        }}
         inputProps={{
           style: {
             color: "white",
           },
+          step: 0.1,
         }}
-        value={value}
         type={"number"}
+        value={input}
         disabled={isDisabled}
         size={"small"}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) => {
+          setInput(e.target.value);
+        }}
         color={"primary"}
         className={clsx({
-          ["bg-primaryDark rounded-sm"]: !isDisabled,
+          "bg-primaryDark rounded-sm": !isDisabled,
         })}
       />
     </div>

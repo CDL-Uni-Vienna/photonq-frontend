@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  Experiment,
   ExperimentResult,
   ExperimentWithConfigs,
 } from "../model/types/type.experiment";
@@ -11,6 +10,7 @@ import {
 } from "../model/model.experiment";
 import { CircuitConfig, circuitConfigs } from "../circuitConfig/circuits4Dv004";
 import { getExperiment } from "../model/model.api";
+import { useConnectedUser } from "./hook.user";
 
 /**
  * This hook is used to get the experiment from the server.
@@ -18,26 +18,35 @@ import { getExperiment } from "../model/model.api";
  * @param id
  */
 export function useSelectedExperiment(id: string) {
-  const getDefaultData = (): ExperimentWithConfigs => ({
-    ...getDefaultExperimentConfig("Experiment"),
+  const user = useConnectedUser();
+  const getDefaultData = (name: string): ExperimentWithConfigs => ({
+    ...getDefaultExperimentConfig(name),
+    id: name,
     withQubitConfig: true,
   });
 
   const [experimentResult, setExperimentResult] = useState<ExperimentResult>();
   const [experiment, setExperiment] = useState<ExperimentWithConfigs>(
-    getDefaultData()
+    getDefaultData(id)
   );
   const [isLoading, setIsLoading] = useState(true);
 
   const getData = async () => {
-    const res = await getExperiment(id);
-    setExperiment((prev) => ({ ...prev, ...res.experimentConfiguration }));
-    setExperimentResult(res.experimentResult);
-    setIsLoading(false);
+    try {
+      const res = await getExperiment(id, user!.token);
+      setExperiment((prev) => ({ ...prev, ...res.experimentConfiguration }));
+      setExperimentResult(res.experimentResult);
+    } catch (e) {
+      // This case means that the id is a name of an experiment not an actual Id.
+      // So we use the default data and let the user edit his newly created experiment.
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
     getData();
+    // eslint-disable-next-line
   }, []);
 
   return {
@@ -71,9 +80,10 @@ export function usePossibleClusterConfigsPresetSettings(
     if (filteredConfigs.length) {
       setExperiment((prev) => ({ ...prev, config: filteredConfigs[0] }));
     }
+    // eslint-disable-next-line
   }, [
-    experiment.clusterState.amountQubits,
-    experiment.clusterState.presetSettings,
+    experiment.ComputeSettings.clusterState.amountQubits,
+    experiment.ComputeSettings.clusterState.presetSettings,
   ]);
 
   return { currentCircuitConfigs };
@@ -112,6 +122,7 @@ export function usePossibleClusterConfigsQubitComputing(
 
   useEffect(() => {
     adaptData();
+    // eslint-disable-next-line
   }, [currentCircuitConfigs, experiment.withQubitConfig]);
 
   return { currentConfigs };

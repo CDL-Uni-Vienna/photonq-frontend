@@ -5,7 +5,6 @@ import { secondaryDark } from "../../../../theme/theme.config";
 import EditorSectionHeader from "./EditorSectionHeader";
 import { useTranslation } from "react-i18next";
 import SettingsImage from "./SettingsImage";
-import { TextField } from "@mui/material";
 import clsx from "clsx";
 import { getEmptyEncodedQubitMeasurement } from "../../../../model/model.experiment";
 import { EncodedQubitMeasurement } from "../../../../model/types/type.experiment";
@@ -14,6 +13,7 @@ import TextFieldWithIcon from "../../../TextFieldWithIcon";
 export default function QubitMeasurementSection({
   setExperiment,
   experiment,
+  inputsDisabled,
 }: EditorSectionProps) {
   const { t } = useTranslation();
 
@@ -29,6 +29,7 @@ export default function QubitMeasurementSection({
         length: experiment.config?.qm_number_of_qubits || 0,
       }).map((_, index) => getEmptyEncodedQubitMeasurement(index + 1)),
     }));
+    // eslint-disable-next-line
   }, [experiment.config?.qm_number_of_qubits]);
 
   return (
@@ -45,12 +46,14 @@ export default function QubitMeasurementSection({
         <div className={"flex space-x-5 w-1/2"}>
           <div className={"space-y-7"}>
             <EncodedQubitInput
+              inputsDisabled={inputsDisabled}
               nr={1}
               experiment={experiment}
               encodedQubits={experiment.config?.qm_number_of_qubits}
               setExperiment={setExperiment}
             />
             <EncodedQubitInput
+              inputsDisabled={inputsDisabled}
               nr={2}
               experiment={experiment}
               encodedQubits={experiment.config?.qm_number_of_qubits}
@@ -59,12 +62,14 @@ export default function QubitMeasurementSection({
           </div>
           <div className={"space-y-7"}>
             <EncodedQubitInput
+              inputsDisabled={inputsDisabled}
               nr={3}
               experiment={experiment}
               encodedQubits={experiment.config?.qm_number_of_qubits}
               setExperiment={setExperiment}
             />
             <EncodedQubitInput
+              inputsDisabled={inputsDisabled}
               nr={4}
               experiment={experiment}
               encodedQubits={experiment.config?.qm_number_of_qubits}
@@ -92,6 +97,9 @@ export default function QubitMeasurementSection({
  *
  * @param nr
  * @param encodedQubits
+ * @param experiment
+ * @param setExperiment
+ * @param inputsDisabled
  * @constructor
  */
 function EncodedQubitInput({
@@ -99,6 +107,7 @@ function EncodedQubitInput({
   encodedQubits,
   experiment,
   setExperiment,
+  inputsDisabled,
 }: {
   nr: number;
   encodedQubits?: number | null;
@@ -113,17 +122,19 @@ function EncodedQubitInput({
   ) => {
     setExperiment((prev) => ({
       ...prev,
-      encodedQubitMeasurements: prev.encodedQubitMeasurements.map(
-        (measurement) => {
-          if (measurement.encodedQubitIndex === nr) {
-            return {
-              ...measurement,
-              [variant]: Math.min(Math.abs(Number(value)), 360),
-            };
-          }
-          return measurement;
-        }
-      ),
+      ComputeSettings: {
+        ...prev.ComputeSettings,
+        encodedQubitMeasurements:
+          prev.ComputeSettings.encodedQubitMeasurements.map((measurement) => {
+            if (measurement.encodedQubitIndex === nr) {
+              return {
+                ...measurement,
+                [variant]: Math.min(Math.abs(Number(value)), 360),
+              };
+            }
+            return measurement;
+          }),
+      },
     }));
   };
 
@@ -131,7 +142,7 @@ function EncodedQubitInput({
     nr: number,
     angle: keyof Omit<EncodedQubitMeasurement, "nr">
   ) => {
-    return experiment.encodedQubitMeasurements.find(
+    return experiment.ComputeSettings.encodedQubitMeasurements.find(
       (measurement) => measurement.encodedQubitIndex === nr
     )?.[angle];
   };
@@ -140,26 +151,26 @@ function EncodedQubitInput({
     <div className={"space-y-3"}>
       <h3
         className={clsx("font-bold", {
-          ["text-gray-500"]: isDisabled(),
+          "text-gray-500": isDisabled(),
         })}
       >{`${t("Encoded Qubit")} ${nr}`}</h3>
       <div
         className={clsx("space-y-3", {
-          ["text-gray-500"]: isDisabled(),
+          "text-gray-500": isDisabled(),
         })}
       >
         <TextFieldWithIcon
-          isDisabled={isDisabled()}
+          isDisabled={isDisabled() || inputsDisabled}
           iconsSrc={"/images/theta.svg"}
-          value={"" + getValue(nr, "theta") || "0"}
+          value={"" + (getValue(nr, "theta") || "0")}
           setValue={(value) => {
             handleOnChange(value, "theta");
           }}
         />
         <TextFieldWithIcon
-          isDisabled={isDisabled()}
+          isDisabled={isDisabled() || inputsDisabled}
           iconsSrc={"/images/phi.svg"}
-          value={"" + getValue(nr, "phi") || "0"}
+          value={"" + (getValue(nr, "phi") || "0")}
           setValue={(value) => handleOnChange(value, "phi")}
         />
       </div>

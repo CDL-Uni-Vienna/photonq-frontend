@@ -13,9 +13,9 @@ export default function NavbarLink(props: {
       className={clsx(
         "transform hover:text-primary hover:scale-105 duration-300",
         {
-          ["font-bold text-primary"]: props.isRouteActive,
-          ["hidden lg:block"]: props.variant === "desktop",
-          ["block lg:hidden"]: props.variant === "mobile",
+          "font-bold text-primary": props.isRouteActive,
+          "hidden lg:block": props.variant === "desktop",
+          "block lg:hidden": props.variant === "mobile",
         }
       )}
     >
