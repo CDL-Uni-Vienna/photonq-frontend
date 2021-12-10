@@ -1,11 +1,6 @@
 FROM node:lts-alpine
-WORKDIR /usr/src/app
-COPY package*.json ./
+COPY build build
+RUN npm install -g serve
 
-RUN npm ci
-
-COPY . .
-RUN npm run build
-
-EXPOSE 3000
-CMD [ "npm", "start" ]
+EXPOSE 8080
+ENTRYPOINT ["serve", "-s", "build", "-l", "8080"]
