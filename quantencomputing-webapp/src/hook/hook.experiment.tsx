@@ -34,7 +34,6 @@ export function useSelectedExperiment(id: string) {
   const getData = async () => {
     try {
       const res = await getExperiment(id, user!.token);
-      console.log(res);
       setExperiment((prev) => ({ ...prev, ...res.experimentConfiguration }));
       setExperimentResult(res.experimentResult);
     } catch (e) {

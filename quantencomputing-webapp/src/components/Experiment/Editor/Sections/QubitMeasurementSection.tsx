@@ -17,6 +17,8 @@ export default function QubitMeasurementSection({
 }: EditorSectionProps) {
   const { t } = useTranslation();
 
+  console.log(experiment);
+
   const getSrc = () => {
     return `/circuitConfig/qm_circuit_model/${experiment.config?.qm_circuit_model}`;
   };
@@ -25,9 +27,12 @@ export default function QubitMeasurementSection({
     // adds array of empty EncodedQubitMeasurments to the experiment
     setExperiment((prev) => ({
       ...prev,
-      encodedQubitMeasurements: Array.from({
-        length: experiment.config?.qm_number_of_qubits || 0,
-      }).map((_, index) => getEmptyEncodedQubitMeasurement(index + 1)),
+      ComputeSettings: {
+        ...prev.ComputeSettings,
+        encodedQubitMeasurements: Array.from({
+          length: experiment.config?.qm_number_of_qubits || 0,
+        }).map((_, index) => getEmptyEncodedQubitMeasurement(index + 1)),
+      },
     }));
     // eslint-disable-next-line
   }, [experiment.config?.qm_number_of_qubits]);

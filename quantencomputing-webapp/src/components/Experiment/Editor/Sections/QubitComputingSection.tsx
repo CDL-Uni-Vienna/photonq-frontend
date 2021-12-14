@@ -77,14 +77,17 @@ export default function QubitComputingSection({
     // adds array of empty Angles to the experiment
     setExperiment((prev) => ({
       ...prev,
-      qubitComputing: {
-        ...prev.ComputeSettings.qubitComputing,
-        circuitAngles: Array.from({
-          length: 4 - (experiment.config?.qc_encoded_qubits || 4),
-        }).map((_, index) => ({
-          circuitAngleName: angleNames[index],
-          circuitAngleValue: 0,
-        })),
+      ComputeSettings: {
+        ...prev.ComputeSettings,
+        qubitComputing: {
+          ...prev.ComputeSettings.qubitComputing,
+          circuitAngles: Array.from({
+            length: 4 - (experiment.config?.qc_encoded_qubits || 4),
+          }).map((_, index) => ({
+            circuitAngleName: angleNames[index],
+            circuitAngleValue: 0,
+          })),
+        },
       },
     }));
     // eslint-disable-next-line
