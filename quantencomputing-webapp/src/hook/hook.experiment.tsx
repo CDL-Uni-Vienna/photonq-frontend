@@ -39,6 +39,11 @@ export function useSelectedExperiment(id: string) {
     } catch (e) {
       // This case means that the id is a name of an experiment not an actual Id.
       // So we use the default data and let the user edit his newly created experiment.
+      const currentName = window.localStorage.getItem(
+        "experimentName"
+      ) as string;
+      window.localStorage.removeItem("experimentName");
+      setExperiment((prev) => ({ ...prev, experimentName: currentName }));
     } finally {
       setIsLoading(false);
     }

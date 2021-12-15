@@ -64,10 +64,11 @@ export default withRouter(function SystemDialog({
       experiment = getDefaultExperimentConfig(input);
       history.push(
         getPathWithId(
-          experiment.experimentName.replace(/\s/g, ""),
+          experiment.experimentName.replace(/\s/g, "").toLowerCase(),
           Path.SingleExperiment
         )
       );
+      window.localStorage.setItem("experimentName", experiment.experimentName);
     }
     resetDialog();
   };
