@@ -16,6 +16,7 @@ import { createExperiment } from "../../model/model.api";
 import { useConnectedUser } from "../../hook/hook.user";
 import { deleteProps } from "../../utils/utils.object";
 import SystemAlert from "../SystemAlert";
+import { BaseEditorPageProps } from "../../pages/EditorPage";
 
 const MAX_RUNTIME = 120;
 
@@ -25,12 +26,12 @@ export default withRouter(function ExperimentNavbar({
   location,
   match,
   history,
-}: ExperimentTopBarProps) {
+  experiment,
+  setExperiment,
+  isLoading,
+}: ExperimentTopBarProps & BaseEditorPageProps) {
   const { t } = useTranslation();
   const user = useConnectedUser();
-  const { experiment, isLoading, setExperiment } = useSelectedExperiment(
-    match.params.id
-  );
   const isRunButtonDisabled = useMemo(
     () => experiment.status !== ExperimentState.DRAFT || isLoading,
     [experiment, isLoading]
@@ -40,14 +41,15 @@ export default withRouter(function ExperimentNavbar({
 
   const runExperiment = async () => {
     try {
-      const createExperimentPayload = deleteProps<
-        CreateExperimentPayload,
-        ExperimentWithConfigs
-      >(experiment, ["experimentId", "withQubitConfig"]);
-      await createExperiment(createExperimentPayload, user!.token);
-      history.push(
-        getPathWithId(experiment.experimentId, Path.ExperimentResult)
-      );
+      const createExperimentPayload = {
+        ...deleteProps<CreateExperimentPayload, ExperimentWithConfigs>(
+          experiment,
+          ["experimentId", "withQubitConfig", "config"]
+        ),
+        status: ExperimentState.IN_QUEUE,
+      };
+      const res = await createExperiment(createExperimentPayload, user!.token);
+      history.push(getPathWithId(res.experimentId, Path.ExperimentResult));
     } catch (e) {
       console.error(e);
       setError(true);

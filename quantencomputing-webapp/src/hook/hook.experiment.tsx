@@ -35,6 +35,7 @@ export function useSelectedExperiment(id: string) {
     try {
       const res = await getExperiment(id, user!.token);
       setExperiment((prev) => ({ ...prev, ...res }));
+      console.log(res, experiment, "experiment set");
     } catch (e) {
       // This case means that the id is a name of an experiment not an actual Id.
       // So we use the default data and let the user edit his newly created experiment.

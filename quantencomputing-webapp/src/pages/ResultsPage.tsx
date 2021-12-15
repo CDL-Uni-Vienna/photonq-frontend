@@ -16,9 +16,8 @@ export default withRouter(function ResultsPage(
   props: RouteComponentProps<{ id: string }>
 ) {
   const { t } = useTranslation();
-  const { experiment, experimentResult } = useSelectedExperiment(
-    props.match.params.id
-  );
+  const { experiment, experimentResult, isLoading, setExperiment } =
+    useSelectedExperiment(props.match.params.id);
 
   return (
     <div
@@ -28,7 +27,11 @@ export default withRouter(function ResultsPage(
           experiment.status === ExperimentState.IN_QUEUE,
       })}
     >
-      <ExperimentNavbar />
+      <ExperimentNavbar
+        experiment={experiment}
+        setExperiment={setExperiment}
+        isLoading={isLoading}
+      />
       <PageLayout>
         <NavbarPadding />
         {experiment.status === ExperimentState.Running ||

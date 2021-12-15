@@ -17,8 +17,6 @@ export default function QubitMeasurementSection({
 }: EditorSectionProps) {
   const { t } = useTranslation();
 
-  console.log(experiment);
-
   const getSrc = () => {
     return `/circuitConfig/qm_circuit_model/${experiment.config?.qm_circuit_model}`;
   };
