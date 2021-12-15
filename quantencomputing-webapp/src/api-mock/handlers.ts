@@ -1,16 +1,17 @@
 import { rest, RestRequest } from "msw";
 import { getDefaultExperimentConfig } from "../model/model.experiment";
+import { ExperimentState } from "../model/types/type.experiment";
 
 export const handlers = [
   rest.get("/experiments/:experimentId", (req, res, context) => {
-    if (!["1", "2", "3"].includes(req.params.experimentId)) {
-      return res(context.delay(500), context.status(500));
-    }
     return res(
       context.delay(500),
       context.status(201),
       context.json({
-        experimentConfiguration: getDefaultExperimentConfig("Experiment"),
+        experimentConfiguration: getDefaultExperimentConfig(
+          "Experiment",
+          ExperimentState.IN_QUEUE
+        ),
         experimentResult: {
           startTime: new Date().toISOString(),
           totalCounts: 400,
@@ -26,9 +27,21 @@ export const handlers = [
       context.delay(500),
       context.status(201),
       context.json([
-        { ...getDefaultExperimentConfig("A"), id: "1" },
-        { ...getDefaultExperimentConfig("B"), id: "2" },
-        { ...getDefaultExperimentConfig("C"), id: "3" },
+        {
+          ...getDefaultExperimentConfig("A"),
+          id: "1",
+          status: ExperimentState.IN_QUEUE,
+        },
+        {
+          ...getDefaultExperimentConfig("B"),
+          id: "2",
+          status: ExperimentState.IN_QUEUE,
+        },
+        {
+          ...getDefaultExperimentConfig("C"),
+          id: "3",
+          status: ExperimentState.IN_QUEUE,
+        },
       ])
     );
   }),

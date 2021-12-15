@@ -1,11 +1,11 @@
 import {
-  ResultParameters,
   EncodedQubitMeasurement,
   Experiment,
+  ExperimentResult,
   ExperimentState,
   ExperimentWithConfigs,
   PresetSetting,
-  ExperimentResult,
+  ResultParameters,
 } from "./types/type.experiment";
 import { CircuitConfig, circuitConfigs } from "../circuitConfig/circuits4Dv004";
 import { format } from "date-fns";
@@ -15,7 +15,10 @@ import { format } from "date-fns";
  *
  * @param experimentName
  */
-export function getDefaultExperimentConfig(experimentName: string): Experiment {
+export function getDefaultExperimentConfig(
+  experimentName: string,
+  status?: ExperimentState
+): Experiment {
   return {
     ComputeSettings: {
       clusterState: {
@@ -41,8 +44,8 @@ export function getDefaultExperimentConfig(experimentName: string): Experiment {
     experimentName,
     projectId: "",
     maxRuntime: 120,
-    experimentId: "615c5752d99d8706d46409f9",
-    status: ExperimentState.IN_QUEUE,
+    experimentId: "jfkdlsaflsdjflkjlfalsfjdslkjfkldsjlkf",
+    status: status || ExperimentState.DRAFT,
   };
 }
 

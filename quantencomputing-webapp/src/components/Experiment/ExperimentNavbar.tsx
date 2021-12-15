@@ -32,10 +32,7 @@ export default withRouter(function ExperimentNavbar({
     match.params.id
   );
   const isRunButtonDisabled = useMemo(
-    () =>
-      experiment.status !== ExperimentState.IN_QUEUE ||
-      experiment.experimentId !== experiment.experimentName ||
-      isLoading,
+    () => experiment.status !== ExperimentState.DRAFT || isLoading,
     [experiment, isLoading]
   );
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -105,28 +102,26 @@ export default withRouter(function ExperimentNavbar({
           </div>
         </div>
       </nav>
-      {isDialogOpen &&
-        experiment.status !== ExperimentState.Failed &&
-        experiment.status !== ExperimentState.Done && (
-          <MaxRuntimeDialog
-            currentMaxRuntime={experiment.maxRuntime.toString()}
-            open={isDialogOpen}
-            isOpen={setIsDialogOpen}
-            onButtonClick={(input) => {
-              if (!input) return;
-              if (+input > MAX_RUNTIME) {
-                return `Has to be smaller or equal than ${MAX_RUNTIME}`;
-              }
-              if (+input < 1) {
-                return `Has to be at least 1`;
-              }
-              setExperiment((prev) => ({
-                ...prev,
-                maxRuntime: +input,
-              }));
-            }}
-          />
-        )}
+      {isDialogOpen && experiment.status === ExperimentState.DRAFT && (
+        <MaxRuntimeDialog
+          currentMaxRuntime={experiment.maxRuntime.toString()}
+          open={isDialogOpen}
+          isOpen={setIsDialogOpen}
+          onButtonClick={(input) => {
+            if (!input) return;
+            if (+input > MAX_RUNTIME) {
+              return `Has to be smaller or equal than ${MAX_RUNTIME}`;
+            }
+            if (+input < 1) {
+              return `Has to be at least 1`;
+            }
+            setExperiment((prev) => ({
+              ...prev,
+              maxRuntime: +input,
+            }));
+          }}
+        />
+      )}
       {error && !isLoading && (
         <SystemAlert severity={"error"}>
           {t("Could not run Experiment")}

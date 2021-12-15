@@ -15,6 +15,7 @@ export enum ExperimentState {
   Running = "RUNNING",
   Failed = "FAILED",
   Done = "DONE",
+  DRAFT = "DRAFT",
 }
 
 export interface ResultParameters {
