@@ -27,7 +27,4 @@ export interface BaseApiFetchPayload<T> {
   token?: string;
 }
 
-export interface GetExperimentResponse {
-  experimentConfiguration: Experiment;
-  experimentResult: ExperimentResult;
-}
+export interface GetExperimentResponse extends Experiment {}
