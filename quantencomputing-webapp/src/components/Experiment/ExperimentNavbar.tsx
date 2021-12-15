@@ -5,7 +5,6 @@ import { getPathWithId, Path } from "../../model/model.routes";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 import DropDownButton from "./DropDownButton";
-import { useSelectedExperiment } from "../../hook/hook.experiment";
 import {
   CreateExperimentPayload,
   ExperimentState,
@@ -24,7 +23,6 @@ interface ExperimentTopBarProps extends RouteComponentProps<{ id: string }> {}
 
 export default withRouter(function ExperimentNavbar({
   location,
-  match,
   history,
   experiment,
   setExperiment,
@@ -76,13 +74,14 @@ export default withRouter(function ExperimentNavbar({
             <ExperimentLinkElement
               highlight={!location.pathname.includes("result")}
               path={Path.SingleExperiment}
-              id={match.params.id}
+              id={experiment.experimentId}
               text={"Editor"}
             />
             <ExperimentLinkElement
               highlight={location.pathname.includes("result")}
               path={Path.ExperimentResult}
-              id={match.params.id}
+              id={experiment.experimentId}
+              disabled={experiment.experimentId === experiment.experimentName}
               text={"Result"}
             />
           </div>
@@ -164,6 +163,7 @@ function MaxRuntimeDialog(props: {
  * @param id
  * @param text
  * @param path
+ * @param disabled
  * @constructor
  */
 function ExperimentLinkElement({
@@ -171,13 +171,28 @@ function ExperimentLinkElement({
   id,
   text,
   path,
+  disabled,
 }: {
   highlight: boolean;
   id: string;
   text: string;
   path: Path;
+  disabled?: boolean;
 }) {
   const { t } = useTranslation();
+
+  if (disabled) {
+    return (
+      <p
+        className={clsx("text-lg", {
+          "text-gray": disabled,
+        })}
+      >
+        {t(text)}
+      </p>
+    );
+  }
+
   return (
     <Link
       style={{ textTransform: "uppercase" }}
