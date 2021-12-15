@@ -87,6 +87,11 @@ export default withRouter(function SystemDialog({
       <DialogContent style={{ minWidth: 500, paddingTop: 8 }}>
         <div className={"flex flex-col space-y-4"}>
           <TextField
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleOnClick();
+              }
+            }}
             type={inputType}
             error={!!errorMassage}
             helperText={errorMassage}
