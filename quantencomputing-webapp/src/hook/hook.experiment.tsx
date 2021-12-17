@@ -35,7 +35,6 @@ export function useSelectedExperiment(id: string) {
     try {
       const res = await getExperiment(id, user!.token);
       setExperiment((prev) => ({ ...prev, ...res }));
-      console.log(res, experiment, "experiment set");
     } catch (e) {
       // This case means that the id is a name of an experiment not an actual Id.
       // So we use the default data and let the user edit his newly created experiment.
@@ -83,7 +82,11 @@ export function usePossibleClusterConfigsPresetSettings(
     );
     setCurrentCircuitConfigs(filteredConfigs);
     if (filteredConfigs.length) {
-      setExperiment((prev) => ({ ...prev, config: filteredConfigs[0] }));
+      setExperiment((prev) => ({
+        ...prev,
+        config: filteredConfigs[0],
+        circuitId: filteredConfigs[0].circuit_id,
+      }));
     }
     // eslint-disable-next-line
   }, [
@@ -117,11 +120,13 @@ export function usePossibleClusterConfigsQubitComputing(
       filterSingleCircuitConfigQubitComputing(config, experiment, true)
     );
     setCurrentConfigs(filteredConfigs);
+    const config = filteredConfigs.find((config) =>
+      filterSingleCircuitConfigQubitComputing(config, experiment, false)
+    );
     setExperiment((prev) => ({
       ...prev,
-      config: filteredConfigs.find((config) =>
-        filterSingleCircuitConfigQubitComputing(config, experiment, false)
-      ),
+      circuitId: config?.circuit_id || 1,
+      config: config,
     }));
   };
 

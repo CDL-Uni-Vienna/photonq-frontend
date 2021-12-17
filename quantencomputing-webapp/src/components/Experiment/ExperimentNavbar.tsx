@@ -46,6 +46,7 @@ export default withRouter(function ExperimentNavbar({
         ),
         status: ExperimentState.IN_QUEUE,
       };
+      createExperimentPayload.circuitId = experiment.config!.circuit_id;
       const res = await createExperiment(createExperimentPayload, user!.token);
       history.push(getPathWithId(res.experimentId, Path.ExperimentResult));
     } catch (e) {

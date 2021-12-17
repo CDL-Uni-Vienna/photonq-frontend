@@ -18,9 +18,9 @@ import TextFieldWithIcon from "../../../TextFieldWithIcon";
 import { CircuitAngleName } from "../../../../model/types/type.experiment";
 
 const greekIconSources = [
-  "/images/phi.svg",
-  "/images/phi.svg",
-  "/images/phi.svg",
+  "/images/alpha.svg",
+  "/images/beta.svg",
+  "/images/gamma.svg",
 ];
 
 const angleNames: CircuitAngleName[] = ["alpha", "beta", "gamma"];
