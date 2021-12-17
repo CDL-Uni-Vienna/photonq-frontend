@@ -50,8 +50,9 @@ export default function ProjectExperimentDataContextProvider({
 
   useEffect(() => {
     getData();
-    setInterval(() => getData(), 1000 * 20);
+    const i = setInterval(() => getData(), 1000 * 20);
     // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => clearInterval(i);
   }, []);
 
   if (isLoading) {
