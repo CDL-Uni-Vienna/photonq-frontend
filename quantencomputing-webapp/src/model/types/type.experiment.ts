@@ -5,11 +5,17 @@ export interface AddExperimentDialogProps {
   projectId: string;
 }
 
+/**
+ *
+ */
 export enum PresetSetting {
   Linear = "linear",
   Ghz = "ghz",
 }
 
+/**
+ *
+ */
 export enum ExperimentState {
   IN_QUEUE = "IN QUEUE",
   Running = "RUNNING",
@@ -18,24 +24,68 @@ export enum ExperimentState {
   DRAFT = "DRAFT",
 }
 
+/**
+ *
+ */
 export interface ResultParameters {
   label: string;
   value: string | number;
 }
 
+/**
+ *
+ */
 export type CircuitAngleName = "alpha" | "beta" | "gamma";
 
+/**
+ *
+ */
 export interface EncodedQubitMeasurement {
   encodedQubitIndex: number;
   theta: number;
   phi: number;
 }
 
+/**
+ *
+ */
+export interface EncodedQubitMeasurementResolution
+  extends EncodedQubitMeasurement {
+  id: number;
+  ComputeSettings: number;
+}
+
+/**
+ *
+ */
 interface CircuitAngle {
   circuitAngleName: CircuitAngleName;
   circuitAngleValue: number;
 }
 
+/**
+ *
+ */
+interface CircuitAngleResolution extends CircuitAngle {
+  id: number;
+  qubitComputing: number;
+}
+
+/**
+ *
+ */
+interface BaseExperimentInformation {
+  circuitId: number;
+  experimentName: string;
+  projectId?: string;
+  maxRuntime: number;
+  experimentId: string;
+  status: ExperimentState;
+}
+
+/**
+ *
+ */
 export interface ExperimentResult {
   startTime: string;
   totalCounts: number;
@@ -55,7 +105,27 @@ export type CreateExperimentPayload = Omit<
 /**
  * Represents the Object that is returned from the api
  */
-export interface Experiment {
+export interface ExperimentResolution extends BaseExperimentInformation {
+  ComputeSettings: {
+    clusterState: {
+      amountQubits: number;
+      presetSettings: PresetSetting;
+      id: number;
+    };
+    qubitComputing: {
+      circuitConfiguration: string;
+      circuitAngles: CircuitAngleResolution[];
+      id: number;
+    };
+    encodedQubitMeasurements: EncodedQubitMeasurementResolution[];
+    user: string;
+  };
+}
+
+/**
+ * Represents the Object that is used in the frontend
+ */
+export interface Experiment extends BaseExperimentInformation {
   ComputeSettings: {
     clusterState: {
       amountQubits: number;
@@ -67,14 +137,11 @@ export interface Experiment {
     };
     encodedQubitMeasurements: EncodedQubitMeasurement[];
   };
-  circuitId: number;
-  experimentName: string;
-  projectId?: string;
-  maxRuntime: number;
-  experimentId: string;
-  status: ExperimentState;
 }
 
+/**
+ *
+ */
 export interface ExperimentWithConfigs extends Experiment {
   config?: CircuitConfig;
   withQubitConfig: boolean;

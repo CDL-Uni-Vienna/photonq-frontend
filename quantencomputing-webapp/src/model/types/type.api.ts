@@ -1,4 +1,4 @@
-import { Experiment, ExperimentResult } from "./type.experiment";
+import { Experiment } from "./type.experiment";
 
 export const BASE_ENDPOINT_URL =
   process.env.REACT_APP_MOCK_API === "True"
