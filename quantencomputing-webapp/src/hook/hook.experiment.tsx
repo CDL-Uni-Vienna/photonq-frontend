@@ -11,6 +11,7 @@ import {
 import { CircuitConfig, circuitConfigs } from "../circuitConfig/circuits4Dv004";
 import { getExperiment } from "../model/model.api";
 import { useConnectedUser } from "./hook.user";
+import { convertExperimentResoultionToFrontendObject } from "../model/model.api-res";
 
 /**
  * This hook is used to get the experiment from the server.
@@ -34,7 +35,11 @@ export function useSelectedExperiment(id: string) {
   const getData = async () => {
     try {
       const res = await getExperiment(id, user!.token);
-      setExperiment((prev) => ({ ...prev, ...res }));
+      console.log(convertExperimentResoultionToFrontendObject(res));
+      setExperiment((prev) => ({
+        ...prev,
+        ...convertExperimentResoultionToFrontendObject(res),
+      }));
     } catch (e) {
       // This case means that the id is a name of an experiment not an actual Id.
       // So we use the default data and let the user edit his newly created experiment.

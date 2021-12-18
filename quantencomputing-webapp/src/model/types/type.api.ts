@@ -1,4 +1,4 @@
-import { Experiment } from "./type.experiment";
+import { ExperimentResolution } from "./type.experiment";
 
 export const BASE_ENDPOINT_URL =
   process.env.REACT_APP_MOCK_API === "True"
@@ -27,4 +27,6 @@ export interface BaseApiFetchPayload<T> {
   token?: string;
 }
 
-export interface GetExperimentResponse extends Experiment {}
+export interface GetExperimentResponse extends ExperimentResolution {}
+
+export interface ResolutionType {}

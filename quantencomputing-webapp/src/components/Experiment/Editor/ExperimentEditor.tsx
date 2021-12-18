@@ -17,7 +17,6 @@ import { BaseEditorPageProps } from "../../../pages/EditorPage";
 
 export default withRouter(
   ({
-    match,
     experiment,
     setExperiment,
     isLoading,

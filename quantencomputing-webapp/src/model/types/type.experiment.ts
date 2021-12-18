@@ -58,15 +58,15 @@ export interface EncodedQubitMeasurementResolution
 /**
  *
  */
-interface CircuitAngle {
+interface CircuitAngle<T> {
   circuitAngleName: CircuitAngleName;
-  circuitAngleValue: number;
+  circuitAngleValue: T;
 }
 
 /**
  *
  */
-interface CircuitAngleResolution extends CircuitAngle {
+interface CircuitAngleResolution extends CircuitAngle<string> {
   id: number;
   qubitComputing: number;
 }
@@ -118,8 +118,8 @@ export interface ExperimentResolution extends BaseExperimentInformation {
       id: number;
     };
     encodedQubitMeasurements: EncodedQubitMeasurementResolution[];
-    user: string;
   };
+  user: string;
 }
 
 /**
@@ -133,7 +133,7 @@ export interface Experiment extends BaseExperimentInformation {
     };
     qubitComputing: {
       circuitConfiguration: string;
-      circuitAngles: CircuitAngle[];
+      circuitAngles: CircuitAngle<number>[];
     };
     encodedQubitMeasurements: EncodedQubitMeasurement[];
   };
