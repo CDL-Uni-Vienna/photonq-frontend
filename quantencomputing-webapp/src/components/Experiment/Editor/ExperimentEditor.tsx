@@ -1,5 +1,4 @@
 import { RouteComponentProps, withRouter } from "react-router";
-import { useSelectedExperiment } from "../../../hook/hook.experiment";
 import DemultiplexerSection from "./Sections/DemultiplexerSection";
 import ClusterStateSection from "./Sections/ClusterStateSection";
 import { Button, CircularProgress } from "@mui/material";
@@ -41,6 +40,8 @@ export default withRouter(
         projectId: experiment.projectId,
       }));
     };
+
+    console.log(experiment);
 
     if (isLoading) {
       return (

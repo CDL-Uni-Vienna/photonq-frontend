@@ -7,7 +7,10 @@ import { useTranslation } from "react-i18next";
 import SettingsImage from "./SettingsImage";
 import clsx from "clsx";
 import { getEmptyEncodedQubitMeasurement } from "../../../../model/model.experiment";
-import { EncodedQubitMeasurement } from "../../../../model/types/type.experiment";
+import {
+  EncodedQubitMeasurement,
+  ExperimentState,
+} from "../../../../model/types/type.experiment";
 import TextFieldWithIcon from "../../../TextFieldWithIcon";
 
 export default function QubitMeasurementSection({
@@ -21,8 +24,10 @@ export default function QubitMeasurementSection({
     return `/circuitConfig/qm_circuit_model/${experiment.config?.qm_circuit_model}`;
   };
 
-  useEffect(() => {
-    // adds array of empty EncodedQubitMeasurments to the experiment
+  const setInitialEncodedQubitMeasurements = () => {
+    if (experiment.status !== ExperimentState.DRAFT) {
+      return;
+    }
     setExperiment((prev) => ({
       ...prev,
       ComputeSettings: {
@@ -32,6 +37,11 @@ export default function QubitMeasurementSection({
         }).map((_, index) => getEmptyEncodedQubitMeasurement(index + 1)),
       },
     }));
+  };
+
+  useEffect(() => {
+    // adds array of empty EncodedQubitMeasurments to the experiment
+    setInitialEncodedQubitMeasurements();
     // eslint-disable-next-line
   }, [experiment.config?.qm_number_of_qubits]);
 
