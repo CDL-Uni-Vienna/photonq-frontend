@@ -13,33 +13,37 @@ export function convertExperimentResoultionToFrontendObject(
     experimentResolution.experimentName,
     experimentResolution.status
   );
-  const temp = deleteProps<
-    Omit<ExperimentResolution, "user">,
-    ExperimentResolution
-  >(experimentResolution, ["user"]);
+  experiment.experimentId = experimentResolution.experimentId;
+  experiment.circuitId = experimentResolution.circuitId;
+  experiment.maxRuntime = experimentResolution.maxRuntime;
+  experiment.projectId = experimentResolution.projectId;
 
   experiment.ComputeSettings.clusterState = deleteProps(
-    temp.ComputeSettings.clusterState,
+    experimentResolution.ComputeSettings.clusterState,
     ["id"]
   );
 
   experiment.ComputeSettings.qubitComputing = deleteProps(
-    temp.ComputeSettings.qubitComputing,
+    experimentResolution.ComputeSettings.qubitComputing,
     ["id"]
   );
 
   experiment.ComputeSettings.qubitComputing.circuitAngles =
-    temp.ComputeSettings.qubitComputing.circuitAngles.map((angle) => ({
-      ...deleteProps(angle, ["id", "qubitComputing"]),
-      circuitAngleValue: +angle.circuitAngleValue,
-    }));
+    experimentResolution.ComputeSettings.qubitComputing.circuitAngles.map(
+      (angle) => ({
+        ...deleteProps(angle, ["id", "qubitComputing"]),
+        circuitAngleValue: +angle.circuitAngleValue,
+      })
+    );
 
   experiment.ComputeSettings.encodedQubitMeasurements =
-    temp.ComputeSettings.encodedQubitMeasurements.map((measurement) => ({
-      ...deleteProps(measurement, ["id", "ComputeSettings"]),
-      phi: +measurement.phi,
-      theta: +measurement.theta,
-    }));
+    experimentResolution.ComputeSettings.encodedQubitMeasurements.map(
+      (measurement) => ({
+        ...deleteProps(measurement, ["id", "ComputeSettings"]),
+        phi: +measurement.phi,
+        theta: +measurement.theta,
+      })
+    );
 
   return experiment;
 }
