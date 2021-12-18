@@ -5,6 +5,7 @@ import { Experiment } from "../model/types/type.experiment";
 import { getExperiments } from "../model/model.api";
 import { useConnectedUser } from "../hook/hook.user";
 import SystemAlert from "../components/SystemAlert";
+import { convertExperimentResoultionToFrontendObject } from "../model/model.api-res";
 
 export interface ProjectExperimentDataProviderProps<
   P extends Array<any>,
@@ -38,7 +39,9 @@ export default function ProjectExperimentDataContextProvider({
   const getData = async () => {
     try {
       const res = await getExperiments(user!.token);
-      setExperiments(res);
+      setExperiments(
+        res.map((e) => convertExperimentResoultionToFrontendObject(e))
+      );
       setError(false);
     } catch (e) {
       console.error(e);
