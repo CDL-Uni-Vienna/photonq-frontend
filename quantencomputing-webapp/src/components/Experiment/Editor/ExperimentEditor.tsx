@@ -41,8 +41,6 @@ export default withRouter(
       }));
     };
 
-    console.log(experiment);
-
     if (isLoading) {
       return (
         <div className={"h-screen flex justify-center items-center"}>

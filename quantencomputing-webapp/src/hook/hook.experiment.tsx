@@ -6,6 +6,7 @@ import {
 import {
   filterSingleCircuitConfigClusterState,
   filterSingleCircuitConfigQubitComputing,
+  getConfig,
   getDefaultExperimentConfig,
 } from "../model/model.experiment";
 import { CircuitConfig, circuitConfigs } from "../circuitConfig/circuits4Dv004";
@@ -35,10 +36,11 @@ export function useSelectedExperiment(id: string) {
   const getData = async () => {
     try {
       const res = await getExperiment(id, user!.token);
-      console.log(convertExperimentResoultionToFrontendObject(res));
+      const temp = convertExperimentResoultionToFrontendObject(res);
       setExperiment((prev) => ({
         ...prev,
-        ...convertExperimentResoultionToFrontendObject(res),
+        ...temp,
+        config: getConfig(temp),
       }));
     } catch (e) {
       // This case means that the id is a name of an experiment not an actual Id.
@@ -86,11 +88,18 @@ export function usePossibleClusterConfigsPresetSettings(
       filterSingleCircuitConfigClusterState(config, experiment)
     );
     setCurrentCircuitConfigs(filteredConfigs);
+
     if (filteredConfigs.length) {
       setExperiment((prev) => ({
         ...prev,
-        config: filteredConfigs[0],
-        circuitId: filteredConfigs[0].circuit_id,
+        config:
+          filteredConfigs.find(
+            (config) => config.circuit_id === experiment.circuitId
+          ) || filteredConfigs[0],
+        circuitId:
+          filteredConfigs.find(
+            (config) => config.circuit_id === experiment.circuitId
+          )?.circuit_id || filteredConfigs[0].circuit_id,
       }));
     }
     // eslint-disable-next-line
@@ -125,14 +134,20 @@ export function usePossibleClusterConfigsQubitComputing(
       filterSingleCircuitConfigQubitComputing(config, experiment, true)
     );
     setCurrentConfigs(filteredConfigs);
-    const config = filteredConfigs.find((config) =>
-      filterSingleCircuitConfigQubitComputing(config, experiment, false)
-    );
-    setExperiment((prev) => ({
-      ...prev,
-      circuitId: config?.circuit_id || 1,
-      config: config,
-    }));
+    const config =
+      filteredConfigs.find(
+        (config) => config.circuit_id === experiment.circuitId
+      ) ||
+      filteredConfigs.find((config) =>
+        filterSingleCircuitConfigQubitComputing(config, experiment, false)
+      );
+    if (config) {
+      setExperiment((prev) => ({
+        ...prev,
+        config: config,
+        circuitId: config.circuit_id,
+      }));
+    }
   };
 
   useEffect(() => {
