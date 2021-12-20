@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import ContentContainer from "../../../Layout/ContentContainer";
-import { secondaryDark, primaryDark } from "../../../../theme/theme.config";
+import { primaryDark, secondaryDark } from "../../../../theme/theme.config";
 import EditorSectionHeader from "./EditorSectionHeader";
 import { useTranslation } from "react-i18next";
 import { EditorSectionProps } from "./ClusterStateSection";
@@ -15,12 +15,15 @@ import SettingsImage from "./SettingsImage";
 import { usePossibleClusterConfigsQubitComputing } from "../../../../hook/hook.experiment";
 import { CircuitConfig } from "../../../../circuitConfig/circuits4Dv004";
 import TextFieldWithIcon from "../../../TextFieldWithIcon";
-import { CircuitAngleName } from "../../../../model/types/type.experiment";
+import {
+  CircuitAngleName,
+  ExperimentState,
+} from "../../../../model/types/type.experiment";
 
 const greekIconSources = [
-  "/images/phi.svg",
-  "/images/phi.svg",
-  "/images/phi.svg",
+  "/images/alpha.svg",
+  "/images/beta.svg",
+  "/images/gamma.svg",
 ];
 
 const angleNames: CircuitAngleName[] = ["alpha", "beta", "gamma"];
@@ -73,8 +76,8 @@ export default function QubitComputingSection({
     }));
   };
 
-  useEffect(() => {
-    // adds array of empty Angles to the experiment
+  const setInitialQubitComputingAngles = () => {
+    if (experiment.status !== ExperimentState.DRAFT) return;
     setExperiment((prev) => ({
       ...prev,
       ComputeSettings: {
@@ -90,6 +93,11 @@ export default function QubitComputingSection({
         },
       },
     }));
+  };
+
+  useEffect(() => {
+    // adds array of empty Angles to the experiment
+    setInitialQubitComputingAngles();
     // eslint-disable-next-line
   }, [experiment.config?.qc_encoded_qubits]);
 

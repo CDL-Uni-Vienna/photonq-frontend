@@ -5,7 +5,11 @@ import {
   GetExperimentResponse,
   Method,
 } from "./types/type.api";
-import { CreateExperimentPayload, Experiment } from "./types/type.experiment";
+import {
+  CreateExperimentPayload,
+  Experiment,
+  ExperimentResolution,
+} from "./types/type.experiment";
 import {
   LoginCredentials,
   LoginResponse,
@@ -58,7 +62,9 @@ export async function getExperiment(
 /**
  *
  */
-export async function getExperiments(token: string): Promise<Experiment[]> {
+export async function getExperiments(
+  token: string
+): Promise<ExperimentResolution[]> {
   const response = await baseApiFetch({
     method: Method.GET,
     endpoint: Endpoint.Experiments,
@@ -78,7 +84,7 @@ export async function updateExperiment(
   id: string,
   newExperiment: CreateExperimentPayload,
   token: string
-): Promise<Experiment> {
+): Promise<ExperimentResolution> {
   await deleteExperiment(id, token);
   return createExperiment(newExperiment, token);
 }
@@ -107,7 +113,7 @@ export async function deleteExperiment(id: string, token: string) {
 export async function createExperiment(
   experimentPayload: CreateExperimentPayload,
   token: string
-): Promise<Experiment> {
+): Promise<ExperimentResolution> {
   const response = await baseApiFetch<CreateExperimentPayload>({
     method: Method.POST,
     endpoint: Endpoint.Experiment,
