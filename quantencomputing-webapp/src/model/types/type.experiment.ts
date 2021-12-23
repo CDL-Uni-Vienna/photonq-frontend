@@ -74,7 +74,7 @@ interface CircuitAngleResolution extends CircuitAngle<string> {
 /**
  *
  */
-interface BaseExperimentInformation {
+export interface BaseExperimentInformation {
   circuitId: number;
   experimentName: string;
   projectId?: string;
@@ -120,6 +120,11 @@ export interface ExperimentResolution extends BaseExperimentInformation {
     encodedQubitMeasurements: EncodedQubitMeasurementResolution[];
   };
   user: string;
+}
+
+export interface ExperimentResolutionWithResult {
+  experimentConfiguration: ExperimentResolution;
+  experimentResult: ExperimentResult;
 }
 
 /**

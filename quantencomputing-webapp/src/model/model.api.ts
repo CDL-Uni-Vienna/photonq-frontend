@@ -44,6 +44,7 @@ async function baseApiFetch<T>({
 /**
  *
  * @param id
+ * @param token
  */
 export async function getExperiment(
   id: string,

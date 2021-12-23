@@ -40,7 +40,9 @@ export default function ProjectExperimentDataContextProvider({
     try {
       const res = await getExperiments(user!.token);
       setExperiments(
-        res.map((e) => convertExperimentResoultionToFrontendObject(e))
+        res.map(
+          (e) => convertExperimentResoultionToFrontendObject(e).experiment
+        )
       );
       setError(false);
     } catch (e) {
