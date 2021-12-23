@@ -1,49 +1,81 @@
-import { Experiment, ExperimentResolution } from "./types/type.experiment";
+import {
+  Experiment,
+  ExperimentResolution,
+  ExperimentResolutionWithResult,
+  ExperimentResult,
+} from "./types/type.experiment";
 import { deleteProps } from "../utils/utils.object";
 import { getDefaultExperimentConfig } from "./model.experiment";
+
+function getPropsFromResolution(
+  resolution: ExperimentResolution | ExperimentResolutionWithResult,
+  key: keyof ExperimentResolution
+): any {
+  if ("experimentConfiguration" in resolution) {
+    return resolution.experimentConfiguration[key];
+  }
+  return resolution[key];
+}
 
 /**
  *
  * @param experimentResolution
  */
 export function convertExperimentResoultionToFrontendObject(
-  experimentResolution: ExperimentResolution
-): Experiment {
+  experimentResolution: ExperimentResolution | ExperimentResolutionWithResult
+): { experiment: Experiment; result?: ExperimentResult } {
   const experiment = getDefaultExperimentConfig(
-    experimentResolution.experimentName,
-    experimentResolution.status
+    getPropsFromResolution(experimentResolution, "experimentName"),
+    getPropsFromResolution(experimentResolution, "status")
   );
-  experiment.experimentId = experimentResolution.experimentId;
-  experiment.circuitId = experimentResolution.circuitId;
-  experiment.maxRuntime = experimentResolution.maxRuntime;
-  experiment.projectId = experimentResolution.projectId;
+  experiment.experimentId = getPropsFromResolution(
+    experimentResolution,
+    "experimentId"
+  );
+  experiment.circuitId = getPropsFromResolution(
+    experimentResolution,
+    "circuitId"
+  );
+  experiment.maxRuntime = getPropsFromResolution(
+    experimentResolution,
+    "maxRuntime"
+  );
+  experiment.projectId = getPropsFromResolution(
+    experimentResolution,
+    "projectId"
+  );
 
   experiment.ComputeSettings.clusterState = deleteProps(
-    experimentResolution.ComputeSettings.clusterState,
+    getPropsFromResolution(experimentResolution, "ComputeSettings")
+      .clusterState,
     ["id"]
   );
 
   experiment.ComputeSettings.qubitComputing = deleteProps(
-    experimentResolution.ComputeSettings.qubitComputing,
+    getPropsFromResolution(experimentResolution, "ComputeSettings")
+      .qubitComputing,
     ["id"]
   );
 
   experiment.ComputeSettings.qubitComputing.circuitAngles =
-    experimentResolution.ComputeSettings.qubitComputing.circuitAngles.map(
-      (angle) => ({
-        ...deleteProps(angle, ["id", "qubitComputing"]),
-        circuitAngleValue: +angle.circuitAngleValue,
-      })
-    );
+    getPropsFromResolution(
+      experimentResolution,
+      "ComputeSettings"
+    ).qubitComputing.circuitAngles.map((angle: any) => ({
+      // @ts-ignore
+      ...deleteProps(angle, ["id", "qubitComputing"]),
+      circuitAngleValue: +angle.circuitAngleValue,
+    }));
 
-  experiment.ComputeSettings.encodedQubitMeasurements =
-    experimentResolution.ComputeSettings.encodedQubitMeasurements.map(
-      (measurement) => ({
-        ...deleteProps(measurement, ["id", "ComputeSettings"]),
-        phi: +measurement.phi,
-        theta: +measurement.theta,
-      })
-    );
+  experiment.ComputeSettings.encodedQubitMeasurements = getPropsFromResolution(
+    experimentResolution,
+    "ComputeSettings"
+  ).encodedQubitMeasurements.map((measurement: any) => ({
+    // @ts-ignore
+    ...deleteProps(measurement, ["id", "ComputeSettings"]),
+    phi: +measurement.phi,
+    theta: +measurement.theta,
+  }));
 
-  return experiment;
+  return { experiment, result: (experimentResolution as any).experimentResult };
 }

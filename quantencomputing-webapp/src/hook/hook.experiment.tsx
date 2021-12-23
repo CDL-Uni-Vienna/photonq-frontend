@@ -36,12 +36,16 @@ export function useSelectedExperiment(id: string) {
   const getData = async () => {
     try {
       const res = await getExperiment(id, user!.token);
-      const temp = convertExperimentResoultionToFrontendObject(res);
+      const { experiment: temp, result } =
+        convertExperimentResoultionToFrontendObject(res);
       setExperiment((prev) => ({
         ...prev,
         ...temp,
         config: getConfig(temp),
       }));
+      if (result) {
+        setExperimentResult(result);
+      }
     } catch (e) {
       // This case means that the id is a name of an experiment not an actual Id.
       // So we use the default data and let the user edit his newly created experiment.
