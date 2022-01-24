@@ -1,10 +1,10 @@
 {
   "root": true,
   "project": {
-    "name": "Quantum Computing Lading page"
+    "name": "quantum-computing"
   },
   "api": {
-    "projectId": "vdj4usie",
+    "projectId": "t20b2fns",
     "dataset": "production"
   },
   "plugins": [
@@ -12,8 +12,7 @@
     "@sanity/components",
     "@sanity/default-layout",
     "@sanity/default-login",
-    "@sanity/desk-tool",
-    "tabs"
+    "@sanity/desk-tool"
   ],
   "env": {
     "development": {
