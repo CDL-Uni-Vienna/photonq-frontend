@@ -97,6 +97,9 @@ export default function QubitMeasurementSection({
             }
           >
             <div className={"border border-gray-500 p-2"}>
+              <SettingsImage src={"/circuitConfig/EcMeas.svg"} />
+            </div>
+            <div className={"border border-gray-500 p-2"}>
               <SettingsImage normal src={getSrc()} />
             </div>
           </div>
