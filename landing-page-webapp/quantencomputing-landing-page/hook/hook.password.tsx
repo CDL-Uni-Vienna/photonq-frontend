@@ -10,16 +10,21 @@ export interface ErrorObject {
 }
 
 export function usePasswordStrength({ value }: { value: string }) {
+  const [firstRender, setFirstRender] = useState(true);
   const [error, setError] = useState<ErrorObject>({
     length: false,
     strength: false,
   });
 
   useEffect(() => {
-    setError({
-      strength: zxcvbn(value).score < MIN_PASSWORD_STRENGTH,
-      length: value.length < MIN_PASSWORD_LENGTH,
-    });
+    if (!firstRender) {
+      setError({
+        strength: zxcvbn(value).score < MIN_PASSWORD_STRENGTH,
+        length: value.length < MIN_PASSWORD_LENGTH,
+      });
+    } else {
+      setFirstRender(false);
+    }
   }, [value]);
 
   return error;
