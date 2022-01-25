@@ -72,6 +72,7 @@ export default function RegisterForm() {
         value={registerValues.firstName}
         onChange={(e) => handleOnChange(e, "firstName")}
         fullWidth
+        required
         variant={"outlined"}
         label={t("First Name")}
       />
@@ -79,6 +80,7 @@ export default function RegisterForm() {
         value={registerValues.secondName}
         onChange={(e) => handleOnChange(e, "secondName")}
         fullWidth
+        required
         variant={"outlined"}
         label={t("Last Name")}
       />
@@ -97,7 +99,7 @@ export default function RegisterForm() {
         required
         fullWidth
         errorObject={errorObject}
-        label={"Password"}
+        label={"Password *"}
       />
       <FormControlLabel
         control={<Checkbox required defaultChecked />}

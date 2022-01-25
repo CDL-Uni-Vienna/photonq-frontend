@@ -69,7 +69,7 @@ export default function LoginForm() {
         handleOnChange={(e) => handleOnChange(e, "password")}
         required
         fullWidth
-        label={"Password"}
+        label={"Password *"}
       />
       <LoadingButton
         text={t("Login")}

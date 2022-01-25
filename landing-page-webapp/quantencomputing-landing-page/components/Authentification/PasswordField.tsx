@@ -45,6 +45,7 @@ export default function PasswordField(props: PasswordFieldProps) {
       </InputLabel>
       <OutlinedInput
         {...inputProps}
+        required={true}
         autoComplete={"new-password"}
         error={hasError()}
         value={value}
