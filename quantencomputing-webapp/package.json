@@ -1,6 +1,6 @@
 {
   "name": "quantencomputing-webapp",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "private": true,
   "dependencies": {
     "@craco/craco": "^6.4.0",
