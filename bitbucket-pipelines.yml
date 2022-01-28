@@ -29,14 +29,14 @@ pipelines:
           script:
             - cd landing-page-webapp/quantencomputing-landing-page
             - apt-get update && apt-get -y install jq
-            - declare -x VERSION=$(jq -r '.version' package.json)
+            #- declare -x VERSION=$(jq -r '.version' package.json)
             - IMAGE=ghcr.io/uwe-squer/quantencomputing-webapp
-            - TAG=$VERSION
+            #- TAG=$VERSION
   #         - docker login --username "${DOCKER_HUB_USER}" --password "${DOCKER_HUB_PASSWORD}"
             - docker login ghcr.io --username "${GHCR_USER}" --password "${GHCR_PASS}"
             - docker build -t $IMAGE:latest .
-            - docker tag $IMAGE:$TAG $IMAGE:latest
-            - docker push $IMAGE:$TAG
+            - docker tag $IMAGE:latest
+            #- docker push $IMAGE:$TAG
             - docker push $IMAGE:latest
       #- step:
       #    name: Update Version
