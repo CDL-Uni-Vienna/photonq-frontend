@@ -8,7 +8,7 @@ pipelines:
       #     caches:
       #       - node
       #     script:
-      #       - cd quantencomputing-webapp
+      #       - cd landing-page-webapp/quantencomputing-landing-page
       #       - npm ci
       #       - npm test
       - step:
@@ -17,7 +17,7 @@ pipelines:
           services:
             - docker
           script:
-            - cd landing-page-webapp
+            - cd landing-page-webapp/quantencomputing-landing-page
             - apt-get update && apt-get -y install jq
             #- declare -x VERSION=$(jq -r '.version' package.json)
             - IMAGE=ghcr.io/uwe-squer/quantencomputing-webapp
@@ -34,7 +34,7 @@ pipelines:
       #      - node
       #    script:
       #      - apt-get update && apt-get -y install jq
-      #      - cd landing-page-webapp
+      #      - cd landing-page-webapp/quantencomputing-landing-page
       #      - npm ci
       #      - declare -x VERSION=$(jq -r '.version' package.json)
       #      - git tag -f $VERSION
