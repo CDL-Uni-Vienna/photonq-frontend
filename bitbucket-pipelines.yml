@@ -19,29 +19,29 @@ pipelines:
           script:
             - cd landing-page-webapp
             - apt-get update && apt-get -y install jq
-            - declare -x VERSION=$(jq -r '.version' package.json)
+            #- declare -x VERSION=$(jq -r '.version' package.json)
             - IMAGE=ghcr.io/uwe-squer/quantencomputing-webapp
-            - TAG=$VERSION
+            #- TAG=$VERSION
   #         - docker login --username "${DOCKER_HUB_USER}" --password "${DOCKER_HUB_PASSWORD}"
             - docker login ghcr.io --username "${GHCR_USER}" --password "${GHCR_PASS}"
-            - docker build -t $IMAGE:$TAG .
-            - docker tag $IMAGE:$TAG $IMAGE:latest
-            - docker push $IMAGE:$TAG
+            - docker build -t $IMAGE:latest .
+            #- docker tag $IMAGE:$TAG $IMAGE:latest
+            #- docker push $IMAGE:$TAG
             - docker push $IMAGE:latest
-      - step:
-          name: Update Version
-          caches:
-            - node
-          script:
-            - apt-get update && apt-get -y install jq
-            - cd landing-page-webapp
-            - npm ci
-            - declare -x VERSION=$(jq -r '.version' package.json)
-            - git tag -f $VERSION
-            - git remote -v
-            - git push origin -f --tags
-            - npm --no-git-tag-version version patch
-            - declare -x VERSION=$(jq -r '.version' package.json)
-            - git add .
-            - git commit -m "[skip CI] Update version to $VERSION"
-            - git push  
+      #- step:
+      #    name: Update Version
+      #    caches:
+      #      - node
+      #    script:
+      #      - apt-get update && apt-get -y install jq
+      #      - cd landing-page-webapp
+      #      - npm ci
+      #      - declare -x VERSION=$(jq -r '.version' package.json)
+      #      - git tag -f $VERSION
+      #      - git remote -v
+      #      - git push origin -f --tags
+      #      - npm --no-git-tag-version version patch
+      #      - declare -x VERSION=$(jq -r '.version' package.json)
+      #      - git add .
+      #      - git commit -m "[skip CI] Update version to $VERSION"
+      #      - git push  
