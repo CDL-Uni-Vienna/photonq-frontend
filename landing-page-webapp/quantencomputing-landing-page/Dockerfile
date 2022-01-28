@@ -16,10 +16,8 @@ RUN adduser -S nextjs -u 1001
 
 USER nextjs
 
-EXPOSE 3000
-
-ENV PORT 3000
-
+EXPOSE 8080
+ENV PORT 8080
 ENV NEXT_TELEMETRY_DISABLED 1
 
 CMD ["node", "standalone/server.js"]
