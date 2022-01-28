@@ -35,7 +35,7 @@ pipelines:
   #         - docker login --username "${DOCKER_HUB_USER}" --password "${DOCKER_HUB_PASSWORD}"
             - docker login ghcr.io --username "${GHCR_USER}" --password "${GHCR_PASS}"
             - docker build -t $IMAGE:latest .
-            - docker tag $IMAGE:latest
+            #- docker tag $IMAGE:latest
             #- docker push $IMAGE:$TAG
             - docker push $IMAGE:latest
       #- step:
