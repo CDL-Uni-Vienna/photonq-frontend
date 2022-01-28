@@ -12,22 +12,12 @@ pipelines:
       #       - npm ci
       #       - npm test
       - step:
-          name: Build Production
-          caches:
-            - node
-          script:
-            - cd quantencomputing-webapp
-            - npm ci
-            - npm run build
-          artifacts:
-            - quantencomputing-webapp/build/**
-      - step:
-          name: Push Docker to DockerHub
+          name: Build Docker Image and Push ghcr.io
           # size: 2x # double the amount of resources for this step
           services:
             - docker
           script:
-            - cd quantencomputing-webapp
+            - cd landing-page-webapp
             - apt-get update && apt-get -y install jq
             - declare -x VERSION=$(jq -r '.version' package.json)
             - IMAGE=ghcr.io/uwe-squer/quantencomputing-webapp
@@ -44,7 +34,7 @@ pipelines:
             - node
           script:
             - apt-get update && apt-get -y install jq
-            - cd quantencomputing-webapp
+            - cd landing-page-webapp
             - npm ci
             - declare -x VERSION=$(jq -r '.version' package.json)
             - git tag -f $VERSION
