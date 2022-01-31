@@ -20,7 +20,7 @@ pipelines:
             - npm ci
             - npm run build --production
           artifacts:
-            - landing-page-webapp/quantencomputing-landing-page/.next/**
+            - landing-page-webapp/quantencomputing-landing-page/**
       - step:
           name: Build Docker Image and Push ghcr.io
           # size: 2x # double the amount of resources for this step
