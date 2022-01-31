@@ -2,7 +2,12 @@
 FROM node:16-alpine AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
-COPY .next .next
+WORKDIR /app
+COPY public ./public
+COPY next.config.js ./
+COPY package.js ./package.json
+COPY .next/standalone ./
+COPY .next/static ./.next/static
 
 ENV NODE_ENV production
 
@@ -20,5 +25,4 @@ EXPOSE 8080
 ENV PORT 8080
 ENV NEXT_TELEMETRY_DISABLED 1
 
-WORKDIR "/.next/standalone"
 CMD ["node", "server.js"]
