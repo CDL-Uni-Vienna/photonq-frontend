@@ -3,7 +3,7 @@ import { ExperimentResolution } from "./type.experiment";
 export const BASE_ENDPOINT_URL =
   process.env.NEXT_PUBLIC_MOCK_API === "True"
     ? "/api"
-    : process.env.NEXT_PUBLIC_BASE_URL;
+    : process.env.NEXT_PUBLIC_BASE_URL || "/api";
 
 export enum Endpoint {
   Experiment = "/experiments",
