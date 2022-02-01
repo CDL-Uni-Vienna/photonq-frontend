@@ -62,6 +62,25 @@ export async function getExperiment(
 
 /**
  *
+ * @param id
+ * @param token
+ */
+ export async function getExperimentResult(
+  id: string,
+  token: string
+): Promise<any> {
+  const response = await baseApiFetch({
+    method: Method.GET,
+    params: `${id}/results`,
+    endpoint: Endpoint.Experiment,
+    token,
+  });
+  if (!response.ok) throw new Error("Could not get full Experiment results" + id);
+  return response.json();
+}
+
+/**
+ *
  */
 export async function getExperiments(
   token: string

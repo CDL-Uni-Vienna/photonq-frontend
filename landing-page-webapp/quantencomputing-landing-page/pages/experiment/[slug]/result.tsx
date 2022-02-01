@@ -11,13 +11,20 @@ import { useTranslation } from "react-i18next";
 import DownloadButton from "../../../components/DownloadButton";
 import { downloadData } from "../../../utils/utils.download";
 import { useRouter } from "next/router";
+import { useConnectedUser } from "../../../hook/hook.user";
+import { getExperimentResult } from "../../../model/model.api";
 
 export default function ResultsPage() {
   const { t } = useTranslation();
   const router = useRouter();
+  const user = useConnectedUser();
   const { experiment, experimentResult, isLoading, setExperiment } =
     useSelectedExperiment(router.query.slug as string);
+  async function handleDownloadExperimentResult() {
 
+    const fullExperimentResult = await getExperimentResult(experiment.experimentId, user!.token);
+    downloadData(`${experiment.experimentName}_full-results`, fullExperimentResult);
+  }
   return (
     <div
       className={clsx("bg-primaryDark h-full pb-14", {
@@ -34,7 +41,7 @@ export default function ResultsPage() {
       <PageLayout>
         <NavbarPadding />
         {experiment.status === ExperimentState.Running ||
-        experiment.status === ExperimentState.IN_QUEUE ? (
+          experiment.status === ExperimentState.IN_QUEUE ? (
           <div
             className={
               "h-screen flex flex-col justify-center items-center space-y-5"
@@ -54,10 +61,7 @@ export default function ResultsPage() {
             <div className={"flex justify-end mt-8"}>
               <DownloadButton
                 onClick={() => {
-                  downloadData(experiment.experimentName, {
-                    experimentConfigs: experiment,
-                    result: experimentResult,
-                  });
+                  handleDownloadExperimentResult();
                 }}
               >
                 {t("Results")}
