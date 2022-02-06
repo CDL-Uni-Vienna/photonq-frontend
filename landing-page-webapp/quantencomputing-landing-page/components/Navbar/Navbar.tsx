@@ -26,10 +26,13 @@ export default function Navbar() {
   return (
     <div className={"relative"}>
       <nav
-        className={clsx("left-0 right-0 border-b z-30 flex justify-center", {
-          ["absolute"]: !mobileNavBarOpen,
-          ["fixed"]: mobileNavBarOpen,
-        })}
+        className={clsx(
+          "left-0 bg-secondary right-0 border-b z-30 flex justify-center",
+          {
+            ["absolute"]: !mobileNavBarOpen,
+            ["fixed"]: mobileNavBarOpen,
+          }
+        )}
       >
         <div
           className={
