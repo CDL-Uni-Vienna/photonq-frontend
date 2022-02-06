@@ -1,8 +1,12 @@
 import React from "react";
-import Button from "../Button/Button";
 import { getWebAppUrl } from "../../utils/webapp";
+import { Button } from "@mui/material";
+import { useRouter } from "next/router";
+import { Path } from "../../model/model.routes";
 
 export default function PrimaryCTA() {
+  const router = useRouter();
+
   return (
     <div
       className={
@@ -17,7 +21,8 @@ export default function PrimaryCTA() {
         </p>
       </div>
       <Button
-        onClick={() => window.open(getWebAppUrl(), "_blank")}
+        onClick={() => router.push(Path.Login)}
+        color={"secondary"}
         variant={"outlined"}
       >
         Start quantum computing

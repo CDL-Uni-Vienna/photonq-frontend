@@ -1,9 +1,8 @@
 import React from "react";
 import { GuideDocumentLocalizedPreview } from "../../cms/guide/guide.type";
-import GuidePreview from "./GuidePreview";
-import Button from "../Button/Button";
 import GuidePreviewGrid from "./GuidePreviewGrid";
 import { useRouter } from "next/router";
+import { Button } from "@mui/material";
 
 interface DocumentationPreviewProps {
   guides: GuideDocumentLocalizedPreview[];
@@ -25,7 +24,7 @@ export default function DocumentationPreview({
       <div className={"pt-8"}>
         <Button
           onClick={() => router.push("/how-to-guides")}
-          variant={"primary"}
+          variant={"contained"}
         >
           Read more
         </Button>

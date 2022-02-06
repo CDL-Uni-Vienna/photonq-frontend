@@ -6,6 +6,8 @@ import PageLayout from "../components/Layout/PageLayout";
 import AuthProvider from "../providers/AuthProvider";
 import { Path } from "../model/model.routes";
 import AuthPageLayout from "../components/Layout/AuthPageLayout";
+import { ThemeProvider } from "@mui/material";
+import theme from "../theme/theme";
 
 if (process.env.NEXT_PUBLIC_MOCK_API === "True") {
   require("../api-mock");
@@ -13,7 +15,7 @@ if (process.env.NEXT_PUBLIC_MOCK_API === "True") {
 
 function MyApp({ Component, pageProps, router }: AppProps) {
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <AuthProvider>
         {!router.pathname.includes("experiment") && <Navbar />}
         {router.pathname === Path.Login || router.pathname === Path.Register ? (
@@ -28,7 +30,7 @@ function MyApp({ Component, pageProps, router }: AppProps) {
           </PageLayout>
         )}
       </AuthProvider>
-    </>
+    </ThemeProvider>
   );
 }
 export default appWithTranslation(MyApp);

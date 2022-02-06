@@ -1,9 +1,13 @@
 import React from "react";
 import SectionHeader from "../Section/SectionHeader";
-import Button from "../Button/Button";
 import { getWebAppUrl } from "../../utils/webapp";
+import { Button } from "@mui/material";
+import { useRouter } from "next/router";
+import { Path } from "../../model/model.routes";
 
 export default function HomeHero() {
+  const router = useRouter();
+
   return (
     <div className={"flex flex-col items-center justify-center"}>
       <div style={{ maxWidth: 604 }}>
@@ -25,8 +29,8 @@ export default function HomeHero() {
         }
       >
         <Button
-          onClick={() => window.open(getWebAppUrl(), "_blank")}
-          variant={"primary"}
+          onClick={() => router.push(Path.Register)}
+          variant={"contained"}
         >
           Register now
         </Button>

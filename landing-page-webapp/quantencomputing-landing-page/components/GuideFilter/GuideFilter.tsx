@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../Button/Button";
+import { Button } from "@mui/material";
 
 export enum GuideCategory {
   All = "All",
@@ -25,10 +25,9 @@ export default function GuideFilter({
             className={"w-filter-button-sm md:w-filter-button text-sm"}
           >
             <Button
-              size={"sm"}
-              fullWidth
+              size={"small"}
               onClick={() => setCurrentCategory(category)}
-              variant={currentCategory === category ? "primary" : "link"}
+              variant={currentCategory === category ? "contained" : "text"}
             >
               {category}
             </Button>
