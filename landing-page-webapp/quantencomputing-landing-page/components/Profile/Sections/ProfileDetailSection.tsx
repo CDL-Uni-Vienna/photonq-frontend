@@ -42,7 +42,9 @@ export default function ProfileDetailSection() {
               .filter((key) => tableKeys.includes(key as keyof User))
               .map((key, index) => (
                 <TableRow key={index}>
-                  <TableCell>{t(key).toUpperCase()}</TableCell>
+                  <TableCell>
+                    {key === "username" ? "E-MAIL" : t(key).toUpperCase()}
+                  </TableCell>
                   <TableCell>
                     {isEditing ? (
                       <TextField

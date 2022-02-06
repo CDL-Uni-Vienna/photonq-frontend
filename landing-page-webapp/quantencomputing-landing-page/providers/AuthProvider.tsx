@@ -7,7 +7,7 @@ import React, {
 import { OptionalBaseProviderType } from "../model/types/type.provider";
 import { User } from "../model/types/type.user";
 import { useRouter } from "next/router";
-import { getPrivateRoutes, getPublicRoutes, Path } from "../model/model.routes";
+import { getPrivateRoutes, Path } from "../model/model.routes";
 import { CircularProgress } from "@mui/material";
 
 export const AuthContext = createContext<
