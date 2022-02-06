@@ -7,6 +7,7 @@ import { useConnectedUser } from "../../hook/hook.user";
 import {
   getLoggedInNavbarRoutes,
   getLoggedOutNavbarRoutes,
+  Path,
 } from "../../model/model.routes";
 
 export default function Navbar() {
@@ -19,6 +20,14 @@ export default function Navbar() {
       return getLoggedInNavbarRoutes();
     }
     return getLoggedOutNavbarRoutes();
+  };
+
+  const isRouteActive = (href: string) => {
+    return (
+      router.route === href ||
+      (router.route.includes(href) && href !== "/") ||
+      (router.route.includes(Path.Register) && href === Path.Login)
+    );
   };
 
   const routes = useMemo(() => getRoutes(), [user]);
@@ -51,10 +60,7 @@ export default function Navbar() {
                 variant={"desktop"}
                 key={index}
                 route={route}
-                isRouteActive={
-                  router.route === route.href ||
-                  (router.route.includes(route.href) && route.href !== "/")
-                }
+                isRouteActive={isRouteActive(route.href)}
               />
             ))}
             <ToggleButton
@@ -80,10 +86,7 @@ export default function Navbar() {
                 variant={"mobile"}
                 key={index}
                 route={route}
-                isRouteActive={
-                  router.route === route.href ||
-                  (router.route.includes(route.href) && route.href !== "/")
-                }
+                isRouteActive={isRouteActive(route.href)}
               />
             ))}
           </div>
