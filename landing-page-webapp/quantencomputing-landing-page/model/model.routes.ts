@@ -92,7 +92,7 @@ export function getLoggedOutNavbarRoutes() {
     },
     {
       href: Path.Login,
-      label: "Create Account",
+      label: "Sign in",
     },
   ];
 }
