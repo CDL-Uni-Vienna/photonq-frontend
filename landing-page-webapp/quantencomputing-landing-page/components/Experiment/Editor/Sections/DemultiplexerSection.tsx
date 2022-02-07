@@ -35,7 +35,7 @@ export default function DemultiplexerSection() {
             <div>
               <p>95.00%</p>
               <p>90.00%</p>
-              <p>4.00%</p>
+              <p>4.00 K</p>
             </div>
           </div>
           <div
