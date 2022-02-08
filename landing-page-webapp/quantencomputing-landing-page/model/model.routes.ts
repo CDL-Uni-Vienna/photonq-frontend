@@ -77,6 +77,10 @@ export function getLoggedInNavbarRoutes() {
       href: Path.HowToGuides,
       label: "How to Guides",
     },
+    {
+      href: Path.Login,
+      label: "Logout",
+    },
   ];
 }
 
