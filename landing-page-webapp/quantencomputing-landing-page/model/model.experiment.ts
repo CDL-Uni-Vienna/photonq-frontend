@@ -183,7 +183,7 @@ export function getComputationParameters(
     },
     {
       label: "Computation configuration",
-      value: experiment.ComputeSettings.qubitComputing.circuitConfiguration,
+      value: experiment.circuitId || "horseshoe",
     },
     {
       label: "CPhase gates",
