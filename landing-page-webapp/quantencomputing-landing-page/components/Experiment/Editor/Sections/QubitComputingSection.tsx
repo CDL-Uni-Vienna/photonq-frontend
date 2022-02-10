@@ -85,7 +85,9 @@ export default function QubitComputingSection({
         qubitComputing: {
           ...prev.ComputeSettings.qubitComputing,
           circuitAngles: Array.from({
-            length: 4 - (experiment.config?.qc_encoded_qubits || 4),
+            length:
+              (experiment.config?.csp_number_of_qubits || 0) -
+              (experiment.config?.qc_encoded_qubits || 0),
           }).map((_, index) => ({
             circuitAngleName: angleNames[index],
             circuitAngleValue: 0,
@@ -159,7 +161,9 @@ export default function QubitComputingSection({
                 }`}</p>
                 <div className={"space-y-3 mt-2"}>
                   {Array.from({
-                    length: 4 - (experiment.config?.qc_encoded_qubits || 4),
+                    length:
+                      (experiment.config?.csp_number_of_qubits || 0) -
+                      (experiment.config?.qc_encoded_qubits || 0),
                   }).map((_, index) => (
                     <TextFieldWithIcon
                       isDisabled={inputsDisabled}
