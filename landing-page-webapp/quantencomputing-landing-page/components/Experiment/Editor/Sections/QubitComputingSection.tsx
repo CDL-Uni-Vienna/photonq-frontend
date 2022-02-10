@@ -129,7 +129,7 @@ export default function QubitComputingSection({
           </div>
           <p>
             {t(
-              "Implement different quantum circuits byu rearranging the prepared cluster state"
+              "Implement different quantum circuits by rearranging the prepared cluster state"
             )}
           </p>
         </div>
