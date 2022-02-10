@@ -1,21 +1,32 @@
 import Link from "next/link";
 import clsx from "clsx";
-import React from "react";
+import React, { useContext } from "react";
 import { getWebAppUrl } from "../../utils/webapp";
 import { useRouter } from "next/router";
+import { useConnectedUser } from "../../hook/hook.user";
+import { AuthContext } from "../../providers/AuthProvider";
 
 export default function MenuLink(props: {
-  route: { href: string; label: string; newTab?: boolean };
+  route: {
+    href: string;
+    label: string;
+    newTab?: boolean;
+    clearAuthState?: boolean;
+  };
   isRouteActive: boolean;
   variant: "mobile" | "desktop";
   setMobileNavBarOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const router = useRouter();
+  const { setValue: setUser } = useContext(AuthContext);
 
   return (
     <a
       onClick={() => {
         props.setMobileNavBarOpen?.(false);
+        if (props.route.clearAuthState) {
+          setUser(undefined);
+        }
         if (props.route.newTab) {
           window.open(getWebAppUrl(), "_blank");
         } else {

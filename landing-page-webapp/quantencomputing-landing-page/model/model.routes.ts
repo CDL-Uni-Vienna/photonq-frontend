@@ -80,6 +80,7 @@ export function getLoggedInNavbarRoutes() {
     {
       href: Path.Login,
       label: "Logout",
+      clearAuthState: true,
     },
   ];
 }
