@@ -24,6 +24,12 @@ export default function QubitMeasurementSection({
     return `/circuitConfig/qm_circuit_model/${experiment.config?.qm_circuit_model}`;
   };
 
+  const getEncodedQubits = () => {
+    return experiment.withQubitConfig
+      ? experiment.config?.qm_number_of_qubits || 0
+      : experiment.config?.csp_number_of_qubits || 0;
+  };
+
   const setInitialEncodedQubitMeasurements = () => {
     if (experiment.status !== ExperimentState.DRAFT) {
       return;
@@ -33,7 +39,7 @@ export default function QubitMeasurementSection({
       ComputeSettings: {
         ...prev.ComputeSettings,
         encodedQubitMeasurements: Array.from({
-          length: experiment.config?.qm_number_of_qubits || 0,
+          length: getEncodedQubits(),
         }).map((_, index) => getEmptyEncodedQubitMeasurement(index + 1)),
       },
     }));
@@ -43,7 +49,7 @@ export default function QubitMeasurementSection({
     // adds array of empty EncodedQubitMeasurments to the experiment
     setInitialEncodedQubitMeasurements();
     // eslint-disable-next-line
-  }, [experiment.config?.qm_number_of_qubits]);
+  }, [experiment.config?.qm_number_of_qubits, experiment.withQubitConfig]);
 
   return (
     <ContentContainer withPadding color={secondaryDark} className={"space-y-6"}>
@@ -62,14 +68,14 @@ export default function QubitMeasurementSection({
               inputsDisabled={inputsDisabled}
               nr={1}
               experiment={experiment}
-              encodedQubits={experiment.config?.qm_number_of_qubits}
+              encodedQubits={getEncodedQubits()}
               setExperiment={setExperiment}
             />
             <EncodedQubitInput
               inputsDisabled={inputsDisabled}
               nr={2}
               experiment={experiment}
-              encodedQubits={experiment.config?.qm_number_of_qubits}
+              encodedQubits={getEncodedQubits()}
               setExperiment={setExperiment}
             />
           </div>
@@ -78,14 +84,14 @@ export default function QubitMeasurementSection({
               inputsDisabled={inputsDisabled}
               nr={3}
               experiment={experiment}
-              encodedQubits={experiment.config?.qm_number_of_qubits}
+              encodedQubits={getEncodedQubits()}
               setExperiment={setExperiment}
             />
             <EncodedQubitInput
               inputsDisabled={inputsDisabled}
               nr={4}
               experiment={experiment}
-              encodedQubits={experiment.config?.qm_number_of_qubits}
+              encodedQubits={getEncodedQubits()}
               setExperiment={setExperiment}
             />
           </div>
