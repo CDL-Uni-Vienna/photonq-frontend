@@ -139,11 +139,11 @@ export function usePossibleClusterConfigsQubitComputing(
     );
     setCurrentConfigs(filteredConfigs);
     const config =
-      filteredConfigs.find(
-        (config) => config.circuit_id === experiment.circuitId
-      ) ||
       filteredConfigs.find((config) =>
         filterSingleCircuitConfigQubitComputing(config, experiment, false)
+      ) ||
+      filteredConfigs.find(
+        (config) => config.circuit_id === experiment.circuitId
       );
     if (config) {
       setExperiment((prev) => ({

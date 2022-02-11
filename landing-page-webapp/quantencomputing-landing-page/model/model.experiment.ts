@@ -102,7 +102,7 @@ export function filterSingleCircuitConfigQubitComputing(
   }
   if (
     experiment.config &&
-    experiment.config.qc_encoded_onoff !== circuitConfig.qc_encoded_onoff
+    Number(experiment.withQubitConfig) !== circuitConfig.qc_encoded_onoff
   ) {
     return false;
   }
