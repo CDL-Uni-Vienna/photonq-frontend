@@ -44,7 +44,7 @@ export default function DemultiplexerSection() {
             }
           >
             <embed src="/images/demultiplexer-editor.svg" />
-            <ArrowRightAltIcon color={"primary"} fontSize={"large"} />
+            <ArrowRightAltIcon color={"primary"} sx={{ height: "2.20em" }} fontSize={"large"} />
           </div>
         </div>
       </ContentContainer>
