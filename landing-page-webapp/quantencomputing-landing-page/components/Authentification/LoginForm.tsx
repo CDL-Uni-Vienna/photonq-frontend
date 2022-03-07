@@ -54,7 +54,7 @@ export default function LoginForm() {
   };
 
   return (
-    <AuthFormContainer header={"Login"} onSubmit={(e) => login(e)}>
+    <AuthFormContainer header={"Sign in to PhotonQ"} onSubmit={(e) => login(e)}>
       <TextField
         value={loginValues.username}
         onChange={(e) => handleOnChange(e, "username")}
@@ -72,7 +72,7 @@ export default function LoginForm() {
         label={"Password *"}
       />
       <LoadingButton
-        text={t("Login")}
+        text={t("Sign in")}
         isLoading={isLoading}
         fullWidth
         variant={"contained"}

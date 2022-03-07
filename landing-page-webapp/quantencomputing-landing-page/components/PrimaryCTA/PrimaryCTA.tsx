@@ -15,12 +15,12 @@ export default function PrimaryCTA() {
     >
       <div className={"text-center space-y-7"}>
         <h3 className={"text-2xl font-bold"}>Start Quantum Computing</h3>
-        <p>
-          Create your free account and start experimenting with our Quantum
-          Computer!
+        <p className="text-xl">
+          Create your free account and start experimenting with our quantum
+          computer!
         </p>
       </div>
-      <Button
+      <Button size={"large"}
         onClick={() => router.push(Path.Login)}
         color={"secondary"}
         variant={"outlined"}

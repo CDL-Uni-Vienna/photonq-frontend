@@ -4,11 +4,13 @@ import NavbarPadding from "../components/Layout/NavbarPadding";
 import { Grid } from "@mui/material";
 import AuthContent from "../components/Authentification/AuthContent";
 import LoginForm from "../components/Authentification/LoginForm";
+import Head from 'next/head'
 
 export default function Login() {
   return (
     <>
       <div className={"md:hidden"}>
+        <Head><title>PhotonQ Quantum Computing</title></Head>
         <NavbarPadding />
       </div>
       <Grid container columnSpacing={12}>
@@ -27,7 +29,7 @@ export default function Login() {
           <AuthContent
             header={"Start Quantum Computing with us!"}
             content={
-              "Our intuitive approach makes it easy for beginners to start with quantum computing and allows experts to run complex experiments."
+              "Our intuitive approach makes it easy for beginners to start with quantum computing and allows experts and educators to run complex photonic experiments on real quantum hardware."
             }
           />
         </Grid>

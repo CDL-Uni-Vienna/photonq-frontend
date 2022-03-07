@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Typography } from "@mui/material";
 import React from "react";
+import Bubbles from "../Bubbles";
 
 export default function AuthContent(props: {
   header: string;
@@ -13,7 +14,7 @@ export default function AuthContent(props: {
         "bg-primaryLightBg w-full h-full flex flex-col justify-center items-center p-8 md:py-0"
       }
     >
-      <embed className={"w-full h-auto"} src="/images/demultiplexer.svg" />
+      <Bubbles />
       <div className={"space-y-5"}>
         <Typography variant={"h5"} fontWeight={"bold"}>
           {t(props.header)}

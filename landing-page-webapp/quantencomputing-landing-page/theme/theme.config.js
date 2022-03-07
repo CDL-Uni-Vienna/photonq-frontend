@@ -1,5 +1,5 @@
 module.exports = {
-  primary: "#2677B2",
+  primary: "#0063A6",
   secondary: "#ffffff",
   primaryLight: "#AFCDE3",
   grey: "#666666",

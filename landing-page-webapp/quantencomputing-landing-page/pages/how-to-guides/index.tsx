@@ -29,8 +29,8 @@ export default function Home({ guides }: PageProps) {
             <SectionHeader text={"Documentation and How-To-Guides"} />
             <p className={"md:w-8/12 md:text-center"}>
               Each of these guides and documentation contains advice and
-              research to guive you guidelines for your successful Quantum
-              Computing Experiment.
+              research to guive you guidelines for your successful quantum
+              computing experiment.
             </p>
           </div>
         </Section>

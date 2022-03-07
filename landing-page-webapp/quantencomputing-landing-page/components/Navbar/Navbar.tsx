@@ -33,7 +33,7 @@ export default function Navbar() {
   const routes = useMemo(() => getRoutes(), [user]);
 
   return (
-    <div className={"relative"}>
+    <div className={"relative text-lg"}>
       <nav
         className={clsx(
           "left-0 bg-secondary right-0 border-b z-30 flex justify-center",
@@ -50,9 +50,13 @@ export default function Navbar() {
         >
           <div
             onClick={() => router.push("/")}
-            className={"w-32 cursor-pointer z-40"}
+            className={"w-40 cursor-pointer z-40"}
           >
-            <img src="/images/uni-wien-logo.svg" alt="Logo Uni Wien" />
+            <img
+              src="/images/uni-wien-logo.svg"
+              alt="Logo Uni Wien"
+              className="w-full h-auto"
+            />
           </div>
           <div className={"flex space-x-8"}>
             {routes.map((route, index) => (

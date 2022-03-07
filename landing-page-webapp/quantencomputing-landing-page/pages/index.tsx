@@ -1,9 +1,9 @@
 import type { GetStaticProps, NextPage } from "next";
 import MaxWidthContainer from "../components/Layout/MaxWidthContainer";
 import HomeHero from "../components/HomeHero/HomeHero";
-import NavbarPadding from "../components/Layout/NavbarPadding";
 import QuantenComputingUiPreview from "../components/QuantenComputingUiPreview/QuantenComputingUiPreview";
 import SectionContent from "../components/Section/SectionContent";
+import SectionFade from "../components/Section/SectionFade";
 import Section from "../components/Section/Section";
 import PrimaryCTA from "../components/PrimaryCTA/PrimaryCTA";
 import Footer from "../components/Footer/Footer";
@@ -12,6 +12,7 @@ import { GuideDocumentLocalizedPreview } from "../cms/guide/guide.type";
 import { getLocalizedHomePageGuidePreviewsQuery } from "../cms/guide/guide.queries";
 import DocumentationPreview from "../components/DocumentationPreview/DocumentationPreview";
 import { buildCmsImage } from "../cms/cms.images";
+import Head from 'next/head'
 
 interface PageProps {
   guides: GuideDocumentLocalizedPreview[];
@@ -20,24 +21,25 @@ interface PageProps {
 export default function Home(props: PageProps) {
   return (
     <div className={"w-full flex flex-col items-center"}>
+      <Head><title>PhotonQ Quantum Computing</title></Head>
+      <Section fullWidth>
+        <HomeHero />
+      </Section>
       <MaxWidthContainer>
-        <NavbarPadding />
-        <Section withVerticalPadding>
-          <HomeHero />
-        </Section>
         <Section withVerticalPadding>
           <QuantenComputingUiPreview />
         </Section>
-        <Section withVerticalPadding>
-          <SectionContent
-            maxWidthImage={417}
-            header={"One-way quantum computing"}
-            content={
-              "For our AKA Measurement based quantum computing (MBQC) we use single-qubit gates as well as prepare cluster states AKA graph states (entangled state of multiple qubits)."
-            }
-            imgSrc={"/images/quantum-computer.svg"}
-          />
-        </Section>
+      </MaxWidthContainer>
+      <Section withVerticalPadding fullWidth>
+        <SectionFade
+          header={"One-way quantum computing"}
+          content={
+            "PhotonQ provides cloud-based access to a real photonic one-way computer backend. Our system exploits cutting-edge quantum photonic technology to realize a photonic quantum computing platform. The quantum processing unit can be accessed and programmed through our customized user interface."
+          }
+          imgSrc={"/images/quantenComputer.jpg"}
+        />
+      </Section>
+      <MaxWidthContainer>
         <Section withVerticalPadding>
           <DocumentationPreview guides={props.guides} />
         </Section>
@@ -48,10 +50,10 @@ export default function Home(props: PageProps) {
       <MaxWidthContainer>
         <Section withVerticalPadding>
           <SectionContent
-            maxWidthImage={300}
+            maxWidthImage={450}
             header={"Who are we?"}
             content={
-              "As Faculty of Physics of University of Vienna we are internationally highly competitive in various quantum research areas. These cover experimental and theoretical research in foundations of quantum physics, quantum optics, quantum information, strongly correlated quantum systems as well as molecular quantum nanophysics."
+              "Philip Walther's group at the Faculty of Physics at the University of Vienna opened the Christian Doppler Laboratory for Photonic Quantum Computing in July 2020. We are a team of scientists, designers, and software developers investigating new technologies for quantum computers based on photonic platforms. Our declared goal is the development and operation of a universal photonic quantum computer platform and we are committed to provide free cloud-based access to a photonic quantum computer. You can already experiment with our 4-qubit processor today!"
             }
             imgSrc={"/images/uni-wien-logo.svg"}
           />

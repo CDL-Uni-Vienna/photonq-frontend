@@ -4,37 +4,51 @@ import { getWebAppUrl } from "../../utils/webapp";
 import { Button } from "@mui/material";
 import { useRouter } from "next/router";
 import { Path } from "../../model/model.routes";
+import { BgFade, MovFade } from "./style";
 
 export default function HomeHero() {
   const router = useRouter();
 
   return (
-    <div className={"flex flex-col items-center justify-center"}>
-      <div style={{ maxWidth: 604 }}>
-        <img
-          className={"w-full h-auto"}
-          src="/images/getting-started-screen.png"
-          alt={"Quantum Computing Webapp UI"}
-        />
-      </div>
-      <div className={"space-y-5 flex flex-col items-center"}>
-        <SectionHeader centered text={"Start quantum computing with us."} />
-        <p className={"text-grey"}>
-          Learn, develop and run programs with our quantum computer
-        </p>
-      </div>
-      <div
-        className={
-          "mt-10 space-y-2 flex flex-col justify-center md:flex-row md:space-y-0"
-        }
-      >
-        <Button
-          onClick={() => router.push(Path.Register)}
-          variant={"contained"}
+    <div className="relative h-screen w-screen">
+      <BgFade className="h-full flex flex-col xl:flex-row-reverse items-center justify-center align-center">
+        <div style={{ maxWidth: 850 }}>
+          <img
+            className={"w-full h-auto relative z-10 mt-20 sm:mt-0"}
+            src="/images/getting-started-screen.png"
+            alt={"Quantum Computing Webapp UI"}
+          />
+        </div>
+        <div
+          className={
+            "space-y-5 flex flex-col items-center relative z-10 text-white sm:p-8 px-8"
+          }
         >
-          Register now
-        </Button>
-      </div>
+          <SectionHeader centered text={"Start quantum computing with us."} />
+          <p className="text-xl">
+            Learn quantum computing and run your circuits on our photonic quantum hardware
+          </p>
+          <div
+            className={
+              "mt-10 space-y-2 flex flex-col justify-center md:flex-row md:space-y-0"
+            }
+          >
+            <Button
+              onClick={() => router.push(Path.Register)}
+              className={"relative z-50"}
+              variant={"contained"}
+              size={"large"}
+            >
+              Register now
+            </Button>
+          </div>
+        </div>
+      </BgFade>
+      <object
+        type="image/svg+xml"
+        data="/images/dreieck.svg"
+        className="w-full absolute bottom-0 z-0"
+      />
     </div>
   );
 }

@@ -6,6 +6,7 @@ export enum Path {
   SingleExperiment = "/experiment/:id",
   ExperimentResult = "/experiment/:id/result",
   HowToGuides = "/how-to-guides",
+  Legal = "/legal",
 }
 
 export function getPathWithId(id: string, path: Path) {
@@ -75,7 +76,7 @@ export function getLoggedInNavbarRoutes() {
     },
     {
       href: Path.HowToGuides,
-      label: "How to Guides",
+      label: "Documentation",
     },
     {
       href: Path.Login,
@@ -93,7 +94,7 @@ export function getLoggedOutNavbarRoutes() {
     },
     {
       href: Path.HowToGuides,
-      label: "How to Guides",
+      label: "Documentation",
     },
     {
       href: Path.Login,

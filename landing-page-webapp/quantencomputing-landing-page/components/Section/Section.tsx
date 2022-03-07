@@ -18,7 +18,7 @@ export default function Section({
     <section
       className={clsx("w-full", {
         ["px-8"]: withHorizontalPadding,
-        ["py-16 lg:py-28 2xl:py-32"]: withVerticalPadding,
+        ["py-16 lg:py-32 2xl:py-36"]: withVerticalPadding,
         ["w-screen"]: fullWidth,
       })}
     >

@@ -126,7 +126,7 @@ export default function RegisterForm() {
                 "cursor-pointer text-primary font-bold transform hover:-translate-y-1 duration-300"
               }
             >
-              {t("Login")}
+              {t("Sign in")}
             </p>
           </Link>
         </div>

@@ -15,14 +15,14 @@ export default function SectionContent({
   imgSrc: svgSrc,
 }: SectionContentProps) {
   return (
-    <div className={"flex justify-center"}>
+    <div className={"flex justify-center text-xl"}>
       <div className={"md:flex space-y-8 md:space-y-0 md:space-x-10"}>
         <div
           className={clsx("md:w-6/12 space-y-5 flex flex-col justify-center", {
             ["md:w-8/12"]: maxWidthImage,
           })}
         >
-          <h3 className={"text-2xl font-bold"}>{header}</h3>
+          <h3 className={"text-3xl font-bold"}>{header}</h3>
           <p>{content}</p>
         </div>
         <div
