@@ -66,9 +66,9 @@ export default function QubitComputingSection({
             (angle) =>
               angle.circuitAngleName === angleName
                 ? {
-                    ...angle,
-                    circuitAngleValue: Math.min(Math.abs(Number(value)), 360),
-                  }
+                  ...angle,
+                  circuitAngleValue: Math.min(Math.abs(Number(value)), 360),
+                }
                 : angle
           ),
         },
@@ -127,7 +127,7 @@ export default function QubitComputingSection({
           </div>
           <p>
             {t(
-              "Implement different quantum circuits byu rearranging the prepared cluster state"
+              "Implement different quantum circuits byu rearranging the prepared cluster state."
             )}
           </p>
         </div>
@@ -151,12 +151,10 @@ export default function QubitComputingSection({
                 />
               </div>
               <div>
-                <p>{`${t("Encoded quibts:")} ${
-                  experiment.config?.qc_encoded_qubits || "0"
-                }`}</p>
-                <p>{`${t("CPhase gate:")} ${
-                  experiment.config?.qc_cphase_gates || "0"
-                }`}</p>
+                <p>{`${t("Encoded quibts:")} ${experiment.config?.qc_encoded_qubits || "0"
+                  }`}</p>
+                <p>{`${t("CPhase gates:")} ${experiment.config?.qc_cphase_gates || "0"
+                  }`}</p>
                 <div className={"space-y-3 mt-2"}>
                   {Array.from({
                     length: 4 - (experiment.config?.qc_encoded_qubits || 4),
@@ -255,9 +253,8 @@ function CircuitConfigSelector({
               .filter((key) => groupedConfigs[key as any].length)
               .map((key) => (
                 <div className={"space-y-2"} key={key}>
-                  <h3 className={"font-bold text-white"}>{`Encoded Qubits ${
-                    groupedConfigs[key as any][0]?.qc_encoded_qubits
-                  }`}</h3>
+                  <h3 className={"font-bold text-white"}>{`Encoded Qubits ${groupedConfigs[key as any][0]?.qc_encoded_qubits
+                    }`}</h3>
                   <div className={"flex space-x-2"}>
                     {groupedConfigs[key as any].map((config) => (
                       <Button

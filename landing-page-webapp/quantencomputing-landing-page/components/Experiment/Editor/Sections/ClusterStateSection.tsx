@@ -68,13 +68,11 @@ export default function ClusterStateSection({
 
   const getSvgSource = (qubitsImage?: boolean) => {
     if (!configs.length) return "";
-    return `/circuitConfig/${
-      qubitsImage ? "csp_preset_settings_svg" : "csp_cluster_state"
-    }/${
-      qubitsImage
+    return `/circuitConfig/${qubitsImage ? "csp_preset_settings_svg" : "csp_cluster_state"
+      }/${qubitsImage
         ? configs[0].csp_preset_settings_svg
         : configs[0].csp_cluster_state
-    }`;
+      }`;
   };
 
   return (
@@ -88,7 +86,7 @@ export default function ClusterStateSection({
           <EditorSectionHeader header={"Cluster State Preparation"} />
           <p className={"text-white"}>
             {t(
-              "Choose your number of qubits and present settings to see the cluster state."
+              "Choose your preferred number of qubits and preset settings to prepare the cluster state."
             )}
           </p>
         </div>
@@ -101,7 +99,7 @@ export default function ClusterStateSection({
                   inputsDisabled ||
                   (nr !== 4 &&
                     experiment.ComputeSettings.clusterState.presetSettings ===
-                      PresetSetting.Ghz)
+                    PresetSetting.Ghz)
                 }
                 onClick={() => setExperimentQubitNr(nr)}
                 variant={isButtonActive(nr)}
@@ -130,8 +128,7 @@ export default function ClusterStateSection({
               {Object.values(PresetSetting).map((val, index) => (
                 <MenuItem key={index} value={val}>
                   {t(
-                    `${
-                      val.substring(0, 1).toUpperCase() + val.substring(1)
+                    `${val.substring(0, 1).toUpperCase() + val.substring(1)
                     } Cluster`
                   )}
                 </MenuItem>

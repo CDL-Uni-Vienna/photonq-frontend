@@ -57,7 +57,7 @@ export default function QubitMeasurementSection({
         <EditorSectionHeader header={"Qubit Measurements"} />
         <p className={"text-white"}>
           {t(
-            "Choose the basis on which to measure each qubit and perform a measurement based quantum computation."
+            "Choose the basis on which to measure each encoded qubit."
           )}
         </p>
       </div>
