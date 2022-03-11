@@ -2,12 +2,14 @@ import NavbarPadding from "../components/Layout/NavbarPadding";
 import Section from "../components/Section/Section";
 import SectionText from "../components/Section/SectionText";
 import Footer from "../components/Footer/Footer";
-import Head from 'next/head'
+import Head from "next/head";
 
 const ImpressumPage = () => {
   return (
     <div className="relative flex flex-col items-center">
-      <Head><title>PhotonQ Quantum Computing</title></Head>
+      <Head>
+        <title>PhotonQ Quantum Computing</title>
+      </Head>
       <div className={"w-full flex flex-col items-center"}>
         <NavbarPadding />
         <div className="mt-10">
@@ -32,17 +34,25 @@ const ImpressumPage = () => {
               heading={"Contact Us"}
               paragraphs={[
                 <p key={"key"} className="pb-4">
-                  If you have any questions about PhotonQ, you can contact us at:
+                  If you have any questions about PhotonQ, you can contact us
+                  at:
                 </p>,
                 <p key={"key"}>
-                  <strong><a href="https://walther.quantum.at" className="no-underline hover:underline">Walther Group</a></strong>
+                  <strong>
+                    <a
+                      href="https://walther.quantum.at"
+                      target="_blank"
+                      className="no-underline hover:underline"
+                      rel="noreferrer"
+                    >
+                      Walther Group
+                    </a>
+                  </strong>
                 </p>,
                 <p key={"key"}>Faculty of Physics, University of Vienna</p>,
                 <p key={"key"}>Boltzmanngasse 5, 1090 Vienna</p>,
                 <p key={"key"}>Austria</p>,
-                <p key={"key"}>
-                  T: +43 1 4277 72561
-                </p>,
+                <p key={"key"}>T: +43 1 4277 72561</p>,
                 <p key={"key"} className="pb-2">
                   walther-office@univie.ac.at
                 </p>,
@@ -54,8 +64,9 @@ const ImpressumPage = () => {
               heading={"Christian Doppler Laboratory"}
               paragraphs={[
                 <p key={"key"} className="pb-2">
-                  The Christian Doppler Laboratory for Photonic Quantum Computing -
-                  the home of the PhotonQ system - is located at Sensengasse 8, 1090 Vienna.
+                  The Christian Doppler Laboratory for Photonic Quantum
+                  Computing - the home of the PhotonQ system - is located at
+                  Sensengasse 8, 1090 Vienna.
                 </p>,
                 ,
               ]}
@@ -66,13 +77,18 @@ const ImpressumPage = () => {
               heading={"Cite"}
               paragraphs={[
                 <p key={"key"} className="pb-2">
-                  When you need to cite or refer to PhotonQ
-                  please use the following reference:
+                  When you need to cite or refer to PhotonQ please use the
+                  following reference:
                 </p>,
                 <p key={"key"} className="pb-2">
                   <strong>PhotonQ. (2022).</strong> <em>PhotonQ Home</em>.
-                  Accessed: DD.MM.YYYY.
-                  Retrieved from: <a href="https://photonq.at/" className="no-underline hover:underline">https://photonq.at</a>
+                  Accessed: DD.MM.YYYY. Retrieved from:{" "}
+                  <a
+                    href="https://photonq.at/"
+                    className="no-underline hover:underline"
+                  >
+                    https://photonq.at
+                  </a>
                 </p>,
                 ,
               ]}

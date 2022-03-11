@@ -5,14 +5,16 @@ import { Button } from "@mui/material";
 import { useRouter } from "next/router";
 import { Path } from "../../model/model.routes";
 import { BgFade, MovFade } from "./style";
+import NavbarPadding from "../Layout/NavbarPadding";
 
 export default function HomeHero() {
   const router = useRouter();
 
   return (
-    <div className="relative h-screen w-screen">
-      <BgFade className="h-full flex flex-col xl:flex-row-reverse items-center justify-center align-center">
-        <div style={{ maxWidth: 850 }}>
+    <div className="relative">
+      <NavbarPadding />
+      <BgFade className="flex flex-col xl:flex-row-reverse items-center justify-center align-center">
+        <div className="max-w-lg xl:max-w-4xl">
           <img
             className={"w-full h-auto relative z-10 mt-20 sm:mt-0"}
             src="/images/getting-started-screen.png"
@@ -25,8 +27,9 @@ export default function HomeHero() {
           }
         >
           <SectionHeader centered text={"Start quantum computing with us."} />
-          <p className="text-xl">
-            Learn quantum computing and run your circuits on our photonic quantum hardware
+          <p className="text-xl text-center">
+            Learn quantum computing and run your circuits on our photonic
+            quantum hardware
           </p>
           <div
             className={

@@ -4,14 +4,16 @@ import NavbarPadding from "../components/Layout/NavbarPadding";
 import { Grid } from "@mui/material";
 import AuthContent from "../components/Authentification/AuthContent";
 import LoginForm from "../components/Authentification/LoginForm";
-import Head from 'next/head'
+import Head from "next/head";
 
 export default function Login() {
   return (
     <>
-      <div className={"md:hidden"}>
-        <Head><title>PhotonQ Quantum Computing</title></Head>
+      <div className={"2xl:hidden"}>
         <NavbarPadding />
+        <Head>
+          <title>PhotonQ Quantum Computing</title>
+        </Head>
       </div>
       <Grid container columnSpacing={12}>
         <Grid item md={7}>

@@ -12,7 +12,7 @@ import { GuideDocumentLocalizedPreview } from "../cms/guide/guide.type";
 import { getLocalizedHomePageGuidePreviewsQuery } from "../cms/guide/guide.queries";
 import DocumentationPreview from "../components/DocumentationPreview/DocumentationPreview";
 import { buildCmsImage } from "../cms/cms.images";
-import Head from 'next/head'
+import Head from "next/head";
 
 interface PageProps {
   guides: GuideDocumentLocalizedPreview[];
@@ -21,7 +21,9 @@ interface PageProps {
 export default function Home(props: PageProps) {
   return (
     <div className={"w-full flex flex-col items-center"}>
-      <Head><title>PhotonQ Quantum Computing</title></Head>
+      <Head>
+        <title>PhotonQ Quantum Computing</title>
+      </Head>
       <Section fullWidth>
         <HomeHero />
       </Section>
@@ -53,7 +55,7 @@ export default function Home(props: PageProps) {
             maxWidthImage={450}
             header={"Who are we?"}
             content={
-              "Philip Walther's group at the Faculty of Physics at the University of Vienna opened the Christian Doppler Laboratory for Photonic Quantum Computing in July 2020. We are a team of scientists, designers, and software developers investigating new technologies for quantum computers based on photonic platforms. Our declared goal is the development and operation of a universal photonic quantum computer platform and we are committed to provide free cloud-based access to a photonic quantum computer. You can already experiment with our 4-qubit processor today!"
+              "Philip Walther's group at the Faculty of Physics at the University of Vienna opened the Christian Doppler Laboratory for Photonic Quantum Computing in July 2020. We are a team of scientists, designers, and software developers investigating new technologies for quantum computers based on photonic platforms. Our declared goal is the development and operation of a photonic quantum computer platform and we are committed to providing free online access to our photonic quantum computers through cloud-based services. You can already experiment with our 4-qubit processor today!"
             }
             imgSrc={"/images/uni-wien-logo.svg"}
           />

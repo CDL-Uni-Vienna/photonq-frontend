@@ -8,6 +8,7 @@ export const BgFade = styled.div(
       rgba(0, 99, 166, 1) 5%,
       rgba(167, 28, 73, 0.75) 80%
     );
+    height: calc(100vh - 110px);
   `
 );
 
@@ -41,7 +42,6 @@ export const MovFade = styled.div(
     animation: ${gradient} 50s linear infinite;
   `
 );
-
 
 export const Gradient = styled.div(
   (props) => css`

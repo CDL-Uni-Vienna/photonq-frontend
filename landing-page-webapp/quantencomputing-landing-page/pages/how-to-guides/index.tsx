@@ -11,6 +11,7 @@ import NavbarPadding from "../../components/Layout/NavbarPadding";
 import MaxWidthContainer from "../../components/Layout/MaxWidthContainer";
 import GuideFilter from "../../components/GuideFilter/GuideFilter";
 import { useGuideFilter } from "../../components/GuideFilter/hook.guideFilter";
+import Head from 'next/head'
 
 interface PageProps {
   guides: GuideDocumentLocalizedPreview[];
@@ -22,6 +23,7 @@ export default function Home({ guides }: PageProps) {
 
   return (
     <div className={"flex flex-col items-center"}>
+      <Head><title>PhotonQ Quantum Computing</title></Head>
       <MaxWidthContainer className={"space-y-12"}>
         <NavbarPadding />
         <Section>
@@ -29,7 +31,7 @@ export default function Home({ guides }: PageProps) {
             <SectionHeader text={"Documentation and How-To-Guides"} />
             <p className={"md:w-8/12 md:text-center"}>
               Each of these guides and documentation contains advice and
-              research to guive you guidelines for your successful quantum
+              research to give you guidelines for your successful quantum
               computing experiment.
             </p>
           </div>
