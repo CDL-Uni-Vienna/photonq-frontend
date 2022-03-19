@@ -151,7 +151,7 @@ export default function QubitComputingSection({
                 />
               </div>
               <div>
-                <p>{`${t("Encoded quibts:")} ${experiment.config?.qc_encoded_qubits || "0"
+                <p>{`${t("Encoded qubits:")} ${experiment.config?.qc_encoded_qubits || "0"
                   }`}</p>
                 <p>{`${t("CPhase gates:")} ${experiment.config?.qc_cphase_gates || "0"
                   }`}</p>

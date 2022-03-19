@@ -56,7 +56,7 @@ export default function DemultiplexerSection() {
         <EditorSectionHeader header={"Demultiplexer"} />
         <p className={"text-white"}>
           {t(
-            "The demultiplexer is a combination logic circuit designed to switch one common input line to one of several separate output line."
+            "The demultiplexer is a photonic setup that uses an active element to switch one common input line to several separate output lines."
           )}
         </p>
       </ContentContainer>
