@@ -56,9 +56,7 @@ export default function QubitMeasurementSection({
       <div>
         <EditorSectionHeader header={"Qubit Measurements"} />
         <p className={"text-white"}>
-          {t(
-            "Choose the basis on which to measure each encoded qubit."
-          )}
+          {t("Choose the basis on which to measure each encoded qubit.")}
         </p>
       </div>
       <div className={"flex space-x-10 text-white"}>
@@ -181,20 +179,47 @@ function EncodedQubitInput({
           "text-gray-500": isDisabled(),
         })}
       >
-        <TextFieldWithIcon
-          isDisabled={isDisabled() || inputsDisabled}
-          iconsSrc={"/images/theta.svg"}
-          value={"" + (getValue(nr, "theta") || "0")}
-          setValue={(value) => {
-            handleOnChange(value, "theta");
-          }}
-        />
-        <TextFieldWithIcon
-          isDisabled={isDisabled() || inputsDisabled}
-          iconsSrc={"/images/phi.svg"}
-          value={"" + (getValue(nr, "phi") || "0")}
-          setValue={(value) => handleOnChange(value, "phi")}
-        />
+        {inputsDisabled ? (
+          <>
+            <div className="flex space-x-2 text-white">
+              <img src="/images/theta.svg" alt="theta" />
+              <p
+                className={clsx({
+                  "text-gray-500": isDisabled(),
+                })}
+              >
+                {getValue(nr, "theta") || "0"}
+              </p>
+            </div>
+            <div className="flex space-x-2 text-white">
+              <img src="/images/phi.svg" alt="phi" />
+              <p
+                className={clsx({
+                  "text-gray-500": isDisabled(),
+                })}
+              >
+                {getValue(nr, "phi") || "0"}
+              </p>
+            </div>
+          </>
+        ) : (
+          <>
+            <TextFieldWithIcon
+              isDisabled={isDisabled()}
+              iconsSrc={"/images/theta.svg"}
+              value={"" + (getValue(nr, "theta") || "0")}
+              setValue={(value) => {
+                handleOnChange(value, "theta");
+              }}
+            />
+            <TextFieldWithIcon
+              isDisabled={isDisabled()}
+              iconsSrc={"/images/phi.svg"}
+              value={"" + (getValue(nr, "phi") || "0")}
+              setValue={(value) => handleOnChange(value, "phi")}
+            />
+          </>
+        )}
       </div>
     </div>
   );

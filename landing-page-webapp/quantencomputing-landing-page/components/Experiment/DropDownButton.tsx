@@ -32,7 +32,6 @@ export default function DropDownButton({
         disabled={isDisabled}
         onClick={onClick}
         style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
-        className={"h-3/4"}
         variant={"contained"}
       >
         {children}
@@ -40,13 +39,14 @@ export default function DropDownButton({
       <Button
         disabled={isDisabled}
         onClick={handleOnClick}
+        size="large"
         style={{
           minWidth: 20,
+          minHeight: 36.5,
           padding: 0,
           borderTopLeftRadius: 0,
           borderBottomLeftRadius: 0,
         }}
-        className={"h-3/4"}
         variant={"contained"}
       >
         <KeyboardArrowDownIcon />

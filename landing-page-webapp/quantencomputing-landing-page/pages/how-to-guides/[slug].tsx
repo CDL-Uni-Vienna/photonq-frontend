@@ -53,7 +53,7 @@ export default function Home(props: PageProps) {
       </Section>
       <MaxWidthContainer>
         <PortableTextContainer>
-          <div className={"pb-16 lg:pb-28 2xl:pb-32"}>
+          <div className={"pb-16 lg:pb-28 2xl:pb-32 prose"}>
             <PortableText blocks={props.guide.body} />
           </div>
         </PortableTextContainer>

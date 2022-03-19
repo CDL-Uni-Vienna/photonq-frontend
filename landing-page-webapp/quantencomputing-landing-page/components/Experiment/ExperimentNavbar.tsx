@@ -1,57 +1,29 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import Link from "next/link";
 import { getPathWithId, Path } from "../../model/model.routes";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
-import DropDownButton from "./DropDownButton";
-import {
-  CreateExperimentPayload,
-  ExperimentState,
-  ExperimentWithConfigs,
-} from "../../model/types/type.experiment";
-import SystemDialog from "../SystemDialog/SystemDialog";
-import { createExperiment } from "../../model/model.api";
-import { useConnectedUser } from "../../hook/hook.user";
-import { deleteProps } from "../../utils/utils.object";
-import SystemAlert from "../SystemAlert";
+import { ExperimentState } from "../../model/types/type.experiment";
+
 import { BaseEditorPageProps } from "../../pages/experiment/[slug]";
 import { useRouter } from "next/router";
+import { Button } from "@mui/material";
 
-const MAX_RUNTIME = 120;
+interface EditorNavbarProps extends BaseEditorPageProps {
+  reset: () => void;
+}
 
 export default function ExperimentNavbar({
   experiment,
-  setExperiment,
   isLoading,
-}: BaseEditorPageProps) {
+  reset,
+}: EditorNavbarProps) {
   const { t } = useTranslation();
   const router = useRouter();
-  const user = useConnectedUser();
-  const isRunButtonDisabled = useMemo(
+  const isResetButtonDisabled = useMemo(
     () => experiment.status !== ExperimentState.DRAFT || isLoading,
     [experiment, isLoading]
   );
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [error, setError] = useState(false);
-
-  const runExperiment = async () => {
-    try {
-      const createExperimentPayload = {
-        ...deleteProps<CreateExperimentPayload, ExperimentWithConfigs>(
-          experiment,
-          ["experimentId", "withQubitConfig", "config"]
-        ),
-        status: ExperimentState.IN_QUEUE,
-      };
-      createExperimentPayload.circuitId = experiment.config!.circuit_id;
-      const res = await createExperiment(createExperimentPayload, user!.token);
-      router.push(getPathWithId(res.experimentId, Path.ExperimentResult));
-    } catch (e) {
-      console.error(e);
-      setError(true);
-      setTimeout(() => setError(false), 5000);
-    }
-  };
 
   return (
     <div className={"relative w-full text-white"}>
@@ -84,74 +56,17 @@ export default function ExperimentNavbar({
             />
           </div>
           <div className={"flex justify-end items-center"}>
-            <DropDownButton
-              isDisabled={isRunButtonDisabled}
-              actions={[
-                {
-                  label: "Set Max Runtime",
-                  action: () => {
-                    setIsDialogOpen(true);
-                  },
-                },
-              ]}
-              onClick={runExperiment}
+            <Button
+              disabled={isResetButtonDisabled}
+              variant={"outlined"}
+              onClick={reset}
             >
-              {t("Run")}
-            </DropDownButton>
+              {t("Reset")}
+            </Button>
           </div>
         </div>
       </nav>
-      {isDialogOpen && experiment.status === ExperimentState.DRAFT && (
-        <MaxRuntimeDialog
-          currentMaxRuntime={experiment.maxRuntime.toString()}
-          open={isDialogOpen}
-          isOpen={setIsDialogOpen}
-          onButtonClick={(input) => {
-            if (!input) return;
-            if (+input > MAX_RUNTIME) {
-              return `Has to be smaller or equal than ${MAX_RUNTIME}`;
-            }
-            if (+input < 1) {
-              return `Has to be at least 1`;
-            }
-            setExperiment((prev) => ({
-              ...prev,
-              maxRuntime: +input,
-            }));
-          }}
-        />
-      )}
-      {error && !isLoading && (
-        <SystemAlert severity={"error"}>
-          {t("Could not run Experiment")}
-        </SystemAlert>
-      )}
     </div>
-  );
-}
-
-/**
- *
- * @param props
- * @constructor
- */
-function MaxRuntimeDialog(props: {
-  open: boolean;
-  isOpen: (value: ((prevState: boolean) => boolean) | boolean) => void;
-  onButtonClick: (input?: string) => string | undefined;
-  currentMaxRuntime: string;
-}) {
-  return (
-    <SystemDialog
-      defaultInput={props.currentMaxRuntime}
-      inputType={"number"}
-      isOpen={props.open}
-      setIsOpen={props.isOpen}
-      label={"Max Runtime"}
-      buttonText={"Save"}
-      onButtonClick={props.onButtonClick}
-      title={"Set Max Runtime"}
-    />
   );
 }
 

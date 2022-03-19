@@ -22,25 +22,30 @@ interface ActionCellProps extends CustomTableCellProps<any> {
   setAddExperimentDialogProps: React.Dispatch<
     React.SetStateAction<AddExperimentDialogProps>
   >;
+  toggleContextMenu: (
+    element: HTMLElement | null,
+    isOpen: boolean,
+    actions: any
+  ) => void;
 }
 
 export default function ActionCell({
   row,
   setAddExperimentDialogProps,
+  toggleContextMenu,
 }: ActionCellProps) {
-  const [isContextMenuOpen, setIsContextMenuOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const user = useConnectedUser();
   const {
     experiments: { setValue: setExperiments },
   } = useContext(ProjectExperimentDataContext);
+  const [isOpen, setIsOpen] = React.useState(false);
 
   const handleOnClick = (
     e: React.MouseEvent<HTMLAnchorElement> | React.MouseEvent<HTMLButtonElement>
   ) => {
     e.stopPropagation();
-    setAnchorEl(anchorEl ? null : e.currentTarget);
-    setIsContextMenuOpen((prev) => !prev);
+    setIsOpen((prev) => !prev);
+    toggleContextMenu(e.currentTarget, isOpen, getActions());
   };
 
   const getBaseActions = () => {
@@ -93,12 +98,6 @@ export default function ActionCell({
       <IconButton onClick={handleOnClick}>
         <MoreVertIcon />
       </IconButton>
-      <ContextMenu
-        actions={getActions()}
-        isOpen={isContextMenuOpen}
-        setIsOpen={setIsContextMenuOpen}
-        anchorEl={anchorEl}
-      />
     </React.Fragment>
   );
 }

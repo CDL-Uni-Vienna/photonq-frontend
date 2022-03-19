@@ -68,11 +68,13 @@ export default function ClusterStateSection({
 
   const getSvgSource = (qubitsImage?: boolean) => {
     if (!configs.length) return "";
-    return `/circuitConfig/${qubitsImage ? "csp_preset_settings_svg" : "csp_cluster_state"
-      }/${qubitsImage
+    return `/circuitConfig/${
+      qubitsImage ? "csp_preset_settings_svg" : "csp_cluster_state"
+    }/${
+      qubitsImage
         ? configs[0].csp_preset_settings_svg
         : configs[0].csp_cluster_state
-      }`;
+    }`;
   };
 
   return (
@@ -93,47 +95,62 @@ export default function ClusterStateSection({
         <div className={"space-y-2"}>
           <h3 className={"text-white font-bold"}>{t("Number of Qubits")}</h3>
           <ButtonGroup>
-            {[2, 3, 4].map((nr) => (
-              <Button
-                disabled={
-                  inputsDisabled ||
-                  (nr !== 4 &&
-                    experiment.ComputeSettings.clusterState.presetSettings ===
-                    PresetSetting.Ghz)
-                }
-                onClick={() => setExperimentQubitNr(nr)}
-                variant={isButtonActive(nr)}
-                key={nr}
-              >
-                {nr}
-              </Button>
-            ))}
+            {[2, 3, 4].map((nr) =>
+              inputsDisabled ||
+              (nr !== 4 &&
+                experiment.ComputeSettings.clusterState.presetSettings ===
+                  PresetSetting.Ghz) ? (
+                experiment.ComputeSettings.clusterState.amountQubits === nr ? (
+                  <Button variant="contained" key={nr}>
+                    {nr}
+                  </Button>
+                ) : (
+                  <></>
+                )
+              ) : (
+                <Button
+                  onClick={() => setExperimentQubitNr(nr)}
+                  variant={isButtonActive(nr)}
+                  key={nr}
+                >
+                  {nr}
+                </Button>
+              )
+            )}
           </ButtonGroup>
         </div>
         <div className="space-y-2">
           <h3 className={"text-white font-bold"}>{t("Preset Settings")}</h3>
           <div className={"flex space-x-1 items-center"}>
-            <Select
-              disabled={inputsDisabled}
-              size={"small"}
-              className={"bg-primaryDark"}
-              color={"primary"}
-              defaultValue={PresetSetting.Linear}
-              style={{ color: "white" }}
-              value={experiment.ComputeSettings.clusterState.presetSettings}
-              onChange={(e) =>
-                setExperimentPresetSettings(e.target.value as PresetSetting)
-              }
-            >
-              {Object.values(PresetSetting).map((val, index) => (
-                <MenuItem key={index} value={val}>
-                  {t(
-                    `${val.substring(0, 1).toUpperCase() + val.substring(1)
-                    } Cluster`
-                  )}
-                </MenuItem>
-              ))}
-            </Select>
+            {inputsDisabled ? (
+              <Button variant="contained">
+                {experiment.ComputeSettings.clusterState.presetSettings}
+              </Button>
+            ) : (
+              <Select
+                size={"small"}
+                className={"bg-primaryDark"}
+                color={"primary"}
+                defaultValue={PresetSetting.Linear}
+                style={{ color: "white" }}
+                value={experiment.ComputeSettings.clusterState.presetSettings}
+                onChange={(e) =>
+                  setExperimentPresetSettings(e.target.value as PresetSetting)
+                }
+              >
+                {Object.values(PresetSetting).map((val, index) => (
+                  <MenuItem key={index} value={val}>
+                    {t(
+                      `${
+                        val !== "ghz"
+                          ? val.substring(0, 1).toUpperCase() + val.substring(1)
+                          : val.toUpperCase()
+                      } Cluster`
+                    )}
+                  </MenuItem>
+                ))}
+              </Select>
+            )}
             {/*eslint-disable-next-line*/}
             <img
               className={"max-h-8"}

@@ -45,17 +45,24 @@ export default function Navbar() {
       >
         <div
           className={
-            "max-w-max bg-white w-full flex justify-between items-center py-4 px-8"
+            "max-w-max bg-white w-full flex justify-between items-center py-4 px-8 "
           }
         >
           <div
             onClick={() => router.push("/")}
-            className={"w-40 cursor-pointer z-40"}
+            className={
+              "w-40 cursor-pointer z-40 flex items-center space-x-4 divide-x"
+            }
           >
+            <img
+              src="/images/CDG_Logo.svg"
+              alt="Logo Christian Doppler Forschungsgesellschaft"
+              style={{ maxHeight: 60 }}
+            />
             <img
               src="/images/uni-wien-logo.svg"
               alt="Logo Uni Wien"
-              className="w-full h-auto"
+              style={{ maxHeight: 80 }}
             />
           </div>
           <div className={"flex space-x-8"}>

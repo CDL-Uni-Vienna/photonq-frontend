@@ -2,7 +2,7 @@ import type { GetStaticProps, NextPage } from "next";
 import MaxWidthContainer from "../components/Layout/MaxWidthContainer";
 import HomeHero from "../components/HomeHero/HomeHero";
 import QuantenComputingUiPreview from "../components/QuantenComputingUiPreview/QuantenComputingUiPreview";
-import SectionContent from "../components/Section/SectionContent";
+import SectionLogos from "../components/Section/SectionLogos";
 import SectionFade from "../components/Section/SectionFade";
 import Section from "../components/Section/Section";
 import PrimaryCTA from "../components/PrimaryCTA/PrimaryCTA";
@@ -51,13 +51,13 @@ export default function Home(props: PageProps) {
       </Section>
       <MaxWidthContainer>
         <Section withVerticalPadding>
-          <SectionContent
-            maxWidthImage={450}
+          <SectionLogos
             header={"Who are we?"}
             content={
-              "Philip Walther's group at the Faculty of Physics at the University of Vienna opened the Christian Doppler Laboratory for Photonic Quantum Computing in July 2020. We are a team of scientists, designers, and software developers investigating new technologies for quantum computers based on photonic platforms. Our declared goal is the development and operation of a photonic quantum computer platform and we are committed to providing free online access to our photonic quantum computers through cloud-based services. You can already experiment with our 4-qubit processor today!"
+              "We are a team of scientists, designers, and software developers at the Christian Doppler Laboratory for Photonic Quantum Computing at the Faculty of Physics at the University of Vienna. Our research focus is on the development and operation of a photonic quantum computer platform and we are committed to providing free online access to a photonic quantum computer through cloud-based services. You can already experiment with our four-qubit processor today!"
             }
-            imgSrc={"/images/uni-wien-logo.svg"}
+            imgTopSrc={"/images/uni-wien-logo.svg"}
+            imgBotSrc={"/images/CDG_Logo.svg"}
           />
         </Section>
       </MaxWidthContainer>

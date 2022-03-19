@@ -21,9 +21,14 @@ export default function ResultsPage() {
   const { experiment, experimentResult, isLoading, setExperiment } =
     useSelectedExperiment(router.query.slug as string);
   async function handleDownloadExperimentResult() {
-
-    const fullExperimentResult = await getExperimentResult(experiment.experimentId, user!.token);
-    downloadData(`${experiment.experimentName}_full-results`, fullExperimentResult);
+    const fullExperimentResult = await getExperimentResult(
+      experiment.experimentId,
+      user!.token
+    );
+    downloadData(
+      `${experiment.experimentName}_full-results`,
+      fullExperimentResult
+    );
   }
   return (
     <div
@@ -34,6 +39,7 @@ export default function ResultsPage() {
       })}
     >
       <ExperimentNavbar
+        reset={() => undefined}
         experiment={experiment}
         setExperiment={setExperiment}
         isLoading={isLoading}
@@ -41,7 +47,7 @@ export default function ResultsPage() {
       <PageLayout>
         <NavbarPadding />
         {experiment.status === ExperimentState.Running ||
-          experiment.status === ExperimentState.IN_QUEUE ? (
+        experiment.status === ExperimentState.IN_QUEUE ? (
           <div
             className={
               "h-screen flex flex-col justify-center items-center space-y-5"

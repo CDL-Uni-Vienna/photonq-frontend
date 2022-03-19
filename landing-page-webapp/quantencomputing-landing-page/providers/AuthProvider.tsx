@@ -9,11 +9,12 @@ import { User } from "../model/types/type.user";
 import { useRouter } from "next/router";
 import { getPrivateRoutes, Path } from "../model/model.routes";
 import { CircularProgress } from "@mui/material";
+import Cookies from "js-cookie";
 
 export const AuthContext = createContext<
   OptionalBaseProviderType<User & { token: string }>
 >({
-  setValue: () => {},
+  setValue: () => { },
 });
 
 interface AuthProviderProps {
@@ -25,8 +26,23 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<(User & { token: string }) | undefined>();
   const [verified, setVerified] = useState(false);
 
-  useLayoutEffect(() => {
+  React.useLayoutEffect(() => {
     if (
+      typeof user !== "undefined" &&
+      Cookies.get("user") !== JSON.stringify(user)
+    ) {
+      Cookies.set("user", JSON.stringify(user), {
+        expires: 0.25,
+        secure: true,
+      });
+    }
+  }, [user]);
+
+  useLayoutEffect(() => {
+    if (typeof Cookies.get("user") !== "undefined" && !user) {
+      setUser(JSON.parse(Cookies.get("user") || ""));
+      setVerified(true);
+    } else if (
       getPrivateRoutes().some((route) => route.href === router.pathname) &&
       !user
     ) {

@@ -3,8 +3,8 @@ import clsx from "clsx";
 import React, { useContext } from "react";
 import { getWebAppUrl } from "../../utils/webapp";
 import { useRouter } from "next/router";
-import { useConnectedUser } from "../../hook/hook.user";
 import { AuthContext } from "../../providers/AuthProvider";
+import Cookies from "js-cookie";
 
 export default function MenuLink(props: {
   route: {
@@ -26,6 +26,7 @@ export default function MenuLink(props: {
         props.setMobileNavBarOpen?.(false);
         if (props.route.clearAuthState) {
           setUser(undefined);
+          Cookies.remove("user");
         }
         if (props.route.newTab) {
           window.open(getWebAppUrl(), "_blank");
