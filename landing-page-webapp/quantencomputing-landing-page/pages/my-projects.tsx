@@ -1,3 +1,4 @@
+import Head from "next/head";
 import React, { useState } from "react";
 import NavbarPadding from "../components/Layout/NavbarPadding";
 import SectionHeader from "../components/Layout/SectionHeader";
@@ -16,6 +17,9 @@ export default function MyProjectPage() {
 
   return (
     <>
+      <Head>
+        <title>PhotonQ Quantum Computing</title>
+      </Head>
       <NavbarPadding />
       <SectionHeader
         withVerticalSpacing

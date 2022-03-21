@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 import { GuideSkeleton } from "../../components/GuideSkeleton/BlogPostSkeleton";
 import Section from "../../components/Section/Section";
 import GuideHeader from "../../components/GuideHeader/GuideHeader";
+import Head from "next/head";
 
 interface PageProps {
   guide: GuideDocumentLocalized;
@@ -41,6 +42,9 @@ export default function Home(props: PageProps) {
 
   return (
     <div className={"flex flex-col items-center"}>
+      <Head>
+        <title>PhotonQ Quantum Computing</title>
+      </Head>
       <NavbarPadding />
       <Section fullWidth withVerticalPadding>
         <GuideHeader

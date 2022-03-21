@@ -105,7 +105,9 @@ export default function ClusterStateSection({
                     {nr}
                   </Button>
                 ) : (
-                  <></>
+                  <Button key={nr} variant={"outlined"}>
+                    {nr}
+                  </Button>
                 )
               ) : (
                 <Button
@@ -123,7 +125,7 @@ export default function ClusterStateSection({
           <h3 className={"text-white font-bold"}>{t("Preset Settings")}</h3>
           <div className={"flex space-x-1 items-center"}>
             {inputsDisabled ? (
-              <Button variant="contained">
+              <Button variant="outlined">
                 {experiment.ComputeSettings.clusterState.presetSettings}
               </Button>
             ) : (

@@ -104,16 +104,6 @@ export default function ExperimentResultContainer({
               <p>{param.value}</p>
             </div>
           ))}
-          <DownloadButton
-            onClick={() =>
-              downloadData(
-                `${experiment.experimentName}-results`,
-                experimentResult
-              )
-            }
-          >
-            {t("Execution Metadata File")}
-          </DownloadButton>
         </div>
       </div>
     </ContentContainer>

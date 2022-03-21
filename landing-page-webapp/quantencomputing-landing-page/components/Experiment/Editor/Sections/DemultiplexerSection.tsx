@@ -16,7 +16,7 @@ export default function DemultiplexerSection() {
       >
         <div className={"w-full text-white space-y-4"}>
           <EditorSectionHeader header={"Source"} />
-          <div className={"flex justify-between mr-10"}>
+          <div className={"flex space-x-16 mr-10"}>
             <div>
               <p>{t("Wavelength")}</p>
               <p>{t("Single Photon Rate")}</p>
@@ -40,11 +40,15 @@ export default function DemultiplexerSection() {
           </div>
           <div
             className={
-              "flex absolute -right-12 top-1/2 transform -translate-y-1/2"
+              "flex absolute -right-9 top-1/2 transform -translate-y-1/2 space-x-5"
             }
           >
             <embed src="/images/demultiplexer-editor.svg" />
-            <ArrowRightAltIcon color={"primary"} sx={{ height: "2.20em" }} fontSize={"large"} />
+            <ArrowRightAltIcon
+              color={"primary"}
+              sx={{ height: "2.20em" }}
+              fontSize={"large"}
+            />
           </div>
         </div>
       </ContentContainer>
@@ -56,7 +60,7 @@ export default function DemultiplexerSection() {
         <EditorSectionHeader header={"Demultiplexer"} />
         <p className={"text-white"}>
           {t(
-            "The demultiplexer is a photonic setup that uses an active element to switch one common input line to several separate output lines."
+            "The demultiplexer is a combination logic circuit designed to switch one common input line to one of several separate output lines."
           )}
         </p>
       </ContentContainer>

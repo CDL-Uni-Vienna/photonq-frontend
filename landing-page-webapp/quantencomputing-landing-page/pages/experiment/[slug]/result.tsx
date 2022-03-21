@@ -13,6 +13,7 @@ import { downloadData } from "../../../utils/utils.download";
 import { useRouter } from "next/router";
 import { useConnectedUser } from "../../../hook/hook.user";
 import { getExperimentResult } from "../../../model/model.api";
+import Head from "next/head";
 
 export default function ResultsPage() {
   const { t } = useTranslation();
@@ -38,6 +39,9 @@ export default function ResultsPage() {
           experiment.status === ExperimentState.IN_QUEUE,
       })}
     >
+      <Head>
+        <title>PhotonQ Quantum Computing</title>
+      </Head>
       <ExperimentNavbar
         reset={() => undefined}
         experiment={experiment}
@@ -66,6 +70,7 @@ export default function ResultsPage() {
             />
             <div className={"flex justify-end mt-8"}>
               <DownloadButton
+                variant="contained"
                 onClick={() => {
                   handleDownloadExperimentResult();
                 }}

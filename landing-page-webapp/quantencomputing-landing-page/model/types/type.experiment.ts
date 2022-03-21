@@ -137,7 +137,6 @@ export interface Experiment extends BaseExperimentInformation {
       presetSettings: PresetSetting;
     };
     qubitComputing: {
-      circuitConfiguration: string;
       circuitAngles: CircuitAngle<number>[];
     };
     encodedQubitMeasurements: EncodedQubitMeasurement[];

@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import DropDownButton from "../DropDownButton";
 import { createExperiment } from "../../../model/model.api";
 import { useConnectedUser } from "../../../hook/hook.user";
-import { deleteProps } from "../../../utils/utils.object";
+import { deleteProps, prepareExperiment } from "../../../utils/utils.object";
 import { useMemo, useState } from "react";
 import {
   CreateExperimentPayload,
@@ -74,10 +74,11 @@ function ExperimentEditor({
   const runExperiment = async () => {
     try {
       const createExperimentPayload = {
-        ...deleteProps<CreateExperimentPayload, ExperimentWithConfigs>(
-          experiment,
-          ["experimentId", "withQubitConfig", "config"]
-        ),
+        ...prepareExperiment(experiment, [
+          "experimentId",
+          "withQubitConfig",
+          "config",
+        ]),
         status: ExperimentState.IN_QUEUE,
       };
       createExperimentPayload.circuitId = experiment.config!.circuit_id;

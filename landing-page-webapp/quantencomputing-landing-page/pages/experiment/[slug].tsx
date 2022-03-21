@@ -11,6 +11,7 @@ import {
 } from "../../model/model.experiment";
 
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 export interface BaseEditorPageProps {
   experiment: ExperimentWithConfigs;
@@ -39,6 +40,9 @@ function EditorPage() {
 
   return (
     <div style={{ backgroundColor: "#222328" }}>
+      <Head>
+        <title>PhotonQ Quantum Computing</title>
+      </Head>
       <ExperimentNavbar {...props} reset={reset} />
       <PageLayout>
         <NavbarPadding />

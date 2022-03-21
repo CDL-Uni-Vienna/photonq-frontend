@@ -26,7 +26,6 @@ export function getDefaultExperimentConfig(
         presetSettings: PresetSetting.Linear,
       },
       qubitComputing: {
-        circuitConfiguration: "horseshoe",
         circuitAngles: [
           {
             circuitAngleName: "alpha",
@@ -174,23 +173,23 @@ export function getComputationParameters(
 ): ResultParameters[] {
   return [
     {
-      label: "Physical qubits",
+      label: "Physical Qubits",
       value: experiment.ComputeSettings.clusterState.amountQubits,
     },
     {
-      label: "Encoded qubits",
+      label: "Encoded Qubits",
       value: config.qc_encoded_qubits || 0,
     },
     {
-      label: "Computation configuration",
-      value: experiment.circuitId || "horseshoe",
+      label: "Circuit ID",
+      value: experiment.circuitId || 0,
     },
     {
-      label: "CPhase gates",
+      label: "CPhase Gates",
       value: config.qc_cphase_gates || 0,
     },
     {
-      label: "Computing parameters",
+      label: "Computing Parameters",
       value: convertToAngleString(
         experiment.ComputeSettings.qubitComputing.circuitAngles.map(
           (val) => val.circuitAngleValue
