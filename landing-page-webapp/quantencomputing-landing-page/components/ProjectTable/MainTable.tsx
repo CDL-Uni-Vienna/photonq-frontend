@@ -49,8 +49,13 @@ export default function MainTable({
           isOpen: boolean,
           actions: any
         ) => {
-          setIsContextMenuOpen(isOpen);
-          setAnchorEl(element);
+          setAnchorEl((prev) => {
+            setIsContextMenuOpen(
+              prev !== element || (prev === element && !isOpen)
+            );
+
+            return element;
+          });
           setActions(actions);
         },
       },

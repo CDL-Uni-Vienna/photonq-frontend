@@ -26,7 +26,7 @@ export default function RegisterPage() {
         </Grid>
         <Grid item md={5}>
           <AuthContent
-            header={"Start Quantum Computing with us!"}
+            header={"Start quantum computing with us!"}
             content={
               "Our intuitive approach makes it easy for beginners to start with quantum computing and allows experts and educators to run complex photonic experiments on real quantum hardware."
             }

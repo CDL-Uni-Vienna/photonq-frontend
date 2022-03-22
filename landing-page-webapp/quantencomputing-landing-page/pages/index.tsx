@@ -34,7 +34,7 @@ export default function Home(props: PageProps) {
       </MaxWidthContainer>
       <Section withVerticalPadding fullWidth>
         <SectionFade
-          header={"One-way quantum computing"}
+          header={"One-way Quantum Computing"}
           content={
             "PhotonQ provides cloud-based access to a real photonic one-way computer backend. Our system exploits cutting-edge quantum photonic technology to realize a photonic quantum computing platform. The quantum processing unit can be accessed and programmed through our customized user interface."
           }

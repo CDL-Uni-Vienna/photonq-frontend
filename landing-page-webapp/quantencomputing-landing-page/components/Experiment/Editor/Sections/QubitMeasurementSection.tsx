@@ -188,7 +188,7 @@ function EncodedQubitInput({
                   "text-gray-500": isDisabled(),
                 })}
               >
-                {getValue(nr, "theta") || "0"}
+                {`${getValue(nr, "theta") || "0"}°`}
               </p>
             </div>
             <div className="flex space-x-2 text-white">
@@ -198,13 +198,14 @@ function EncodedQubitInput({
                   "text-gray-500": isDisabled(),
                 })}
               >
-                {getValue(nr, "phi") || "0"}
+                {`${getValue(nr, "phi") || "0"}°`}
               </p>
             </div>
           </>
         ) : (
           <>
             <TextFieldWithIcon
+              unit="°"
               isDisabled={isDisabled()}
               iconsSrc={"/images/theta.svg"}
               value={"" + (getValue(nr, "theta") || "0")}
@@ -213,6 +214,7 @@ function EncodedQubitInput({
               }}
             />
             <TextFieldWithIcon
+              unit="°"
               isDisabled={isDisabled()}
               iconsSrc={"/images/phi.svg"}
               value={"" + (getValue(nr, "phi") || "0")}

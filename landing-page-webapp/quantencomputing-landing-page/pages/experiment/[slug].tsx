@@ -21,8 +21,10 @@ export interface BaseEditorPageProps {
 
 function EditorPage() {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+  const get =
+    typeof window !== "undefined" && window.location.search === "get=false";
   const router = useRouter();
-  const props = useSelectedExperiment(router.query.slug as string);
+  const props = useSelectedExperiment(router.query.slug as string, get);
 
   const reset = () => {
     const defaultExperiment = getDefaultExperimentConfig(

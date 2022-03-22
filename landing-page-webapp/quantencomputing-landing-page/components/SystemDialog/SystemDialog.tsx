@@ -66,7 +66,7 @@ export default function SystemDialog({
         getPathWithId(
           experiment.experimentName.replace(/\s/g, "").toLowerCase(),
           Path.SingleExperiment
-        )
+        ) + "?get=false"
       );
       window.localStorage.setItem("experimentName", experiment.experimentName);
     }

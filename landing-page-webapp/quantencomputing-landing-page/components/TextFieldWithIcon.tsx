@@ -7,6 +7,7 @@ interface TextFieldWithIconProps {
   value: string;
   setValue: (value: string) => void;
   isDisabled?: boolean;
+  unit?: string;
 }
 
 export default function TextFieldWithIcon({
@@ -14,6 +15,7 @@ export default function TextFieldWithIcon({
   value,
   setValue,
   isDisabled,
+  unit,
 }: TextFieldWithIconProps) {
   const [input, setInput] = useState(value);
 
@@ -35,6 +37,12 @@ export default function TextFieldWithIcon({
             color: "white",
           },
           step: 0.1,
+        }}
+        InputProps={{
+          endAdornment: unit,
+          style: {
+            color: isDisabled ? "" : "white",
+          },
         }}
         type={"number"}
         value={input}
