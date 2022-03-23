@@ -31,7 +31,7 @@ export default function PasswordField(props: PasswordFieldProps) {
       return `Password is too short (at least ${MIN_PASSWORD_LENGTH} characters long)`;
     }
     if (errorObject?.strength) {
-      return "Password is to weak!";
+      return "Password is too weak!";
     }
     return "";
   };

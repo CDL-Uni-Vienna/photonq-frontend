@@ -25,8 +25,7 @@ export default function Navbar() {
   const isRouteActive = (href: string) => {
     return (
       router.route === href ||
-      (router.route.includes(href) && href !== "/") ||
-      (router.route.includes(Path.Register) && href === Path.Login)
+      (router.route.includes(href) && href !== "/")
     );
   };
 

@@ -65,7 +65,7 @@ export async function getExperiment(
  * @param id
  * @param token
  */
- export async function getExperimentResult(
+export async function getExperimentResult(
   id: string,
   token: string
 ): Promise<any> {
@@ -75,7 +75,8 @@ export async function getExperiment(
     endpoint: Endpoint.Experiment,
     token,
   });
-  if (!response.ok) throw new Error("Could not get full Experiment results" + id);
+  if (!response.ok)
+    throw new Error("Could not get full Experiment results" + id);
   return response.json();
 }
 
@@ -176,10 +177,13 @@ export async function register(
     endpoint: Endpoint.Register,
     body: credentials,
   });
-  if (!response.ok) {
-    throw new Error(
-      "Authorization information is missing or invalid. " + credentials
-    );
+  if (!(response.status === 200 || response.status === 201)) {
+    if (response.status === 400) {
+      throw new Error("User with this email already exists.");
+    } else {
+      throw new Error("Authorization data missing or invalid.");
+    }
+
   }
   return response.json();
 }

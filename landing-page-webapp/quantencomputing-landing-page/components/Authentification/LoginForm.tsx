@@ -92,7 +92,7 @@ export default function LoginForm() {
                 "cursor-pointer text-primary font-bold transform hover:-translate-y-1 duration-300"
               }
             >
-              {t("Register")}
+              {t("Register now!")}
             </p>
           </Link>
         </div>

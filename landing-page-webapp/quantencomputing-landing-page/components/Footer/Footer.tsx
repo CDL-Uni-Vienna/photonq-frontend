@@ -38,7 +38,7 @@ export default function Footer({ alwaysAtBottom }: FooterProps) {
                   className="cursor-pointer"
                   onClick={() => router.push("/register")}
                 >
-                  Register
+                  Sign up
                 </a>
               </div>
               <div className="flex flex-col space-y-4 mt-3">
