@@ -8,10 +8,55 @@ export const handlers = [
       context.delay(500),
       context.status(201),
       context.json({
-        experimentConfiguration: getDefaultExperimentConfig(
-          "Experiment",
-          ExperimentState.DRAFT
-        ),
+        experimentConfiguration: {
+          user: "test@test.at",
+          status: "DONE",
+          created: "2021-12-22T12:11:45.461307Z",
+          experimentName: "test-new-backend",
+          projectId: "",
+          maxRuntime: 120,
+          experimentId: "fd6da011-0668-496c-8457-5686ec187a03",
+          circuitId: 6,
+          ComputeSettings: {
+            encodedQubitMeasurements: [
+              {
+                id: 12,
+                encodedQubitIndex: 1,
+                theta: "33.00",
+                phi: "66.00",
+                ComputeSettings: 18,
+              },
+            ],
+            qubitComputing: {
+              id: 18,
+              circuitAngles: [
+                {
+                  id: 36,
+                  circuitAngleName: "alpha",
+                  circuitAngleValue: "1.000",
+                  qubitComputing: 18,
+                },
+                {
+                  id: 37,
+                  circuitAngleName: "beta",
+                  circuitAngleValue: "2.000",
+                  qubitComputing: 18,
+                },
+                {
+                  id: 38,
+                  circuitAngleName: "gamma",
+                  circuitAngleValue: "3.000",
+                  qubitComputing: 18,
+                },
+              ],
+            },
+            clusterState: {
+              id: 18,
+              presetSettings: "linear",
+              amountQubits: 2,
+            },
+          },
+        },
         experimentResult: {
           startTime: new Date().toISOString(),
           totalCounts: 400,

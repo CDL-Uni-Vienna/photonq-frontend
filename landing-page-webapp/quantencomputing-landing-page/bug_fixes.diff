@@ -1,0 +1,938 @@
+diff --git a/api-mock/handlers.ts b/api-mock/handlers.ts
+index d6c4a44..7eb69a6 100644
+--- a/api-mock/handlers.ts
++++ b/api-mock/handlers.ts
+@@ -8,10 +8,55 @@ export const handlers = [
+       context.delay(500),
+       context.status(201),
+       context.json({
+-        experimentConfiguration: getDefaultExperimentConfig(
+-          "Experiment",
+-          ExperimentState.DRAFT
+-        ),
++        experimentConfiguration: {
++          user: "test@test.at",
++          status: "DONE",
++          created: "2021-12-22T12:11:45.461307Z",
++          experimentName: "test-new-backend",
++          projectId: "",
++          maxRuntime: 120,
++          experimentId: "fd6da011-0668-496c-8457-5686ec187a03",
++          circuitId: 5,
++          ComputeSettings: {
++            encodedQubitMeasurements: [
++              {
++                id: 12,
++                encodedQubitIndex: 1,
++                theta: "33.00",
++                phi: "66.00",
++                ComputeSettings: 18,
++              },
++            ],
++            qubitComputing: {
++              id: 18,
++              circuitAngles: [
++                {
++                  id: 36,
++                  circuitAngleName: "alpha",
++                  circuitAngleValue: "1.000",
++                  qubitComputing: 18,
++                },
++                {
++                  id: 37,
++                  circuitAngleName: "beta",
++                  circuitAngleValue: "2.000",
++                  qubitComputing: 18,
++                },
++                {
++                  id: 38,
++                  circuitAngleName: "gamma",
++                  circuitAngleValue: "3.000",
++                  qubitComputing: 18,
++                },
++              ],
++            },
++            clusterState: {
++              id: 18,
++              presetSettings: "linear",
++              amountQubits: 2,
++            },
++          },
++        },
+         experimentResult: {
+           startTime: new Date().toISOString(),
+           totalCounts: 400,
+diff --git a/components/Experiment/Editor/ExperimentEditor.tsx b/components/Experiment/Editor/ExperimentEditor.tsx
+index 9ad3d30..144598b 100644
+--- a/components/Experiment/Editor/ExperimentEditor.tsx
++++ b/components/Experiment/Editor/ExperimentEditor.tsx
+@@ -1,24 +1,23 @@
+-import DemultiplexerSection from "./Sections/DemultiplexerSection";
+-import ClusterStateSection from "./Sections/ClusterStateSection";
+ import { CircularProgress } from "@mui/material";
+-import QubitComputingSection from "./Sections/QubitComputingSection";
+-import QubitMeasurementSection from "./Sections/QubitMeasurementSection";
+-import { useTranslation } from "react-i18next";
+-import DropDownButton from "../DropDownButton";
+-import { createExperiment } from "../../../model/model.api";
+-import { useConnectedUser } from "../../../hook/hook.user";
+-import { deleteProps, prepareExperiment } from "../../../utils/utils.object";
++import { useRouter } from "next/router";
+ import { useMemo, useState } from "react";
++import { useTranslation } from "react-i18next";
+ import {
+-  CreateExperimentPayload,
+-  ExperimentState,
+-  ExperimentWithConfigs,
+-} from "../../../model/types/type.experiment";
+-import { BaseEditorPageProps } from "../../../pages/experiment/[slug]";
++  CircuitConfig,
++  circuitConfigs,
++} from "../../../circuitConfig/circuits4Dv004";
++import { useConnectedUser } from "../../../hook/hook.user";
++import { createExperiment } from "../../../model/model.api";
+ import { getPathWithId, Path } from "../../../model/model.routes";
+-import { useRouter } from "next/router";
+-import SystemDialog from "../../SystemDialog/SystemDialog";
++import { ExperimentState } from "../../../model/types/type.experiment";
++import { BaseEditorPageProps } from "../../../pages/experiment/[slug]";
+ import SystemAlert from "../../SystemAlert";
++import SystemDialog from "../../SystemDialog/SystemDialog";
++import DropDownButton from "../DropDownButton";
++import ClusterStateSection from "./Sections/ClusterStateSection";
++import DemultiplexerSection from "./Sections/DemultiplexerSection";
++import QubitComputingSection from "./Sections/QubitComputingSection";
++import QubitMeasurementSection from "./Sections/QubitMeasurementSection";
+ 
+ interface ExperimentEditorProps extends BaseEditorPageProps {
+   action: () => void;
+@@ -66,23 +65,27 @@ function ExperimentEditor({
+   const user = useConnectedUser();
+   const router = useRouter();
+ 
+-  const inputsDisabled = useMemo(
+-    () => experiment.status !== ExperimentState.DRAFT,
+-    [experiment]
++  const currentConfig = useMemo<CircuitConfig | undefined>(
++    () => circuitConfigs.find((c) => c.circuit_id === experiment.circuitId),
++    [experiment.circuitId]
++  );
++  const inputsDisabled = useMemo<boolean>(
++    () => router.query.slug !== "new",
++    [router.query.slug]
+   );
+ 
+   const runExperiment = async () => {
+     try {
+-      const createExperimentPayload = {
+-        ...prepareExperiment(experiment, [
+-          "experimentId",
+-          "withQubitConfig",
+-          "config",
+-        ]),
+-        status: ExperimentState.IN_QUEUE,
+-      };
+-      createExperimentPayload.circuitId = experiment.config!.circuit_id;
+-      const res = await createExperiment(createExperimentPayload, user!.token);
++      const res = await createExperiment(
++        {
++          circuitId: experiment.circuitId,
++          experimentName: experiment.experimentName,
++          projectId: experiment.projectId,
++          maxRuntime: experiment.maxRuntime,
++          ComputeSettings: experiment.ComputeSettings,
++        },
++        user!.token
++      );
+       router.push(getPathWithId(res.experimentId, Path.ExperimentResult));
+     } catch (e) {
+       console.error(e);
+@@ -111,11 +114,13 @@ function ExperimentEditor({
+         inputsDisabled={inputsDisabled}
+         experiment={experiment}
+         setExperiment={setExperiment}
++        currentConfig={currentConfig}
+       />
+       <QubitMeasurementSection
+         inputsDisabled={inputsDisabled}
+         experiment={experiment}
+         setExperiment={setExperiment}
++        currentConfig={currentConfig}
+       />
+       <div className={"flex justify-end items-center"}>
+         <DropDownButton
+diff --git a/components/Experiment/Editor/Sections/ClusterStateSection.tsx b/components/Experiment/Editor/Sections/ClusterStateSection.tsx
+index b65dc5b..6154cf0 100644
+--- a/components/Experiment/Editor/Sections/ClusterStateSection.tsx
++++ b/components/Experiment/Editor/Sections/ClusterStateSection.tsx
+@@ -5,16 +5,17 @@ import EditorSectionHeader from "./EditorSectionHeader";
+ import { useTranslation } from "react-i18next";
+ import { Button, ButtonGroup, MenuItem, Select } from "@mui/material";
+ import {
+-  ExperimentWithConfigs,
++  Experiment,
+   PresetSetting,
+ } from "../../../../model/types/type.experiment";
+ import SettingsImage from "./SettingsImage";
+-import { usePossibleClusterConfigsPresetSettings } from "../../../../hook/hook.experiment";
++import { CircuitConfig, circuitConfigs } from "../../../../circuitConfig/circuits4Dv004";
+ 
+ export interface EditorSectionProps {
+-  experiment: ExperimentWithConfigs;
+-  setExperiment: React.Dispatch<React.SetStateAction<ExperimentWithConfigs>>;
++  experiment: Experiment;
++  setExperiment: React.Dispatch<React.SetStateAction<Experiment>>;
+   inputsDisabled?: boolean;
++  currentConfig?: CircuitConfig,
+ }
+ 
+ export default function ClusterStateSection({
+@@ -23,8 +24,6 @@ export default function ClusterStateSection({
+   inputsDisabled,
+ }: EditorSectionProps) {
+   const { t } = useTranslation();
+-  const { currentCircuitConfigs: configs } =
+-    usePossibleClusterConfigsPresetSettings(experiment, setExperiment);
+ 
+   const setExperimentQubitNr = (nr: number) => {
+     if (
+@@ -67,13 +66,20 @@ export default function ClusterStateSection({
+   };
+ 
+   const getSvgSource = (qubitsImage?: boolean) => {
+-    if (!configs.length) return "";
++    const config = circuitConfigs.find(
++      (c) =>
++        c.csp_number_of_qubits ===
++          experiment.ComputeSettings.clusterState.amountQubits &&
++        c.csp_preset_settings_name ===
++          experiment.ComputeSettings.clusterState.presetSettings
++    );
++    if (!config) return "";
+     return `/circuitConfig/${
+       qubitsImage ? "csp_preset_settings_svg" : "csp_cluster_state"
+     }/${
+       qubitsImage
+-        ? configs[0].csp_preset_settings_svg
+-        : configs[0].csp_cluster_state
++        ? config.csp_preset_settings_svg
++        : config.csp_cluster_state
+     }`;
+   };
+ 
+diff --git a/components/Experiment/Editor/Sections/QubitComputingSection.tsx b/components/Experiment/Editor/Sections/QubitComputingSection.tsx
+index 17facf4..ca1b330 100644
+--- a/components/Experiment/Editor/Sections/QubitComputingSection.tsx
++++ b/components/Experiment/Editor/Sections/QubitComputingSection.tsx
+@@ -12,8 +12,10 @@ import {
+   Switch,
+ } from "@mui/material";
+ import SettingsImage from "./SettingsImage";
+-import { usePossibleClusterConfigsQubitComputing } from "../../../../hook/hook.experiment";
+-import { CircuitConfig } from "../../../../circuitConfig/circuits4Dv004";
++import {
++  CircuitConfig,
++  circuitConfigs,
++} from "../../../../circuitConfig/circuits4Dv004";
+ import TextFieldWithIcon from "../../../TextFieldWithIcon";
+ import {
+   CircuitAngleName,
+@@ -32,17 +34,24 @@ export default function QubitComputingSection({
+   setExperiment,
+   experiment,
+   inputsDisabled,
++  currentConfig,
+ }: EditorSectionProps) {
+-  const { currentConfigs: configs } = usePossibleClusterConfigsQubitComputing(
+-    experiment,
+-    setExperiment
+-  );
+-
+   const { t } = useTranslation();
+-
+-  const getSrc = () => {
+-    return `/circuitConfig/qc_circuit_model/${experiment.config?.qc_circuit_model}`;
+-  };
++  const [withQubitConfig, setWithQubitConfig] = useState<boolean>(true);
++  const availableConfigs = useMemo<CircuitConfig[]>(
++    () =>
++      circuitConfigs.filter(
++        (c) =>
++          c.csp_number_of_qubits ===
++            experiment.ComputeSettings.clusterState.amountQubits &&
++          c.csp_preset_settings_name ===
++            experiment.ComputeSettings.clusterState.presetSettings &&
++          (withQubitConfig
++            ? c.qc_circuit_model && c.qc_circuit_conf
++            : c.qc_encoded_onoff === Number(withQubitConfig))
++      ),
++    [experiment.ComputeSettings.clusterState, withQubitConfig]
++  );
+ 
+   const getAngleValue = (angleName: CircuitAngleName) => {
+     return (
+@@ -76,8 +85,7 @@ export default function QubitComputingSection({
+     }));
+   };
+ 
+-  const setInitialQubitComputingAngles = () => {
+-    if (experiment.status !== ExperimentState.DRAFT) return;
++  const setCircuitAnglesFromConfig = () => {
+     setExperiment((prev) => ({
+       ...prev,
+       ComputeSettings: {
+@@ -86,8 +94,8 @@ export default function QubitComputingSection({
+           ...prev.ComputeSettings.qubitComputing,
+           circuitAngles: Array.from({
+             length:
+-              (experiment.config?.csp_number_of_qubits || 0) -
+-              (experiment.config?.qc_encoded_qubits || 0),
++              (currentConfig?.csp_number_of_qubits || 0) -
++              (currentConfig?.qc_encoded_qubits || 0),
+           }).map((_, index) => ({
+             circuitAngleName: angleNames[index],
+             circuitAngleValue: 0,
+@@ -97,11 +105,39 @@ export default function QubitComputingSection({
+     }));
+   };
+ 
++  const toggleQubitComputing = () => {
++    if (withQubitConfig) {
++      setExperiment((prev) => ({
++        ...prev,
++        ComputeSettings: {
++          ...prev.ComputeSettings,
++          qubitComputing: {
++            ...prev.ComputeSettings.qubitComputing,
++            circuitAngles: [],
++          },
++        },
++      }));
++    } else {
++      setCircuitAnglesFromConfig();
++    }
++    setWithQubitConfig(!withQubitConfig);
++  };
++
++  useEffect(() => {
++    if (!inputsDisabled && experiment.status === ExperimentState.DRAFT) {
++      setExperiment((prev) => ({
++        ...prev,
++        circuitId: availableConfigs[0].circuit_id,
++      }));
++    }
++  }, [availableConfigs, setExperiment, inputsDisabled, experiment.status]);
++
+   useEffect(() => {
+     // adds array of empty Angles to the experiment
+-    setInitialQubitComputingAngles();
++    if (inputsDisabled || experiment.status !== ExperimentState.DRAFT) return;
++    setCircuitAnglesFromConfig();
+     // eslint-disable-next-line
+-  }, [experiment.config?.qc_encoded_qubits]);
++  }, [currentConfig]);
+ 
+   return (
+     <ContentContainer
+@@ -116,15 +152,10 @@ export default function QubitComputingSection({
+             <div className={"flex items-center space-x-2"}>
+               <Switch
+                 disabled={inputsDisabled}
+-                checked={experiment.withQubitConfig}
+-                onChange={() => {
+-                  setExperiment((prev) => ({
+-                    ...prev,
+-                    withQubitConfig: !prev.withQubitConfig,
+-                  }));
+-                }}
++                checked={withQubitConfig}
++                onChange={toggleQubitComputing}
+               />
+-              <p>{experiment.withQubitConfig ? "On" : "Off"}</p>
++              <p>{withQubitConfig ? "On" : "Off"}</p>
+             </div>
+           </div>
+           <p>
+@@ -134,7 +165,7 @@ export default function QubitComputingSection({
+           </p>
+         </div>
+       </div>
+-      {configs.length && experiment.withQubitConfig && (
++      {availableConfigs.length && withQubitConfig && (
+         <div className={"flex space-x-10 text-white"}>
+           <div className={"space-y-3 w-1/2"}>
+             <h3 className={"font-bold"}>{t("Circuit Configuration")}</h3>
+@@ -142,28 +173,28 @@ export default function QubitComputingSection({
+               <div>
+                 <CircuitConfigSelector
+                   inputsDisabled={inputsDisabled}
+-                  currentConfig={experiment.config}
+-                  configs={configs}
++                  currentConfig={currentConfig}
++                  configs={availableConfigs}
+                   setCurrentConfig={(circuit: CircuitConfig) => {
+                     setExperiment((prev) => ({
+                       ...prev,
+-                      config: circuit,
++                      circuitId: circuit.circuit_id,
+                     }));
+                   }}
+                 />
+               </div>
+               <div>
+                 <p>{`${t("Encoded quibts:")} ${
+-                  experiment.config?.qc_encoded_qubits || "0"
++                  currentConfig?.qc_encoded_qubits || "0"
+                 }`}</p>
+                 <p>{`${t("CPhase gates:")} ${
+-                  experiment.config?.qc_cphase_gates || "0"
++                  currentConfig?.qc_cphase_gates || "0"
+                 }`}</p>
+                 <div className={"space-y-3 mt-2"}>
+                   {Array.from({
+                     length:
+-                      (experiment.config?.csp_number_of_qubits || 0) -
+-                      (experiment.config?.qc_encoded_qubits || 0),
++                      (currentConfig?.csp_number_of_qubits || 0) -
++                      (currentConfig?.qc_encoded_qubits || 0),
+                   }).map((_, index) =>
+                     inputsDisabled ? (
+                       <div className="flex space-x-2">
+@@ -191,7 +222,10 @@ export default function QubitComputingSection({
+           <div className={"flex flex-col justify-center text-white space-y-4"}>
+             <h3 className={"font-bold text-lg"}>{t("Circuit")}</h3>
+             <div className={"border border-gray-500 p-2"}>
+-              <SettingsImage normal src={getSrc()} />
++              <SettingsImage
++                normal
++                src={`/circuitConfig/qc_circuit_model/${currentConfig?.qc_circuit_model}`}
++              />
+             </div>
+           </div>
+         </div>
+diff --git a/components/Experiment/Editor/Sections/QubitMeasurementSection.tsx b/components/Experiment/Editor/Sections/QubitMeasurementSection.tsx
+index e73970b..271fbcf 100644
+--- a/components/Experiment/Editor/Sections/QubitMeasurementSection.tsx
++++ b/components/Experiment/Editor/Sections/QubitMeasurementSection.tsx
+@@ -17,21 +17,20 @@ export default function QubitMeasurementSection({
+   setExperiment,
+   experiment,
+   inputsDisabled,
++  currentConfig,
+ }: EditorSectionProps) {
++  const encodedQubits = currentConfig?.qc_encoded_onoff
++    ? currentConfig?.qm_number_of_qubits || 0
++    : currentConfig?.csp_number_of_qubits || 0;
+   const { t } = useTranslation();
+ 
+   const getSrc = () => {
+-    return `/circuitConfig/qm_circuit_model/${experiment.config?.qm_circuit_model}`;
++    return `/circuitConfig/qm_circuit_model/${currentConfig?.qm_circuit_model}`;
+   };
+ 
+-  const getEncodedQubits = () => {
+-    return experiment.withQubitConfig
+-      ? experiment.config?.qm_number_of_qubits || 0
+-      : experiment.config?.csp_number_of_qubits || 0;
+-  };
+-
+-  const setInitialEncodedQubitMeasurements = () => {
+-    if (experiment.status !== ExperimentState.DRAFT) {
++  useEffect(() => {
++    // adds array of empty EncodedQubitMeasurments to the experiment
++    if (inputsDisabled || experiment.status !== ExperimentState.DRAFT) {
+       return;
+     }
+     setExperiment((prev) => ({
+@@ -39,17 +38,12 @@ export default function QubitMeasurementSection({
+       ComputeSettings: {
+         ...prev.ComputeSettings,
+         encodedQubitMeasurements: Array.from({
+-          length: getEncodedQubits(),
++          length: encodedQubits,
+         }).map((_, index) => getEmptyEncodedQubitMeasurement(index + 1)),
+       },
+     }));
+-  };
+-
+-  useEffect(() => {
+-    // adds array of empty EncodedQubitMeasurments to the experiment
+-    setInitialEncodedQubitMeasurements();
+     // eslint-disable-next-line
+-  }, [experiment.config?.qm_number_of_qubits, experiment.withQubitConfig]);
++  }, [currentConfig]);
+ 
+   return (
+     <ContentContainer withPadding color={secondaryDark} className={"space-y-6"}>
+@@ -66,14 +60,14 @@ export default function QubitMeasurementSection({
+               inputsDisabled={inputsDisabled}
+               nr={1}
+               experiment={experiment}
+-              encodedQubits={getEncodedQubits()}
++              encodedQubits={encodedQubits}
+               setExperiment={setExperiment}
+             />
+             <EncodedQubitInput
+               inputsDisabled={inputsDisabled}
+               nr={2}
+               experiment={experiment}
+-              encodedQubits={getEncodedQubits()}
++              encodedQubits={encodedQubits}
+               setExperiment={setExperiment}
+             />
+           </div>
+@@ -82,14 +76,14 @@ export default function QubitMeasurementSection({
+               inputsDisabled={inputsDisabled}
+               nr={3}
+               experiment={experiment}
+-              encodedQubits={getEncodedQubits()}
++              encodedQubits={encodedQubits}
+               setExperiment={setExperiment}
+             />
+             <EncodedQubitInput
+               inputsDisabled={inputsDisabled}
+               nr={4}
+               experiment={experiment}
+-              encodedQubits={getEncodedQubits()}
++              encodedQubits={encodedQubits}
+               setExperiment={setExperiment}
+             />
+           </div>
+diff --git a/components/Experiment/ExperimentNavbar.tsx b/components/Experiment/ExperimentNavbar.tsx
+index 7065178..7ce42cf 100644
+--- a/components/Experiment/ExperimentNavbar.tsx
++++ b/components/Experiment/ExperimentNavbar.tsx
+@@ -47,13 +47,15 @@ export default function ExperimentNavbar({
+               id={experiment.experimentId}
+               text={"Editor"}
+             />
+-            <ExperimentLinkElement
+-              highlight={router.pathname.includes("result")}
+-              path={Path.ExperimentResult}
+-              id={experiment.experimentId}
+-              disabled={experiment.experimentId === experiment.experimentName}
+-              text={"Result"}
+-            />
++            {experiment.status !== ExperimentState.DRAFT && (
++              <ExperimentLinkElement
++                highlight={router.pathname.includes("result")}
++                path={Path.ExperimentResult}
++                id={experiment.experimentId}
++                disabled={experiment.experimentId === experiment.experimentName}
++                text={"Result"}
++              />
++            )}
+           </div>
+           <div className={"flex justify-end items-center"}>
+             <Button
+diff --git a/components/SystemDialog/SystemDialog.tsx b/components/SystemDialog/SystemDialog.tsx
+index 478b3cd..921f9a9 100644
+--- a/components/SystemDialog/SystemDialog.tsx
++++ b/components/SystemDialog/SystemDialog.tsx
+@@ -49,7 +49,6 @@ export default function SystemDialog({
+   };
+ 
+   const handleOnClick = async () => {
+-    let experiment: Experiment;
+     if (onButtonClick) {
+       const error = onButtonClick(input);
+       if (error) {
+@@ -61,14 +60,12 @@ export default function SystemDialog({
+         setErrorMassage("Can't be empty");
+         return;
+       }
+-      experiment = getDefaultExperimentConfig(input);
+       router.push(
+         getPathWithId(
+-          experiment.experimentName.replace(/\s/g, "").toLowerCase(),
++          "new",
+           Path.SingleExperiment
+-        ) + "?get=false"
++        ) + `?name=${input}`
+       );
+-      window.localStorage.setItem("experimentName", experiment.experimentName);
+     }
+     resetDialog();
+   };
+diff --git a/components/TextFieldWithIcon.tsx b/components/TextFieldWithIcon.tsx
+index e9e6917..c8a9afb 100644
+--- a/components/TextFieldWithIcon.tsx
++++ b/components/TextFieldWithIcon.tsx
+@@ -17,21 +17,10 @@ export default function TextFieldWithIcon({
+   isDisabled,
+   unit,
+ }: TextFieldWithIconProps) {
+-  const [input, setInput] = useState(value);
+-
+-  useLayoutEffect(() => {
+-    setInput(value);
+-  }, [value]);
+-
+   return (
+     <div className={"flex items-center space-x-2"}>
+       <embed src={iconsSrc} />
+       <TextField
+-        onBlur={(event) => {
+-          const currentValue = input.replace(",", ".");
+-          setValue(currentValue);
+-          setInput(currentValue.length ? currentValue.replace(".", ",") : "0");
+-        }}
+         inputProps={{
+           style: {
+             color: "white",
+@@ -45,11 +34,11 @@ export default function TextFieldWithIcon({
+           },
+         }}
+         type={"number"}
+-        value={input}
++        value={value}
+         disabled={isDisabled}
+         size={"small"}
+         onChange={(e) => {
+-          setInput(e.target.value);
++          setValue(e.target.value.replace(",", "."));
+         }}
+         color={"primary"}
+         className={clsx({
+diff --git a/hook/hook.experiment.tsx b/hook/hook.experiment.tsx
+index 6cd6e41..414797f 100644
+--- a/hook/hook.experiment.tsx
++++ b/hook/hook.experiment.tsx
+@@ -1,74 +1,62 @@
+-import React, { useEffect, useState } from "react";
++import { useEffect, useState } from "react";
++import { getExperiment } from "../model/model.api";
++import { convertExperimentResoultionToFrontendObject } from "../model/model.api-res";
++import { getDefaultExperimentConfig } from "../model/model.experiment";
+ import {
++  Experiment,
+   ExperimentResult,
+   ExperimentWithConfigs,
+ } from "../model/types/type.experiment";
+-import {
+-  filterSingleCircuitConfigClusterState,
+-  filterSingleCircuitConfigQubitComputing,
+-  getConfig,
+-  getDefaultExperimentConfig,
+-} from "../model/model.experiment";
+-import { CircuitConfig, circuitConfigs } from "../circuitConfig/circuits4Dv004";
+-import { getExperiment } from "../model/model.api";
+ import { useConnectedUser } from "./hook.user";
+-import { convertExperimentResoultionToFrontendObject } from "../model/model.api-res";
+ 
+ /**
+  * This hook is used to get the experiment from the server.
+  *
+  * @param id
+  */
+-export function useSelectedExperiment(id: string, get: boolean = true) {
++export function useSelectedExperiment(id: string | "new") {
+   const user = useConnectedUser();
+-  const getDefaultData = (name: string): ExperimentWithConfigs => {
+-    console.log("load default data")
+-    return {
+-      ...getDefaultExperimentConfig(name),
+-      experimentId: name,
+-      withQubitConfig: true,
+-    }
+-  };
+ 
+   const [experimentResult, setExperimentResult] = useState<ExperimentResult>();
+-  const [experiment, setExperiment] = useState<ExperimentWithConfigs>(
+-    getDefaultData(id)
++  const [experiment, setExperiment] = useState<Experiment>(
++    getDefaultExperimentConfig("")
+   );
+   const [isLoading, setIsLoading] = useState(true);
+ 
+   const getData = async () => {
+     try {
+-      console.log("load real data")
+-      if (get) {
+-        const res = await getExperiment(id, user!.token);
+-        const { experiment: temp, result } =
+-          convertExperimentResoultionToFrontendObject(res);
+-        setExperiment((prev) => ({
+-          ...prev,
+-          ...temp,
+-          config: getConfig(temp),
+-        }));
+-        if (result) {
+-          setExperimentResult(result);
+-        }
++      const res = await getExperiment(id, user!.token);
++      const { experiment: temp, result } =
++        convertExperimentResoultionToFrontendObject(res);
++      setExperiment((prev) => ({
++        ...prev,
++        ...temp,
++      }));
++      if (result) {
++        setExperimentResult(result);
+       }
+     } catch (e) {
+-      // This case means that the id is a name of an experiment not an actual Id.
+-      // So we use the default data and let the user edit his newly created experiment.
+-      const currentName = window.localStorage.getItem(
+-        "experimentName"
+-      ) as string;
+-      window.localStorage.removeItem("experimentName");
+-      setExperiment((prev) => ({ ...prev, experimentName: currentName }));
++      console.error(e);
+     } finally {
+       setIsLoading(false);
+     }
+   };
+ 
+   useEffect(() => {
+-    getData();
++    if (user && id) {
++      if (id !== "new") {
++        getData();
++      } else {
++        const sp = new URLSearchParams(window.location.search);
++        setExperiment({
++          ...experiment,
++          experimentName: sp.get("name") || "",
++        });
++        setIsLoading(false);
++      }
++    }
+     // eslint-disable-next-line
+-  }, []);
++  }, [user, id]);
+ 
+   return {
+     experiment,
+@@ -77,93 +65,3 @@ export function useSelectedExperiment(id: string, get: boolean = true) {
+     isLoading,
+   };
+ }
+-
+-/**
+- * This hook returns all possible configs for the preset settings section.
+- * The experiment that is passed as prop is updated accordingly.
+- *
+- * @param experiment
+- * @param setExperiment
+- */
+-export function usePossibleClusterConfigsPresetSettings(
+-  experiment: ExperimentWithConfigs,
+-  setExperiment: React.Dispatch<React.SetStateAction<ExperimentWithConfigs>>
+-) {
+-  const [currentCircuitConfigs, setCurrentCircuitConfigs] = useState<
+-    CircuitConfig[]
+-  >([]);
+-
+-  useEffect(() => {
+-    const filteredConfigs = circuitConfigs.filter((config) =>
+-      filterSingleCircuitConfigClusterState(config, experiment)
+-    );
+-    setCurrentCircuitConfigs(filteredConfigs);
+-
+-    if (filteredConfigs.length) {
+-      setExperiment((prev) => ({
+-        ...prev,
+-        config:
+-          filteredConfigs.find(
+-            (config) => config.circuit_id === experiment.circuitId
+-          ) || filteredConfigs[0],
+-        circuitId:
+-          filteredConfigs.find(
+-            (config) => config.circuit_id === experiment.circuitId
+-          )?.circuit_id || filteredConfigs[0].circuit_id,
+-      }));
+-    }
+-    // eslint-disable-next-line
+-  }, [
+-    experiment.ComputeSettings.clusterState.amountQubits,
+-    experiment.ComputeSettings.clusterState.presetSettings,
+-  ]);
+-
+-  return { currentCircuitConfigs };
+-}
+-
+-/**
+- * This hook returns all possible configs for the qubit computing section.
+- * The experiment that is passed as prop is updated accordingly.
+- *
+- * @param experiment
+- * @param setExperiment
+- */
+-export function usePossibleClusterConfigsQubitComputing(
+-  experiment: ExperimentWithConfigs,
+-  setExperiment: React.Dispatch<React.SetStateAction<ExperimentWithConfigs>>
+-) {
+-  const { currentCircuitConfigs } = usePossibleClusterConfigsPresetSettings(
+-    experiment,
+-    setExperiment
+-  );
+-
+-  const [currentConfigs, setCurrentConfigs] = useState(currentCircuitConfigs);
+-
+-  const adaptData = () => {
+-    const filteredConfigs = currentCircuitConfigs.filter((config) =>
+-      filterSingleCircuitConfigQubitComputing(config, experiment, true)
+-    );
+-    setCurrentConfigs(filteredConfigs);
+-    const config =
+-      filteredConfigs.find((config) =>
+-        filterSingleCircuitConfigQubitComputing(config, experiment, false)
+-      ) ||
+-      filteredConfigs.find(
+-        (config) => config.circuit_id === experiment.circuitId
+-      );
+-    if (config) {
+-      setExperiment((prev) => ({
+-        ...prev,
+-        config: config,
+-        circuitId: config.circuit_id,
+-      }));
+-    }
+-  };
+-
+-  useEffect(() => {
+-    adaptData();
+-    // eslint-disable-next-line
+-  }, [currentCircuitConfigs, experiment.withQubitConfig]);
+-
+-  return { currentConfigs };
+-}
+diff --git a/model/model.experiment.ts b/model/model.experiment.ts
+index 83a15c1..ac5d708 100644
+--- a/model/model.experiment.ts
++++ b/model/model.experiment.ts
+@@ -30,20 +30,22 @@ export function getDefaultExperimentConfig(
+           {
+             circuitAngleName: "alpha",
+             circuitAngleValue: 0,
+-          },
+-          {
+-            circuitAngleName: "beta",
+-            circuitAngleValue: 0,
+-          },
++          }
+         ],
+       },
+-      encodedQubitMeasurements: [],
++      encodedQubitMeasurements: [
++        {
++          encodedQubitIndex: 1,
++          theta: 0,
++          phi: 0,
++        },
++      ],
+     },
+     circuitId: 5,
+     experimentName,
+     projectId: "",
+     maxRuntime: 120,
+-    experimentId: "jfkdlsaflsdjflkjlfalsfjdslkjfkldsjlkf",
++    experimentId: "83a5b1c7-6076-43a0-9f5a-a15b711e8b6c",
+     status: status || ExperimentState.DRAFT,
+   };
+ }
+diff --git a/pages/experiment/[slug].tsx b/pages/experiment/[slug].tsx
+index 8d43d16..2e57b8a 100644
+--- a/pages/experiment/[slug].tsx
++++ b/pages/experiment/[slug].tsx
+@@ -1,43 +1,35 @@
+-import React from "react";
++import React, { useEffect } from "react";
+ import PageLayout from "../../components/Layout/PageLayout";
+ import NavbarPadding from "../../components/Layout/NavbarPadding";
+ import ExperimentNavbar from "../../components/Experiment/ExperimentNavbar";
+ import ExperimentEditor from "../../components/Experiment/Editor/ExperimentEditor";
+ import { useSelectedExperiment } from "../../hook/hook.experiment";
+-import { ExperimentWithConfigs } from "../../model/types/type.experiment";
+-import {
+-  getConfig,
+-  getDefaultExperimentConfig,
+-} from "../../model/model.experiment";
++import { Experiment } from "../../model/types/type.experiment";
++import { getDefaultExperimentConfig } from "../../model/model.experiment";
+ 
+ import { useRouter } from "next/router";
+ import Head from "next/head";
+ 
+ export interface BaseEditorPageProps {
+-  experiment: ExperimentWithConfigs;
+-  setExperiment: React.Dispatch<React.SetStateAction<ExperimentWithConfigs>>;
++  experiment: Experiment;
++  setExperiment: React.Dispatch<React.SetStateAction<Experiment>>;
+   isLoading: boolean;
+ }
+ 
+ function EditorPage() {
+   const [isDialogOpen, setIsDialogOpen] = React.useState(false);
+-  const get =
+-    typeof window !== "undefined" && window.location.search !== "get=false";
+   const router = useRouter();
+-  const props = useSelectedExperiment(router.query.slug as string, get);
++  const props = useSelectedExperiment(router.query.slug as string);
+ 
+   const reset = () => {
+     const defaultExperiment = getDefaultExperimentConfig(
+       props.experiment.experimentName
+     );
+-    const config = getConfig(defaultExperiment);
+-    props.setExperiment(() => ({
++    props.setExperiment({
+       ...defaultExperiment,
+-      config: config,
+-      withQubitConfig: !!config?.qc_encoded_onoff,
+       experimentId: props.experiment.experimentId,
+       projectId: props.experiment.projectId,
+-    }));
++    });
+   };
+ 
+   return (
+diff --git a/providers/AuthProvider.tsx b/providers/AuthProvider.tsx
+index 3aa968a..a614d61 100644
+--- a/providers/AuthProvider.tsx
++++ b/providers/AuthProvider.tsx
+@@ -1,7 +1,7 @@
+ import React, {
+   createContext,
+   ReactNode,
+-  useLayoutEffect,
++  useEffect,
+   useState,
+ } from "react";
+ import { OptionalBaseProviderType } from "../model/types/type.provider";
+@@ -26,7 +26,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
+   const [user, setUser] = useState<(User & { token: string }) | undefined>();
+   const [verified, setVerified] = useState(false);
+ 
+-  React.useLayoutEffect(() => {
++  useEffect(() => {
+     if (
+       typeof user !== "undefined" &&
+       Cookies.get("user") !== JSON.stringify(user)
+@@ -38,7 +38,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
+     }
+   }, [user]);
+ 
+-  useLayoutEffect(() => {
++  useEffect(() => {
+     if (typeof Cookies.get("user") !== "undefined" && !user) {
+       setUser(JSON.parse(Cookies.get("user") || ""));
+       setVerified(true);
+diff --git a/utils/utils.object.ts b/utils/utils.object.ts
+index ea049ad..ce620b6 100644
+--- a/utils/utils.object.ts
++++ b/utils/utils.object.ts
+@@ -10,12 +10,3 @@ export function deleteProps<T, V>(obj: V, props: (keyof V)[]): T {
+   }
+   return objCopy as unknown as T;
+ }
+-
+-export const prepareExperiment = (experiment: any, props: string[]) => {
+-  if (!experiment["withQubitConfig"]) {
+-    experiment.ComputeSettings.qubitComputing.circuitAngles = [];
+-  }
+-
+-  // @ts-ignore
+-  return { ...deleteProps(experiment, props) };
+-};

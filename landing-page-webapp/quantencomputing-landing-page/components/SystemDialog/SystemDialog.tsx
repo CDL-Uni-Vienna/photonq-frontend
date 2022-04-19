@@ -49,7 +49,6 @@ export default function SystemDialog({
   };
 
   const handleOnClick = async () => {
-    let experiment: Experiment;
     if (onButtonClick) {
       const error = onButtonClick(input);
       if (error) {
@@ -61,14 +60,12 @@ export default function SystemDialog({
         setErrorMassage("Can't be empty");
         return;
       }
-      experiment = getDefaultExperimentConfig(input);
       router.push(
         getPathWithId(
-          experiment.experimentName.replace(/\s/g, "").toLowerCase(),
+          "new",
           Path.SingleExperiment
-        ) + "?get=false"
+        ) + `?name=${input}`
       );
-      window.localStorage.setItem("experimentName", experiment.experimentName);
     }
     resetDialog();
   };

@@ -5,16 +5,17 @@ import EditorSectionHeader from "./EditorSectionHeader";
 import { useTranslation } from "react-i18next";
 import { Button, ButtonGroup, MenuItem, Select } from "@mui/material";
 import {
-  ExperimentWithConfigs,
+  Experiment,
   PresetSetting,
 } from "../../../../model/types/type.experiment";
 import SettingsImage from "./SettingsImage";
-import { usePossibleClusterConfigsPresetSettings } from "../../../../hook/hook.experiment";
+import { CircuitConfig, circuitConfigs } from "../../../../circuitConfig/circuits4Dv004";
 
 export interface EditorSectionProps {
-  experiment: ExperimentWithConfigs;
-  setExperiment: React.Dispatch<React.SetStateAction<ExperimentWithConfigs>>;
+  experiment: Experiment;
+  setExperiment: React.Dispatch<React.SetStateAction<Experiment>>;
   inputsDisabled?: boolean;
+  currentConfig?: CircuitConfig,
 }
 
 export default function ClusterStateSection({
@@ -23,8 +24,6 @@ export default function ClusterStateSection({
   inputsDisabled,
 }: EditorSectionProps) {
   const { t } = useTranslation();
-  const { currentCircuitConfigs: configs } =
-    usePossibleClusterConfigsPresetSettings(experiment, setExperiment);
 
   const setExperimentQubitNr = (nr: number) => {
     if (
@@ -67,13 +66,20 @@ export default function ClusterStateSection({
   };
 
   const getSvgSource = (qubitsImage?: boolean) => {
-    if (!configs.length) return "";
+    const config = circuitConfigs.find(
+      (c) =>
+        c.csp_number_of_qubits ===
+          experiment.ComputeSettings.clusterState.amountQubits &&
+        c.csp_preset_settings_name ===
+          experiment.ComputeSettings.clusterState.presetSettings
+    );
+    if (!config) return "";
     return `/circuitConfig/${
       qubitsImage ? "csp_preset_settings_svg" : "csp_cluster_state"
     }/${
       qubitsImage
-        ? configs[0].csp_preset_settings_svg
-        : configs[0].csp_cluster_state
+        ? config.csp_preset_settings_svg
+        : config.csp_cluster_state
     }`;
   };
 

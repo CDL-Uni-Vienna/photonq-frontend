@@ -1,24 +1,23 @@
-import DemultiplexerSection from "./Sections/DemultiplexerSection";
-import ClusterStateSection from "./Sections/ClusterStateSection";
 import { CircularProgress } from "@mui/material";
+import { useRouter } from "next/router";
+import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
+import {
+  CircuitConfig,
+  circuitConfigs,
+} from "../../../circuitConfig/circuits4Dv004";
+import { useConnectedUser } from "../../../hook/hook.user";
+import { createExperiment } from "../../../model/model.api";
+import { getPathWithId, Path } from "../../../model/model.routes";
+import { ExperimentState } from "../../../model/types/type.experiment";
+import { BaseEditorPageProps } from "../../../pages/experiment/[slug]";
+import SystemAlert from "../../SystemAlert";
+import SystemDialog from "../../SystemDialog/SystemDialog";
+import DropDownButton from "../DropDownButton";
+import ClusterStateSection from "./Sections/ClusterStateSection";
+import DemultiplexerSection from "./Sections/DemultiplexerSection";
 import QubitComputingSection from "./Sections/QubitComputingSection";
 import QubitMeasurementSection from "./Sections/QubitMeasurementSection";
-import { useTranslation } from "react-i18next";
-import DropDownButton from "../DropDownButton";
-import { createExperiment } from "../../../model/model.api";
-import { useConnectedUser } from "../../../hook/hook.user";
-import { deleteProps, prepareExperiment } from "../../../utils/utils.object";
-import { useMemo, useState } from "react";
-import {
-  CreateExperimentPayload,
-  ExperimentState,
-  ExperimentWithConfigs,
-} from "../../../model/types/type.experiment";
-import { BaseEditorPageProps } from "../../../pages/experiment/[slug]";
-import { getPathWithId, Path } from "../../../model/model.routes";
-import { useRouter } from "next/router";
-import SystemDialog from "../../SystemDialog/SystemDialog";
-import SystemAlert from "../../SystemAlert";
 
 interface ExperimentEditorProps extends BaseEditorPageProps {
   action: () => void;
@@ -66,23 +65,27 @@ function ExperimentEditor({
   const user = useConnectedUser();
   const router = useRouter();
 
-  const inputsDisabled = useMemo(
-    () => experiment.status !== ExperimentState.DRAFT,
-    [experiment]
+  const currentConfig = useMemo<CircuitConfig | undefined>(
+    () => circuitConfigs.find((c) => c.circuit_id === experiment.circuitId),
+    [experiment.circuitId]
+  );
+  const inputsDisabled = useMemo<boolean>(
+    () => router.query.slug !== "new",
+    [router.query.slug]
   );
 
   const runExperiment = async () => {
     try {
-      const createExperimentPayload = {
-        ...prepareExperiment(experiment, [
-          "experimentId",
-          "withQubitConfig",
-          "config",
-        ]),
-        status: ExperimentState.IN_QUEUE,
-      };
-      createExperimentPayload.circuitId = experiment.config!.circuit_id;
-      const res = await createExperiment(createExperimentPayload, user!.token);
+      const res = await createExperiment(
+        {
+          circuitId: experiment.circuitId,
+          experimentName: experiment.experimentName,
+          projectId: experiment.projectId,
+          maxRuntime: experiment.maxRuntime,
+          ComputeSettings: experiment.ComputeSettings,
+        },
+        user!.token
+      );
       router.push(getPathWithId(res.experimentId, Path.ExperimentResult));
     } catch (e) {
       console.error(e);
@@ -111,11 +114,13 @@ function ExperimentEditor({
         inputsDisabled={inputsDisabled}
         experiment={experiment}
         setExperiment={setExperiment}
+        currentConfig={currentConfig}
       />
       <QubitMeasurementSection
         inputsDisabled={inputsDisabled}
         experiment={experiment}
         setExperiment={setExperiment}
+        currentConfig={currentConfig}
       />
       <div className={"flex justify-end items-center"}>
         <DropDownButton

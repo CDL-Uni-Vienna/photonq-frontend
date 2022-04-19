@@ -17,21 +17,20 @@ export default function QubitMeasurementSection({
   setExperiment,
   experiment,
   inputsDisabled,
+  currentConfig,
 }: EditorSectionProps) {
+  const encodedQubits = currentConfig?.qc_encoded_onoff
+    ? currentConfig?.qm_number_of_qubits || 0
+    : currentConfig?.csp_number_of_qubits || 0;
   const { t } = useTranslation();
 
   const getSrc = () => {
-    return `/circuitConfig/qm_circuit_model/${experiment.config?.qm_circuit_model}`;
+    return `/circuitConfig/qm_circuit_model/${currentConfig?.qm_circuit_model}`;
   };
 
-  const getEncodedQubits = () => {
-    return experiment.withQubitConfig
-      ? experiment.config?.qm_number_of_qubits || 0
-      : experiment.config?.csp_number_of_qubits || 0;
-  };
-
-  const setInitialEncodedQubitMeasurements = () => {
-    if (experiment.status !== ExperimentState.DRAFT) {
+  useEffect(() => {
+    // adds array of empty EncodedQubitMeasurments to the experiment
+    if (inputsDisabled || experiment.status !== ExperimentState.DRAFT) {
       return;
     }
     setExperiment((prev) => ({
@@ -39,17 +38,12 @@ export default function QubitMeasurementSection({
       ComputeSettings: {
         ...prev.ComputeSettings,
         encodedQubitMeasurements: Array.from({
-          length: getEncodedQubits(),
+          length: encodedQubits,
         }).map((_, index) => getEmptyEncodedQubitMeasurement(index + 1)),
       },
     }));
-  };
-
-  useEffect(() => {
-    // adds array of empty EncodedQubitMeasurments to the experiment
-    setInitialEncodedQubitMeasurements();
     // eslint-disable-next-line
-  }, [experiment.config?.qm_number_of_qubits, experiment.withQubitConfig]);
+  }, [currentConfig]);
 
   return (
     <ContentContainer withPadding color={secondaryDark} className={"space-y-6"}>
@@ -66,14 +60,14 @@ export default function QubitMeasurementSection({
               inputsDisabled={inputsDisabled}
               nr={1}
               experiment={experiment}
-              encodedQubits={getEncodedQubits()}
+              encodedQubits={encodedQubits}
               setExperiment={setExperiment}
             />
             <EncodedQubitInput
               inputsDisabled={inputsDisabled}
               nr={2}
               experiment={experiment}
-              encodedQubits={getEncodedQubits()}
+              encodedQubits={encodedQubits}
               setExperiment={setExperiment}
             />
           </div>
@@ -82,14 +76,14 @@ export default function QubitMeasurementSection({
               inputsDisabled={inputsDisabled}
               nr={3}
               experiment={experiment}
-              encodedQubits={getEncodedQubits()}
+              encodedQubits={encodedQubits}
               setExperiment={setExperiment}
             />
             <EncodedQubitInput
               inputsDisabled={inputsDisabled}
               nr={4}
               experiment={experiment}
-              encodedQubits={getEncodedQubits()}
+              encodedQubits={encodedQubits}
               setExperiment={setExperiment}
             />
           </div>

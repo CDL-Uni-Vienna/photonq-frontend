@@ -17,21 +17,10 @@ export default function TextFieldWithIcon({
   isDisabled,
   unit,
 }: TextFieldWithIconProps) {
-  const [input, setInput] = useState(value);
-
-  useLayoutEffect(() => {
-    setInput(value);
-  }, [value]);
-
   return (
     <div className={"flex items-center space-x-2"}>
       <embed src={iconsSrc} />
       <TextField
-        onBlur={(event) => {
-          const currentValue = input.replace(",", ".");
-          setValue(currentValue);
-          setInput(currentValue.length ? currentValue.replace(".", ",") : "0");
-        }}
         inputProps={{
           style: {
             color: "white",
@@ -45,11 +34,11 @@ export default function TextFieldWithIcon({
           },
         }}
         type={"number"}
-        value={input}
+        value={value}
         disabled={isDisabled}
         size={"small"}
         onChange={(e) => {
-          setInput(e.target.value);
+          setValue(e.target.value.replace(",", "."));
         }}
         color={"primary"}
         className={clsx({

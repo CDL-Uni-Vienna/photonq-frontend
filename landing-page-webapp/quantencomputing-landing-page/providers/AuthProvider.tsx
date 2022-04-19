@@ -1,7 +1,7 @@
 import React, {
   createContext,
   ReactNode,
-  useLayoutEffect,
+  useEffect,
   useState,
 } from "react";
 import { OptionalBaseProviderType } from "../model/types/type.provider";
@@ -26,7 +26,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<(User & { token: string }) | undefined>();
   const [verified, setVerified] = useState(false);
 
-  React.useLayoutEffect(() => {
+  useEffect(() => {
     if (
       typeof user !== "undefined" &&
       Cookies.get("user") !== JSON.stringify(user)
@@ -38,7 +38,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     }
   }, [user]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (typeof Cookies.get("user") !== "undefined" && !user) {
       setUser(JSON.parse(Cookies.get("user") || ""));
       setVerified(true);

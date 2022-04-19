@@ -12,8 +12,10 @@ import {
   Switch,
 } from "@mui/material";
 import SettingsImage from "./SettingsImage";
-import { usePossibleClusterConfigsQubitComputing } from "../../../../hook/hook.experiment";
-import { CircuitConfig } from "../../../../circuitConfig/circuits4Dv004";
+import {
+  CircuitConfig,
+  circuitConfigs,
+} from "../../../../circuitConfig/circuits4Dv004";
 import TextFieldWithIcon from "../../../TextFieldWithIcon";
 import {
   CircuitAngleName,
@@ -32,17 +34,24 @@ export default function QubitComputingSection({
   setExperiment,
   experiment,
   inputsDisabled,
+  currentConfig,
 }: EditorSectionProps) {
-  const { currentConfigs: configs } = usePossibleClusterConfigsQubitComputing(
-    experiment,
-    setExperiment
-  );
-
   const { t } = useTranslation();
-
-  const getSrc = () => {
-    return `/circuitConfig/qc_circuit_model/${experiment.config?.qc_circuit_model}`;
-  };
+  const [withQubitConfig, setWithQubitConfig] = useState<boolean>(true);
+  const availableConfigs = useMemo<CircuitConfig[]>(
+    () =>
+      circuitConfigs.filter(
+        (c) =>
+          c.csp_number_of_qubits ===
+            experiment.ComputeSettings.clusterState.amountQubits &&
+          c.csp_preset_settings_name ===
+            experiment.ComputeSettings.clusterState.presetSettings &&
+          (withQubitConfig
+            ? c.qc_circuit_model && c.qc_circuit_conf
+            : c.qc_encoded_onoff === Number(withQubitConfig))
+      ),
+    [experiment.ComputeSettings.clusterState, withQubitConfig]
+  );
 
   const getAngleValue = (angleName: CircuitAngleName) => {
     return (
@@ -76,8 +85,7 @@ export default function QubitComputingSection({
     }));
   };
 
-  const setInitialQubitComputingAngles = () => {
-    if (experiment.status !== ExperimentState.DRAFT) return;
+  const setCircuitAnglesFromConfig = () => {
     setExperiment((prev) => ({
       ...prev,
       ComputeSettings: {
@@ -86,8 +94,8 @@ export default function QubitComputingSection({
           ...prev.ComputeSettings.qubitComputing,
           circuitAngles: Array.from({
             length:
-              (experiment.config?.csp_number_of_qubits || 0) -
-              (experiment.config?.qc_encoded_qubits || 0),
+              (currentConfig?.csp_number_of_qubits || 0) -
+              (currentConfig?.qc_encoded_qubits || 0),
           }).map((_, index) => ({
             circuitAngleName: angleNames[index],
             circuitAngleValue: 0,
@@ -97,11 +105,39 @@ export default function QubitComputingSection({
     }));
   };
 
+  const toggleQubitComputing = () => {
+    if (withQubitConfig) {
+      setExperiment((prev) => ({
+        ...prev,
+        ComputeSettings: {
+          ...prev.ComputeSettings,
+          qubitComputing: {
+            ...prev.ComputeSettings.qubitComputing,
+            circuitAngles: [],
+          },
+        },
+      }));
+    } else {
+      setCircuitAnglesFromConfig();
+    }
+    setWithQubitConfig(!withQubitConfig);
+  };
+
+  useEffect(() => {
+    if (!inputsDisabled && experiment.status === ExperimentState.DRAFT) {
+      setExperiment((prev) => ({
+        ...prev,
+        circuitId: availableConfigs[0].circuit_id,
+      }));
+    }
+  }, [availableConfigs, setExperiment, inputsDisabled, experiment.status]);
+
   useEffect(() => {
     // adds array of empty Angles to the experiment
-    setInitialQubitComputingAngles();
+    if (inputsDisabled || experiment.status !== ExperimentState.DRAFT) return;
+    setCircuitAnglesFromConfig();
     // eslint-disable-next-line
-  }, [experiment.config?.qc_encoded_qubits]);
+  }, [currentConfig]);
 
   return (
     <ContentContainer
@@ -116,15 +152,10 @@ export default function QubitComputingSection({
             <div className={"flex items-center space-x-2"}>
               <Switch
                 disabled={inputsDisabled}
-                checked={experiment.withQubitConfig}
-                onChange={() => {
-                  setExperiment((prev) => ({
-                    ...prev,
-                    withQubitConfig: !prev.withQubitConfig,
-                  }));
-                }}
+                checked={withQubitConfig}
+                onChange={toggleQubitComputing}
               />
-              <p>{experiment.withQubitConfig ? "On" : "Off"}</p>
+              <p>{withQubitConfig ? "On" : "Off"}</p>
             </div>
           </div>
           <p>
@@ -134,7 +165,7 @@ export default function QubitComputingSection({
           </p>
         </div>
       </div>
-      {configs.length && experiment.withQubitConfig && (
+      {availableConfigs.length && withQubitConfig && (
         <div className={"flex space-x-10 text-white"}>
           <div className={"space-y-3 w-1/2"}>
             <h3 className={"font-bold"}>{t("Circuit Configuration")}</h3>
@@ -142,28 +173,28 @@ export default function QubitComputingSection({
               <div>
                 <CircuitConfigSelector
                   inputsDisabled={inputsDisabled}
-                  currentConfig={experiment.config}
-                  configs={configs}
+                  currentConfig={currentConfig}
+                  configs={availableConfigs}
                   setCurrentConfig={(circuit: CircuitConfig) => {
                     setExperiment((prev) => ({
                       ...prev,
-                      config: circuit,
+                      circuitId: circuit.circuit_id,
                     }));
                   }}
                 />
               </div>
               <div>
                 <p>{`${t("Encoded quibts:")} ${
-                  experiment.config?.qc_encoded_qubits || "0"
+                  currentConfig?.qc_encoded_qubits || "0"
                 }`}</p>
                 <p>{`${t("CPhase gates:")} ${
-                  experiment.config?.qc_cphase_gates || "0"
+                  currentConfig?.qc_cphase_gates || "0"
                 }`}</p>
                 <div className={"space-y-3 mt-2"}>
                   {Array.from({
                     length:
-                      (experiment.config?.csp_number_of_qubits || 0) -
-                      (experiment.config?.qc_encoded_qubits || 0),
+                      (currentConfig?.csp_number_of_qubits || 0) -
+                      (currentConfig?.qc_encoded_qubits || 0),
                   }).map((_, index) =>
                     inputsDisabled ? (
                       <div className="flex space-x-2">
@@ -191,7 +222,10 @@ export default function QubitComputingSection({
           <div className={"flex flex-col justify-center text-white space-y-4"}>
             <h3 className={"font-bold text-lg"}>{t("Circuit")}</h3>
             <div className={"border border-gray-500 p-2"}>
-              <SettingsImage normal src={getSrc()} />
+              <SettingsImage
+                normal
+                src={`/circuitConfig/qc_circuit_model/${currentConfig?.qc_circuit_model}`}
+              />
             </div>
           </div>
         </div>

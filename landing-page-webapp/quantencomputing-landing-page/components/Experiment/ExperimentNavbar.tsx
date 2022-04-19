@@ -47,13 +47,15 @@ export default function ExperimentNavbar({
               id={experiment.experimentId}
               text={"Editor"}
             />
-            <ExperimentLinkElement
-              highlight={router.pathname.includes("result")}
-              path={Path.ExperimentResult}
-              id={experiment.experimentId}
-              disabled={experiment.experimentId === experiment.experimentName}
-              text={"Result"}
-            />
+            {experiment.status !== ExperimentState.DRAFT && (
+              <ExperimentLinkElement
+                highlight={router.pathname.includes("result")}
+                path={Path.ExperimentResult}
+                id={experiment.experimentId}
+                disabled={experiment.experimentId === experiment.experimentName}
+                text={"Result"}
+              />
+            )}
           </div>
           <div className={"flex justify-end items-center"}>
             <Button

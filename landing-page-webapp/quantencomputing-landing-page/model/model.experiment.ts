@@ -30,20 +30,22 @@ export function getDefaultExperimentConfig(
           {
             circuitAngleName: "alpha",
             circuitAngleValue: 0,
-          },
-          {
-            circuitAngleName: "beta",
-            circuitAngleValue: 0,
-          },
+          }
         ],
       },
-      encodedQubitMeasurements: [],
+      encodedQubitMeasurements: [
+        {
+          encodedQubitIndex: 1,
+          theta: 0,
+          phi: 0,
+        },
+      ],
     },
     circuitId: 5,
     experimentName,
     projectId: "",
     maxRuntime: 120,
-    experimentId: "jfkdlsaflsdjflkjlfalsfjdslkjfkldsjlkf",
+    experimentId: "83a5b1c7-6076-43a0-9f5a-a15b711e8b6c",
     status: status || ExperimentState.DRAFT,
   };
 }
