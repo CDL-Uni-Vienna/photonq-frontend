@@ -18,7 +18,7 @@ export default function MyProjectPage() {
   return (
     <>
       <Head>
-        <title>PhotonQ Quantum Computing</title>
+        <title>PhotonQ - Photonic Quantum Computing</title>
       </Head>
       <NavbarPadding />
       <SectionHeader

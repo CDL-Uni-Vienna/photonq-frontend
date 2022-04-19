@@ -7,7 +7,7 @@ import Head from 'next/head'
 const LegalPage = () => {
   return (
     <div className="relative flex flex-col items-center">
-      <Head><title>PhotonQ Quantum Computing</title></Head>
+      <Head><title>PhotonQ - Photonic Quantum Computing</title></Head>
       <div className={"w-full flex flex-col items-center"}>
         <NavbarPadding />
         <div className="mt-10">
@@ -90,7 +90,7 @@ const LegalPage = () => {
                 </p>,
                 <p key={"key"} className="pb-2">
                   3.	To reasonably report any detected or perceived errors in the
-                  oftware, data communication and system disruptions to the
+                  software, data communication and system disruptions to the
                   Christian Doppler Laboratory for Photonic Quantum Computing.
                 </p>,
                 <p key={"key"} className="pb-2">

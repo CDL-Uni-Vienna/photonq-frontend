@@ -8,7 +8,7 @@ const ImpressumPage = () => {
   return (
     <div className="relative flex flex-col items-center">
       <Head>
-        <title>PhotonQ Quantum Computing</title>
+        <title>PhotonQ - Photonic Quantum Computing</title>
       </Head>
       <div className={"w-full flex flex-col items-center"}>
         <NavbarPadding />
@@ -65,8 +65,8 @@ const ImpressumPage = () => {
               paragraphs={[
                 <p key={"key"} className="pb-2">
                   The Christian Doppler Laboratory for Photonic Quantum
-                  Computing - the home of the PhotonQ system - is located at
-                  Sensengasse 8, 1090 Vienna.
+                  Computing - the home of the PhotonQ system - is located in
+                  Vienna in the 9th district.
                 </p>,
                 ,
               ]}
@@ -81,7 +81,7 @@ const ImpressumPage = () => {
                   following reference:
                 </p>,
                 <p key={"key"} className="pb-2">
-                  <strong>PhotonQ. (2022).</strong> <em>PhotonQ Home</em>.
+                  <strong>PhotonQ. (2022).</strong> <em>PhotonQ - Photonic Quantum Computing</em>.
                   Accessed: DD.MM.YYYY. Retrieved from:{" "}
                   <a
                     href="https://photonq.at/"
@@ -99,8 +99,9 @@ const ImpressumPage = () => {
               heading={"Copyright"}
               paragraphs={[
                 <p key={"key"} className="pb-2">
-                  All website design, text, graphics, selections and layouts
-                  thereof, and software are the copyrighted property of
+                  Unless otherwise indicated, all website design, text,
+                  graphics, selections and layouts thereof, and software are
+                  the copyrighted property of
                   Christian Doppler Laboratory for Photonic Quantum Computing
                   (Copyright © 2022 Walther Group, Faculty of Physics,
                   University of Vienna. All rights reserved.).

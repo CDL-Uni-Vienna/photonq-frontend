@@ -43,7 +43,7 @@ export default function Home(props: PageProps) {
   return (
     <div className={"flex flex-col items-center"}>
       <Head>
-        <title>PhotonQ Quantum Computing</title>
+        <title>PhotonQ - Photonic Quantum Computing</title>
       </Head>
       <NavbarPadding />
       <Section fullWidth withVerticalPadding>

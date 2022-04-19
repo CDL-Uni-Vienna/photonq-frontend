@@ -12,7 +12,7 @@ export default function Login() {
       <div className={"2xl:hidden"}>
         <NavbarPadding />
         <Head>
-          <title>PhotonQ Quantum Computing</title>
+          <title>PhotonQ - Photonic Quantum Computing</title>
         </Head>
       </div>
       <Grid container columnSpacing={12}>

@@ -9,7 +9,7 @@ export default function ProfilePage() {
   return (
     <div className={"pb-4"}>
       <Head>
-        <title>PhotonQ Quantum Computing</title>
+        <title>PhotonQ - Photonic Quantum Computing</title>
       </Head>
       <NavbarPadding />
       <SectionHeader header={"My Profile"} withVerticalSpacing />

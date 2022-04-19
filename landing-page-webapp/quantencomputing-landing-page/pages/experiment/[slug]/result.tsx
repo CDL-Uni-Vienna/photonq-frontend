@@ -40,7 +40,7 @@ export default function ResultsPage() {
       })}
     >
       <Head>
-        <title>PhotonQ Quantum Computing</title>
+        <title>PhotonQ - Photonic Quantum Computing</title>
       </Head>
       <ExperimentNavbar
         reset={() => undefined}
@@ -51,7 +51,7 @@ export default function ResultsPage() {
       <PageLayout>
         <NavbarPadding />
         {experiment.status === ExperimentState.Running ||
-        experiment.status === ExperimentState.IN_QUEUE ? (
+          experiment.status === ExperimentState.IN_QUEUE ? (
           <div
             className={
               "h-screen flex flex-col justify-center items-center space-y-5"

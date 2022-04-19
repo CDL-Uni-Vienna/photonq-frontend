@@ -35,7 +35,7 @@ function EditorPage() {
   return (
     <div style={{ backgroundColor: "#222328" }}>
       <Head>
-        <title>PhotonQ Quantum Computing</title>
+        <title>PhotonQ - Photonic Quantum Computing</title>
       </Head>
       <ExperimentNavbar {...props} reset={reset} />
       <PageLayout>

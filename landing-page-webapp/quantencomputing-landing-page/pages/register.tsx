@@ -11,7 +11,7 @@ export default function Register() {
   return (
     <AuthPageLayout>
       <div className={"2xl:hidden"}>
-        <Head><title>PhotonQ Quantum Computing</title></Head>
+        <Head><title>PhotonQ - Photonic Quantum Computing</title></Head>
         <NavbarPadding />
       </div>
       <Grid container columnSpacing={12}>
