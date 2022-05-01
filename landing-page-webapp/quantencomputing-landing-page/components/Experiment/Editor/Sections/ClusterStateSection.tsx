@@ -6,14 +6,15 @@ import { useTranslation } from "react-i18next";
 import { Button, ButtonGroup, MenuItem, Select } from "@mui/material";
 import {
   Experiment,
+  ExperimentWithConfigs,
   PresetSetting,
 } from "../../../../model/types/type.experiment";
 import SettingsImage from "./SettingsImage";
 import { CircuitConfig, circuitConfigs } from "../../../../circuitConfig/circuits4Dv004";
 
 export interface EditorSectionProps {
-  experiment: Experiment;
-  setExperiment: React.Dispatch<React.SetStateAction<Experiment>>;
+  experiment: ExperimentWithConfigs;
+  setExperiment: React.Dispatch<React.SetStateAction<ExperimentWithConfigs>>;
   inputsDisabled?: boolean;
   currentConfig?: CircuitConfig,
 }
@@ -69,18 +70,16 @@ export default function ClusterStateSection({
     const config = circuitConfigs.find(
       (c) =>
         c.csp_number_of_qubits ===
-          experiment.ComputeSettings.clusterState.amountQubits &&
+        experiment.ComputeSettings.clusterState.amountQubits &&
         c.csp_preset_settings_name ===
-          experiment.ComputeSettings.clusterState.presetSettings
+        experiment.ComputeSettings.clusterState.presetSettings
     );
     if (!config) return "";
-    return `/circuitConfig/${
-      qubitsImage ? "csp_preset_settings_svg" : "csp_cluster_state"
-    }/${
-      qubitsImage
+    return `/circuitConfig/${qubitsImage ? "csp_preset_settings_svg" : "csp_cluster_state"
+      }/${qubitsImage
         ? config.csp_preset_settings_svg
         : config.csp_cluster_state
-    }`;
+      }`;
   };
 
   return (
@@ -103,8 +102,8 @@ export default function ClusterStateSection({
           <ButtonGroup>
             {[2, 3, 4].map((nr) =>
               inputsDisabled ||
-              (nr !== 4 &&
-                experiment.ComputeSettings.clusterState.presetSettings ===
+                (nr !== 4 &&
+                  experiment.ComputeSettings.clusterState.presetSettings ===
                   PresetSetting.Ghz) ? (
                 experiment.ComputeSettings.clusterState.amountQubits === nr ? (
                   <Button variant="contained" key={nr}>
@@ -149,10 +148,9 @@ export default function ClusterStateSection({
                 {Object.values(PresetSetting).map((val, index) => (
                   <MenuItem key={index} value={val}>
                     {t(
-                      `${
-                        val !== "ghz"
-                          ? val.substring(0, 1).toUpperCase() + val.substring(1)
-                          : val.toUpperCase()
+                      `${val !== "ghz"
+                        ? val.substring(0, 1).toUpperCase() + val.substring(1)
+                        : val.toUpperCase()
                       } Cluster`
                     )}
                   </MenuItem>

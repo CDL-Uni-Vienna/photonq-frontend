@@ -4,15 +4,15 @@ import NavbarPadding from "../../components/Layout/NavbarPadding";
 import ExperimentNavbar from "../../components/Experiment/ExperimentNavbar";
 import ExperimentEditor from "../../components/Experiment/Editor/ExperimentEditor";
 import { useSelectedExperiment } from "../../hook/hook.experiment";
-import { Experiment } from "../../model/types/type.experiment";
+import { ExperimentWithConfigs } from "../../model/types/type.experiment";
 import { getDefaultExperimentConfig } from "../../model/model.experiment";
 
 import { useRouter } from "next/router";
 import Head from "next/head";
 
 export interface BaseEditorPageProps {
-  experiment: Experiment;
-  setExperiment: React.Dispatch<React.SetStateAction<Experiment>>;
+  experiment: ExperimentWithConfigs;
+  setExperiment: React.Dispatch<React.SetStateAction<ExperimentWithConfigs>>;
   isLoading: boolean;
 }
 

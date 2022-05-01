@@ -148,5 +148,5 @@ export interface Experiment extends BaseExperimentInformation {
  */
 export interface ExperimentWithConfigs extends Experiment {
   config?: CircuitConfig;
-  withQubitConfig: boolean;
+  withQubitConfig?: boolean;
 }

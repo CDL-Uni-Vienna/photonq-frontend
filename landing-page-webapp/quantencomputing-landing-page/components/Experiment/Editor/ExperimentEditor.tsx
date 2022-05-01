@@ -18,6 +18,7 @@ import ClusterStateSection from "./Sections/ClusterStateSection";
 import DemultiplexerSection from "./Sections/DemultiplexerSection";
 import QubitComputingSection from "./Sections/QubitComputingSection";
 import QubitMeasurementSection from "./Sections/QubitMeasurementSection";
+import { deleteProps, prepareExperiment } from "../../../utils/utils.object";
 
 interface ExperimentEditorProps extends BaseEditorPageProps {
   action: () => void;
@@ -76,13 +77,14 @@ function ExperimentEditor({
 
   const runExperiment = async () => {
     try {
+      const kexperiment = prepareExperiment(experiment, ["experimentId", "withQubitConfig", "config"])
       const res = await createExperiment(
         {
-          circuitId: experiment.circuitId,
-          experimentName: experiment.experimentName,
-          projectId: experiment.projectId,
-          maxRuntime: experiment.maxRuntime,
-          ComputeSettings: experiment.ComputeSettings,
+          circuitId: kexperiment.circuitId,
+          experimentName: kexperiment.experimentName,
+          projectId: kexperiment.projectId,
+          maxRuntime: kexperiment.maxRuntime,
+          ComputeSettings: kexperiment.ComputeSettings,
         },
         user!.token
       );

@@ -43,9 +43,9 @@ export default function QubitComputingSection({
       circuitConfigs.filter(
         (c) =>
           c.csp_number_of_qubits ===
-            experiment.ComputeSettings.clusterState.amountQubits &&
+          experiment.ComputeSettings.clusterState.amountQubits &&
           c.csp_preset_settings_name ===
-            experiment.ComputeSettings.clusterState.presetSettings &&
+          experiment.ComputeSettings.clusterState.presetSettings &&
           (withQubitConfig
             ? c.qc_circuit_model && c.qc_circuit_conf
             : c.qc_encoded_onoff === Number(withQubitConfig))
@@ -75,9 +75,9 @@ export default function QubitComputingSection({
             (angle) =>
               angle.circuitAngleName === angleName
                 ? {
-                    ...angle,
-                    circuitAngleValue: Math.min(Math.abs(Number(value)), 360),
-                  }
+                  ...angle,
+                  circuitAngleValue: Math.min(Math.abs(Number(value)), 360),
+                }
                 : angle
           ),
         },
@@ -88,6 +88,7 @@ export default function QubitComputingSection({
   const setCircuitAnglesFromConfig = () => {
     setExperiment((prev) => ({
       ...prev,
+      withQubitConfig: withQubitConfig,
       ComputeSettings: {
         ...prev.ComputeSettings,
         qubitComputing: {
@@ -184,12 +185,10 @@ export default function QubitComputingSection({
                 />
               </div>
               <div>
-                <p>{`${t("Encoded quibts:")} ${
-                  currentConfig?.qc_encoded_qubits || "0"
-                }`}</p>
-                <p>{`${t("CPhase gates:")} ${
-                  currentConfig?.qc_cphase_gates || "0"
-                }`}</p>
+                <p>{`${t("Encoded quibts:")} ${currentConfig?.qc_encoded_qubits || "0"
+                  }`}</p>
+                <p>{`${t("CPhase gates:")} ${currentConfig?.qc_cphase_gates || "0"
+                  }`}</p>
                 <div className={"space-y-3 mt-2"}>
                   {Array.from({
                     length:
@@ -302,9 +301,8 @@ function CircuitConfigSelector({
               .filter((key) => groupedConfigs[key as any].length)
               .map((key) => (
                 <div className={"space-y-2"} key={key}>
-                  <h3 className={"font-bold text-white"}>{`Encoded Qubits ${
-                    groupedConfigs[key as any][0]?.qc_encoded_qubits
-                  }`}</h3>
+                  <h3 className={"font-bold text-white"}>{`Encoded Qubits ${groupedConfigs[key as any][0]?.qc_encoded_qubits
+                    }`}</h3>
                   <div className={"flex space-x-2"}>
                     {groupedConfigs[key as any].map((config) => (
                       <Button
